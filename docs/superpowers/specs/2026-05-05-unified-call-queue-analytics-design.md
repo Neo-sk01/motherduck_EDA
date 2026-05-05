@@ -23,7 +23,7 @@ Build a recurring batch analytics pipeline plus a unified web dashboard that ans
 2. What happened end-to-end from primary queue to overflow queue?
 3. Where are operational risks across agents, callers, hours, and routing?
 
-The system is not real-time. It runs scheduled daily, weekly, and monthly batches. The dashboard reads cached outputs and MotherDuck-backed analytical tables.
+The system is not real-time. It runs scheduled daily, weekly, and monthly batches, and it supports historical backfills for periods earlier than 2026-04-01 when source data or API access is available. The dashboard reads cached outputs and MotherDuck-backed analytical tables.
 
 ## Architecture
 
@@ -135,6 +135,19 @@ Stop-the-line failures:
 - Funnel numbers are wrong.
 - Gabriel Hubert's cross-queue total is wrong.
 - Caller `9052833500` cross-queue total is wrong.
+
+## Historical Backfill
+
+Historical backfill earlier than 2026-04-01 is in scope. The pipeline must support arbitrary `--start` and `--end` date ranges for CSV, API, and hybrid modes, subject to source availability.
+
+Backfill behavior:
+
+- Backfilled periods use the same ingestion, parsing, deduplication, metric, MotherDuck write, and report-emission paths as scheduled runs.
+- Backfills are idempotent by period, source mode, and queue set.
+- Re-running a backfill replaces the relevant raw, curated, metric, and report outputs for that period in a controlled way.
+- April 2026 remains the canonical exact-number validation reference from the brief.
+- Earlier backfills must pass structural validation, dedup sanity checks, date-range completeness checks, and dashboard rendering checks even when no exact-number reference set exists.
+- When historical CSVs are incomplete or unavailable for one or more queues, the report run must record source gaps instead of silently mixing partial data into complete-looking funnel metrics.
 
 ## Deduplication
 
@@ -290,9 +303,7 @@ Match the brief:
 - Write operations against the Versature API.
 - Alerting or paging integrations.
 - Multi-tenancy.
-- Historical backfill earlier than 2026-04-01.
 
 ## Open Data Requirement
 
 The workspace currently includes a queue 8020 workbook reference. Full v1 acceptance requires the remaining April 2026 queue source files for 8021, 8030, and 8031, or verified API access that can reproduce the Section 11 reference set.
-
