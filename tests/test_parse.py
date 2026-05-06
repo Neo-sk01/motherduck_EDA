@@ -29,3 +29,7 @@ def test_normalize_caller_number_does_not_aggregate_restricted():
     assert normalize_caller_number("+1 (905) 283-3500") == "19052833500"
     assert normalize_caller_number("Restricted").startswith("__restricted__:")
     assert normalize_caller_number(None).startswith("__restricted__:")
+    assert normalize_caller_number("Restricted") != normalize_caller_number("Restricted")
+    assert normalize_caller_number(None) != normalize_caller_number(None)
+    assert normalize_caller_number("Private", row_key="call-a") == "__restricted__:call-a"
+    assert normalize_caller_number("Private", row_key="call-b") == "__restricted__:call-b"
