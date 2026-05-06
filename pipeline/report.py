@@ -27,10 +27,10 @@ def write_report_bundle(
         "anomalies": anomalies,
     }
     (out_dir / "metrics.json").write_text(
-        json.dumps(metrics, indent=2, sort_keys=True, default=str)
+        json.dumps(metrics, allow_nan=False, indent=2, sort_keys=True)
     )
     for queue_id, payload in queue_metrics.items():
         (out_dir / f"metrics_{queue_id}.json").write_text(
-            json.dumps(payload, indent=2, sort_keys=True, default=str)
+            json.dumps(payload, allow_nan=False, indent=2, sort_keys=True)
         )
     return out_dir

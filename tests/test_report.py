@@ -1,4 +1,7 @@
 import json
+import math
+
+import pytest
 
 from pipeline.report import write_report_bundle
 
@@ -23,3 +26,16 @@ def test_write_report_bundle_emits_metrics_and_per_queue_files(tmp_path):
     assert metrics["queues"]["8020"]["total_calls"] == 1181
     assert metrics["crossqueue"]["funnels"]["English"]["effective_answer_rate"] == 0.847
     assert per_queue["queue_id"] == "8020"
+
+
+def test_write_report_bundle_rejects_non_finite_json_values(tmp_path):
+    with pytest.raises(ValueError, match="Out of range float values"):
+        write_report_bundle(
+            data_dir=tmp_path,
+            period="month",
+            start="2026-04-01",
+            end="2026-04-30",
+            queue_metrics={"8020": {"queue_id": "8020", "answer_rate": math.nan}},
+            crossqueue={},
+            anomalies=[],
+        )
