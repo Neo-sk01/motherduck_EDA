@@ -25,7 +25,27 @@ def test_write_report_bundle_emits_metrics_and_per_queue_files(tmp_path):
     assert metrics["date_range"] == {"start": "2026-04-01", "end": "2026-04-30"}
     assert metrics["queues"]["8020"]["total_calls"] == 1181
     assert metrics["crossqueue"]["funnels"]["English"]["effective_answer_rate"] == 0.847
+    assert metrics["source_gaps"] == []
+    assert metrics["validation"] == {"status": "success"}
     assert per_queue["queue_id"] == "8020"
+
+
+def test_write_report_bundle_can_record_source_gaps(tmp_path):
+    out_dir = write_report_bundle(
+        data_dir=tmp_path,
+        period="month",
+        start="2026-02-01",
+        end="2026-02-28",
+        queue_metrics={},
+        crossqueue={},
+        anomalies=[],
+        source_gaps=[{"queue_id": "8031", "reason": "missing_csv"}],
+        validation={"status": "source_gap"},
+    )
+
+    metrics = json.loads((out_dir / "metrics.json").read_text())
+    assert metrics["source_gaps"] == [{"queue_id": "8031", "reason": "missing_csv"}]
+    assert metrics["validation"] == {"status": "source_gap"}
 
 
 def test_write_report_bundle_rejects_non_finite_json_values(tmp_path):

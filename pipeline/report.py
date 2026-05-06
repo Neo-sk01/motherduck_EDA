@@ -14,6 +14,8 @@ def write_report_bundle(
     queue_metrics: dict[str, dict[str, Any]],
     crossqueue: dict[str, Any],
     anomalies: list[dict[str, Any]],
+    source_gaps: list[dict[str, Any]] | None = None,
+    validation: dict[str, Any] | None = None,
 ) -> Path:
     key = f"{period}_{start}_{end}"
     out_dir = data_dir / "reports" / key
@@ -25,6 +27,8 @@ def write_report_bundle(
         "queues": queue_metrics,
         "crossqueue": crossqueue,
         "anomalies": anomalies,
+        "source_gaps": source_gaps or [],
+        "validation": validation or {"status": "success"},
     }
     (out_dir / "metrics.json").write_text(
         json.dumps(metrics, allow_nan=False, indent=2, sort_keys=True)

@@ -57,3 +57,13 @@ def test_app_config_from_env_reads_queue_overrides(monkeypatch):
         "CSR Overflow English",
         "CSR Overflow French",
     ]
+
+
+def test_app_config_from_env_loads_dotenv(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("DATA_DIR", raising=False)
+    (tmp_path / ".env").write_text("DATA_DIR=./from-dotenv\n")
+
+    cfg = AppConfig.from_env()
+
+    assert str(cfg.data_dir).endswith("from-dotenv")

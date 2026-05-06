@@ -26,6 +26,35 @@ def _write_minimal_queue_csv(csv_dir, queue_id: str, call_time: str = "01/15/202
     ).to_csv(csv_dir / f"calls_{queue_id}_2025-01.csv", index=False)
 
 
+def _write_two_row_queue_csv(csv_dir, queue_id: str):
+    pd.DataFrame(
+        [
+            {
+                "Call Time": "01/15/2025 8:33 am",
+                "Orig CallID": f"in-range-{queue_id}",
+                "Caller Number": "905-283-3500",
+                "Time in Queue": "00:09",
+                "Agent Time": "04:04",
+                "Hold Time": "00:00",
+                "Agent Name": f"Agent {queue_id}",
+                "Queue Release Reason": "Orig: Bye",
+                "Agent Release Reason": "Orig: Bye",
+            },
+            {
+                "Call Time": "02/01/2025 8:33 am",
+                "Orig CallID": f"out-range-{queue_id}",
+                "Caller Number": "604-294-1500",
+                "Time in Queue": "00:11",
+                "Agent Time": "00:00",
+                "Hold Time": "00:00",
+                "Agent Name": None,
+                "Queue Release Reason": "No Answer",
+                "Agent Release Reason": "No Answer",
+            },
+        ]
+    ).to_csv(csv_dir / f"calls_{queue_id}_2025-wide.csv", index=False)
+
+
 def test_parse_args_supports_backfill_dates():
     args = parse_args(
         [
@@ -85,9 +114,27 @@ def test_run_csv_writes_report_and_optional_store_for_backfill(tmp_path):
         """
     ).fetchone()[0]
     assert rows == 4
+    warehouse_counts = dict(
+        store.connection.execute(
+            """
+            select 'raw_call_legs', count(*) from raw_call_legs
+            union all select 'queue_period_metrics', count(*) from queue_period_metrics
+            union all select 'funnel_language_metrics', count(*) from funnel_language_metrics
+            union all select 'release_reason_metrics', count(*) from release_reason_metrics
+            union all select 'report_runs', count(*) from report_runs
+            """
+        ).fetchall()
+    )
+    assert warehouse_counts == {
+        "raw_call_legs": 4,
+        "queue_period_metrics": 4,
+        "funnel_language_metrics": 2,
+        "release_reason_metrics": 8,
+        "report_runs": 1,
+    }
 
 
-def test_run_csv_rejects_rows_outside_requested_backfill_range(tmp_path):
+def test_run_csv_filters_rows_outside_requested_backfill_range(tmp_path):
     csv_dir = tmp_path / "csv"
     csv_dir.mkdir()
     config = AppConfig(
@@ -99,10 +146,39 @@ def test_run_csv_rejects_rows_outside_requested_backfill_range(tmp_path):
         queues=tuple(build_default_queues()),
     )
     for queue in config.queues:
-        _write_minimal_queue_csv(csv_dir, queue.queue_id, call_time="02/01/2025 8:33 am")
+        _write_two_row_queue_csv(csv_dir, queue.queue_id)
 
-    with pytest.raises(ValueError, match="outside requested date range"):
+    out_dir = run_csv(config, period="month", start="2025-01-01", end="2025-01-31")
+
+    metrics = json.loads((out_dir / "metrics.json").read_text())
+    assert {queue_id: row["total_calls"] for queue_id, row in metrics["queues"].items()} == {
+        "8020": 1,
+        "8021": 1,
+        "8030": 1,
+        "8031": 1,
+    }
+
+
+def test_run_csv_records_source_gap_report_before_failing(tmp_path):
+    csv_dir = tmp_path / "csv"
+    csv_dir.mkdir()
+    config = AppConfig(
+        motherduck_database="test_db",
+        source="csv",
+        csv_dir=csv_dir,
+        data_dir=tmp_path / "data",
+        timezone="America/Toronto",
+        queues=tuple(build_default_queues()),
+    )
+    for queue in config.queues[:3]:
+        _write_minimal_queue_csv(csv_dir, queue.queue_id)
+
+    with pytest.raises(FileNotFoundError, match="8031"):
         run_csv(config, period="month", start="2025-01-01", end="2025-01-31")
+
+    metrics = json.loads((config.data_dir / "reports" / "month_2025-01-01_2025-01-31" / "metrics.json").read_text())
+    assert metrics["validation"] == {"status": "source_gap"}
+    assert metrics["source_gaps"][0]["queue_id"] == "8031"
 
 
 def test_main_rejects_api_mode_at_this_milestone():

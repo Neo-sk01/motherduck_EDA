@@ -5,6 +5,20 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    def load_dotenv() -> None:
+        path = Path(".env")
+        if not path.exists():
+            return
+        for line in path.read_text().splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or "=" not in stripped:
+                continue
+            key, value = stripped.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
 SourceMode = Literal["csv", "api", "hybrid"]
 QueueRole = Literal["primary", "overflow"]
 
@@ -28,6 +42,7 @@ class AppConfig:
 
     @classmethod
     def from_env(cls) -> "AppConfig":
+        load_dotenv()
         return cls(
             motherduck_database=os.getenv("MOTHERDUCK_DATABASE", "csh_analytics_v2"),
             source=parse_source_mode(os.getenv("SOURCE", "csv")),

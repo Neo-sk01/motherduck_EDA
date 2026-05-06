@@ -32,6 +32,16 @@ def test_compute_queue_metrics_series_and_leaderboards(curated_sample):
     assert metrics["duration_distributions"]["agent_sec"]["median"] == 244.0
     assert metrics["duration_distributions"]["hold_sec"]["count"] == 1
     assert metrics["duration_distributions"]["hold_sec"]["median"] == 20.0
+    assert metrics["release_reasons"]["queue"] == [
+        {"reason": "No Answer", "calls": 3},
+        {"reason": "Orig: Bye", "calls": 1},
+        {"reason": "Term: Bye", "calls": 1},
+    ]
+    assert metrics["release_reasons"]["agent"] == [
+        {"reason": "No Answer", "calls": 3},
+        {"reason": "Orig: Bye", "calls": 1},
+        {"reason": "Term: Bye", "calls": 1},
+    ]
     assert metrics["agent_leaderboard"][0]["agent_name"] == "Alicia"
     assert metrics["agent_leaderboard"][0]["calls"] == 2
     assert metrics["agent_leaderboard"][0]["avg_sec"] == 272.0
@@ -60,5 +70,6 @@ def test_compute_queue_metrics_returns_empty_payload_for_unknown_queue(curated_s
     assert metrics["hourly_volume"] == []
     assert metrics["dow_volume"] == []
     assert metrics["duration_distributions"]["queue_sec"]["count"] == 0
+    assert metrics["release_reasons"] == {"queue": [], "agent": []}
     assert metrics["agent_leaderboard"] == []
     assert metrics["top_callers"] == []

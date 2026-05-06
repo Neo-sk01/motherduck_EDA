@@ -13,6 +13,7 @@ from pipeline.curate import curate_csv_calls
 from pipeline.dedup import deduplicate_csv
 from pipeline.ingest_csv import find_queue_csv, load_queue_csv
 from pipeline.metrics_queue import compute_queue_metrics
+from pipeline.parse import parse_csv_call_time
 from pipeline.report import write_report_bundle
 from pipeline.storage import AnalyticsStore
 
@@ -40,24 +41,43 @@ def run_csv(
     store: AnalyticsStore | None = None,
 ) -> Path:
     curated_queues = []
+    raw_queues = []
+    source_gaps = []
     for queue in config.queues:
-        csv_path = find_queue_csv(config.csv_dir, queue.queue_id)
+        try:
+            csv_path = find_queue_csv(config.csv_dir, queue.queue_id)
+        except FileNotFoundError as exc:
+            source_gaps.append({"queue_id": queue.queue_id, "reason": "missing_csv", "message": str(exc)})
+            continue
         raw = load_queue_csv(csv_path, queue)
+        raw = _filter_raw_date_range(raw, start, end)
+        raw_queues.append(raw)
         deduped = deduplicate_csv(raw)
         curated_queues.append(curate_csv_calls(deduped))
 
-    curated = pd.concat(curated_queues, ignore_index=True)
-    _validate_curated_date_range(curated, start, end)
-    if store is not None:
-        store.replace_curated_calls(start, end, curated)
+    if source_gaps:
+        out_dir = write_report_bundle(
+            config.data_dir,
+            period,
+            start,
+            end,
+            {},
+            {},
+            [],
+            source_gaps=source_gaps,
+            validation={"status": "source_gap"},
+        )
+        missing = ", ".join(gap["queue_id"] for gap in source_gaps)
+        raise FileNotFoundError(f"Missing required queue CSVs for {missing}; source gap report written to {out_dir}")
 
+    curated = pd.concat(curated_queues, ignore_index=True)
     queue_metrics = {
         queue.queue_id: compute_queue_metrics(curated, queue.queue_id)
         for queue in config.queues
     }
     crossqueue = compute_crossqueue_metrics(curated)
     anomalies = detect_anomalies(queue_metrics, crossqueue)
-    return write_report_bundle(
+    out_dir = write_report_bundle(
         config.data_dir,
         period,
         start,
@@ -66,6 +86,12 @@ def run_csv(
         crossqueue,
         anomalies,
     )
+    if store is not None:
+        store.replace_queue_dimension(config.queues)
+        store.replace_raw_call_legs(start, end, pd.concat(raw_queues, ignore_index=True), source_mode="csv")
+        store.replace_curated_calls(start, end, curated)
+        store.replace_report_outputs(start, end, period, "csv", queue_metrics, crossqueue, anomalies)
+    return out_dir
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -83,16 +109,11 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def _validate_curated_date_range(curated: pd.DataFrame, start: str, end: str) -> None:
+def _filter_raw_date_range(raw: pd.DataFrame, start: str, end: str) -> pd.DataFrame:
     start_date = pd.Timestamp(start).normalize()
     end_date = pd.Timestamp(end).normalize()
-    call_dates = pd.to_datetime(curated["call_datetime"], errors="raise").dt.normalize()
-    outside = call_dates.lt(start_date) | call_dates.gt(end_date)
-    if outside.any():
-        sample = curated.loc[outside, ["queue_id", "call_id", "call_time"]].head(5).to_dict("records")
-        raise ValueError(
-            f"CSV rows outside requested date range {start} to {end}: {sample}"
-        )
+    call_dates = parse_csv_call_time(raw["Call Time"]).dt.normalize()
+    return raw.loc[call_dates.between(start_date, end_date)].reset_index(drop=True)
 
 
 if __name__ == "__main__":

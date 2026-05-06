@@ -27,6 +27,7 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
                 "agent_sec": _duration_distribution(pd.Series(dtype="float64")),
                 "hold_sec": _duration_distribution(pd.Series(dtype="float64")),
             },
+            "release_reasons": {"queue": [], "agent": []},
             "agent_leaderboard": [],
             "top_callers": [],
         }
@@ -88,6 +89,10 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
             "agent_sec": _duration_distribution(handled["agent_sec"]),
             "hold_sec": _duration_distribution(df.loc[df["hold_sec"].fillna(0).gt(0), "hold_sec"]),
         },
+        "release_reasons": {
+            "queue": _reason_counts(df, "queue_release_reason"),
+            "agent": _reason_counts(df, "agent_release_reason"),
+        },
         "agent_leaderboard": [
             {
                 "agent_name": str(r["agent_name"]),
@@ -135,6 +140,26 @@ def _duration_distribution(series: pd.Series) -> dict[str, int | float | None]:
         "p75": _json_number(values.quantile(0.75)),
         "max": _json_number(values.max()),
     }
+
+
+def _reason_counts(df: pd.DataFrame, column: str) -> list[dict[str, int | str]]:
+    if column not in df.columns:
+        return []
+    reasons = (
+        df[column]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .loc[lambda s: s.ne("") & s.str.casefold().ne("null")]
+        .value_counts()
+        .rename_axis("reason")
+        .reset_index(name="calls")
+        .sort_values(["calls", "reason"], ascending=[False, True])
+    )
+    return [
+        {"reason": str(row["reason"]), "calls": int(row["calls"])}
+        for row in reasons.to_dict("records")
+    ]
 
 
 def _json_number(value: Any) -> float | None:
