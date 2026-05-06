@@ -30,6 +30,8 @@ def _language_funnel(curated: pd.DataFrame, language: str) -> dict:
     overflow_received = len(overflow)
     overflow_answered = int(overflow_handled.sum())
     overflow_failed = overflow_received - overflow_answered
+    unaccounted = primary_failed - overflow_received
+    lost = overflow_failed + max(unaccounted, 0)
     final_answered = primary_answered + overflow_answered
     return {
         "primary_calls": int(primary_calls),
@@ -39,10 +41,10 @@ def _language_funnel(curated: pd.DataFrame, language: str) -> dict:
         "routing_match": float(overflow_received / primary_failed) if primary_failed else 0.0,
         "overflow_answered": int(overflow_answered),
         "overflow_failed": int(overflow_failed),
-        "lost": int(overflow_failed),
-        "lost_rate": float(overflow_failed / primary_calls) if primary_calls else 0.0,
+        "lost": int(lost),
+        "lost_rate": float(lost / primary_calls) if primary_calls else 0.0,
         "effective_answer_rate": float(final_answered / primary_calls) if primary_calls else 0.0,
-        "unaccounted": int(primary_failed - overflow_received),
+        "unaccounted": int(unaccounted),
     }
 
 
