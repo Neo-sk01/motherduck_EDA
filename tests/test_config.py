@@ -37,3 +37,20 @@ def test_app_config_from_env(monkeypatch):
     assert str(cfg.csv_dir).endswith("data/csv-uploads")
     assert str(cfg.data_dir).endswith("data")
     assert cfg.timezone == "America/Toronto"
+
+
+def test_app_config_from_env_reads_queue_overrides(monkeypatch):
+    monkeypatch.setenv("QUEUE_ENGLISH", "9001")
+    monkeypatch.setenv("QUEUE_FRENCH", "9002")
+    monkeypatch.setenv("QUEUE_AI_OVERFLOW_EN", "9010")
+    monkeypatch.setenv("QUEUE_AI_OVERFLOW_FR", "9011")
+
+    cfg = AppConfig.from_env()
+
+    assert [queue.queue_id for queue in cfg.queues] == ["9001", "9002", "9010", "9011"]
+    assert [queue.name for queue in cfg.queues] == [
+        "CSR English",
+        "CSR French",
+        "CSR Overflow English",
+        "CSR Overflow French",
+    ]
