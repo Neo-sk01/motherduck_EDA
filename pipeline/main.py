@@ -28,6 +28,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--period", choices=("day", "week", "month"), required=True)
     parser.add_argument("--start", required=True)
     parser.add_argument("--end", required=True)
+    parser.add_argument("--write-store", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -46,6 +47,7 @@ def run_csv(
         curated_queues.append(curate_csv_calls(deduped))
 
     curated = pd.concat(curated_queues, ignore_index=True)
+    _validate_curated_date_range(curated, start, end)
     if store is not None:
         store.replace_curated_calls(start, end, curated)
 
@@ -68,15 +70,29 @@ def run_csv(
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    config = AppConfig.from_env()
     if args.source != "csv":
         raise SystemExit(NON_CSV_MESSAGE)
 
+    config = AppConfig.from_env()
     store = None
-    if os.getenv("MOTHERDUCK_TOKEN_RW"):
+    if args.write_store:
+        if not os.getenv("MOTHERDUCK_TOKEN_RW"):
+            raise SystemExit("MOTHERDUCK_TOKEN_RW is required when --write-store is set.")
         store = AnalyticsStore.motherduck(config.motherduck_database)
     run_csv(config, args.period, args.start, args.end, store=store)
     return 0
+
+
+def _validate_curated_date_range(curated: pd.DataFrame, start: str, end: str) -> None:
+    start_date = pd.Timestamp(start).normalize()
+    end_date = pd.Timestamp(end).normalize()
+    call_dates = pd.to_datetime(curated["call_datetime"], errors="raise").dt.normalize()
+    outside = call_dates.lt(start_date) | call_dates.gt(end_date)
+    if outside.any():
+        sample = curated.loc[outside, ["queue_id", "call_id", "call_time"]].head(5).to_dict("records")
+        raise ValueError(
+            f"CSV rows outside requested date range {start} to {end}: {sample}"
+        )
 
 
 if __name__ == "__main__":
