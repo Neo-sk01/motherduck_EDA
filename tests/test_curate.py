@@ -41,7 +41,7 @@ def test_curate_csv_calls_adds_derived_fields_and_handled_flag():
     out = curate_csv_calls(raw)
     assert list(out["queue_id"]) == ["8020", "8020"]
     assert list(out["call_id"]) == ["a", "b"]
-    assert list(out["handled_flag"]) == ["Handled", "No Talk Time"]
+    assert list(out["handled_flag"]) == ["Handled", "No Agent"]
     assert out.loc[0, "queue_sec"] == 9
     assert out.loc[0, "agent_sec"] == 244
     assert out.loc[0, "date"] == "2026-04-01"

@@ -33,5 +33,10 @@ def curate_csv_calls(df: pd.DataFrame) -> pd.DataFrame:
     out["hold_sec"] = df["Hold Time"].map(to_seconds)
     out["agent_release_reason"] = df.get("Agent Release Reason")
     out["queue_release_reason"] = df.get("Queue Release Reason")
-    out["handled_flag"] = out["agent_sec"].fillna(0).gt(0).map({True: "Handled", False: "No Talk Time"})
+    agent_present = (
+        out["agent_name"].notna()
+        & out["agent_name"].astype(str).str.strip().ne("")
+        & out["agent_name"].astype(str).str.strip().str.casefold().ne("null")
+    )
+    out["handled_flag"] = agent_present.map({True: "Handled", False: "No Agent"})
     return out

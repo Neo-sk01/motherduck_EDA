@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from pipeline.crossqueue import compute_crossqueue_metrics
 
@@ -26,7 +27,7 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
                 "caller_number_norm": "9052833500",
                 "date": "2026-04-01",
                 "hour": 9,
-                "handled_flag": "No Talk Time",
+                "handled_flag": "No Agent",
             },
             {
                 "queue_id": "8020",
@@ -37,7 +38,7 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
                 "caller_number_norm": "2223334444",
                 "date": "2026-04-01",
                 "hour": 10,
-                "handled_flag": "No Talk Time",
+                "handled_flag": "No Agent",
             },
             {
                 "queue_id": "8030",
@@ -48,7 +49,7 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
                 "caller_number_norm": "9052833500",
                 "date": "2026-04-01",
                 "hour": 9,
-                "handled_flag": "No Talk Time",
+                "handled_flag": "No Agent",
             },
             {
                 "queue_id": "8021",
@@ -59,7 +60,7 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
                 "caller_number_norm": "8197908197",
                 "date": "2026-04-01",
                 "hour": 8,
-                "handled_flag": "No Talk Time",
+                "handled_flag": "No Agent",
             },
             {
                 "queue_id": "8031",
@@ -82,9 +83,9 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
     assert english["overflow_received"] == 1
     assert english["overflow_failed"] == 1
     assert english["unaccounted"] == 1
-    assert english["lost"] == 2
-    assert english["lost_rate"] == 2 / 3
-    assert english["effective_answer_rate"] == 1 / 3
+    assert english["lost"] == 1
+    assert english["lost_rate"] == 1 / 3
+    assert english["effective_answer_rate"] == pytest.approx(2 / 3)
     assert metrics["agents"][0]["agent_name"] == "Gabriel Hubert"
     assert metrics["agents"][0]["total_calls"] == 2
     assert metrics["callers"][0]["caller_number_norm"] == "9052833500"
