@@ -5,6 +5,22 @@ import pandas as pd
 
 def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
     df = curated[curated["queue_id"].astype(str) == str(queue_id)].copy()
+    if df.empty:
+        return {
+            "queue_id": str(queue_id),
+            "total_calls": 0,
+            "handled_calls": 0,
+            "no_agent_calls": 0,
+            "no_agent_rate": 0.0,
+            "days_with_calls": 0,
+            "avg_calls_per_active_day": 0.0,
+            "busiest_day": None,
+            "quietest_day": None,
+            "daily_volume": [],
+            "hourly_volume": [],
+            "agent_leaderboard": [],
+            "top_callers": [],
+        }
     handled = df[df["agent_name"].notna()]
     daily = df.groupby("date").size().rename("calls").reset_index()
     daily_records = daily.sort_values("date").to_dict("records")
