@@ -17,13 +17,19 @@ Put secrets only in `.env`. Do not commit secrets.
 
 ## CSV Run
 
-Available after the pipeline modules are implemented.
-
 Place the four SONAR Queue Detail CSV files in `data/csv-uploads/`, then run:
 
 ```bash
 python -m pipeline.main --source csv --period month --start 2026-04-01 --end 2026-04-30
 ```
+
+The default command writes report JSON only. To also replace the matching period in MotherDuck/DuckDB tables, set `MOTHERDUCK_TOKEN_RW` and opt in explicitly:
+
+```bash
+python -m pipeline.main --source csv --period month --start 2026-04-01 --end 2026-04-30 --write-store
+```
+
+Backfills support arbitrary `--start` and `--end` dates. If a CSV export contains a broader range, rows outside the requested period are filtered before deduplication and metric computation.
 
 ## Tests
 
