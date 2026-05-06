@@ -1,1 +1,17 @@
 .worktrees/
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.pyc
+data/raw/
+data/curated/
+data/reports/
+data/csv-uploads/
+*.duckdb
+*.duckdb.wal
+node_modules/
+dist/
