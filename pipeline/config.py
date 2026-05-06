@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Literal
 
 SourceMode = Literal["csv", "api", "hybrid"]
@@ -20,8 +21,8 @@ class QueueConfig:
 class AppConfig:
     motherduck_database: str
     source: SourceMode
-    csv_dir: str
-    data_dir: str
+    csv_dir: Path
+    data_dir: Path
     timezone: str
     queues: tuple[QueueConfig, ...]
 
@@ -30,8 +31,8 @@ class AppConfig:
         return cls(
             motherduck_database=os.getenv("MOTHERDUCK_DATABASE", "csh_analytics_v2"),
             source=parse_source_mode(os.getenv("SOURCE", "csv")),
-            csv_dir=os.getenv("CSV_DIR", "./data/csv-uploads"),
-            data_dir=os.getenv("DATA_DIR", "./data"),
+            csv_dir=Path(os.getenv("CSV_DIR", "./data/csv-uploads")),
+            data_dir=Path(os.getenv("DATA_DIR", "./data")),
             timezone=os.getenv("TIMEZONE", "America/Toronto"),
             queues=tuple(build_default_queues()),
         )

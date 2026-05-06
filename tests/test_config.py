@@ -34,6 +34,6 @@ def test_app_config_from_env(monkeypatch):
     cfg = AppConfig.from_env()
     assert cfg.motherduck_database == "csh_analytics_v2"
     assert cfg.source == "csv"
-    assert cfg.csv_dir.endswith("data/csv-uploads")
-    assert cfg.data_dir.endswith("data")
+    assert str(cfg.csv_dir).endswith("data/csv-uploads")
+    assert str(cfg.data_dir).endswith("data")
     assert cfg.timezone == "America/Toronto"
