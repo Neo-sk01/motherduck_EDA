@@ -1,7 +1,10 @@
 from pipeline.config import AppConfig, QueueConfig, build_default_queues, parse_source_mode
 
 
-def test_default_queues_match_brief():
+def test_default_queues_match_brief(monkeypatch):
+    for key in ("QUEUE_ENGLISH", "QUEUE_FRENCH", "QUEUE_AI_OVERFLOW_EN", "QUEUE_AI_OVERFLOW_FR"):
+        monkeypatch.delenv(key, raising=False)
+
     queues = build_default_queues()
     assert [q.queue_id for q in queues] == ["8020", "8021", "8030", "8031"]
     assert queues[0] == QueueConfig("8020", "CSR English", "English", "primary")
