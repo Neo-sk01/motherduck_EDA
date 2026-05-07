@@ -1,0 +1,7537 @@
+{
+  "anomalies": [
+    {
+      "description": "CSH - BUILDS appears in queue 8020 agent leaderboard and should be verified as human or system.",
+      "kind": "system_agent",
+      "queue_id": "8020",
+      "severity": "high",
+      "target": {
+        "agent_name": "CSH - BUILDS",
+        "queue_id": "8020",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Gabriel Hubert handled more than 60% of answered calls on queue 8021.",
+      "kind": "single_agent_dependency",
+      "queue_id": "8021",
+      "severity": "high",
+      "target": {
+        "agent_name": "Gabriel Hubert",
+        "queue_id": "8021",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8021 has no-answer rate above 50% at 12:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8021",
+      "severity": "medium",
+      "target": {
+        "hour": 12,
+        "queue_id": "8021",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8021 has no-answer rate above 50% at 13:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8021",
+      "severity": "medium",
+      "target": {
+        "hour": 13,
+        "queue_id": "8021",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8030 has no-answer rate above 50% at 10:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8030",
+      "severity": "medium",
+      "target": {
+        "hour": 10,
+        "queue_id": "8030",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8030 has no-answer rate above 50% at 11:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8030",
+      "severity": "medium",
+      "target": {
+        "hour": 11,
+        "queue_id": "8030",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8030 has no-answer rate above 50% at 12:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8030",
+      "severity": "medium",
+      "target": {
+        "hour": 12,
+        "queue_id": "8030",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8030 has no-answer rate above 50% at 13:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8030",
+      "severity": "medium",
+      "target": {
+        "hour": 13,
+        "queue_id": "8030",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Queue 8030 has no-answer rate above 50% at 15:00.",
+      "kind": "hourly_no_answer",
+      "queue_id": "8030",
+      "severity": "medium",
+      "target": {
+        "hour": 15,
+        "queue_id": "8030",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "CSH - BUILDS appears in queue 8031 agent leaderboard and should be verified as human or system.",
+      "kind": "system_agent",
+      "queue_id": "8031",
+      "severity": "high",
+      "target": {
+        "agent_name": "CSH - BUILDS",
+        "queue_id": "8031",
+        "view": "per-queue"
+      }
+    },
+    {
+      "description": "Caller 9052833500 exceeded 20 cross-queue contacts.",
+      "kind": "caller_concentration",
+      "severity": "medium",
+      "target": {
+        "entity": "9052833500",
+        "view": "cross-queue"
+      }
+    },
+    {
+      "description": "Caller 6042941500 exceeded 20 cross-queue contacts.",
+      "kind": "caller_concentration",
+      "severity": "medium",
+      "target": {
+        "entity": "6042941500",
+        "view": "cross-queue"
+      }
+    },
+    {
+      "description": "Caller 4256352970 exceeded 20 cross-queue contacts.",
+      "kind": "caller_concentration",
+      "severity": "medium",
+      "target": {
+        "entity": "4256352970",
+        "view": "cross-queue"
+      }
+    },
+    {
+      "description": "Caller 6138629864 exceeded 20 cross-queue contacts.",
+      "kind": "caller_concentration",
+      "severity": "medium",
+      "target": {
+        "entity": "6138629864",
+        "view": "cross-queue"
+      }
+    }
+  ],
+  "crossqueue": {
+    "agents": [
+      {
+        "8020": 182,
+        "8021": 24,
+        "8030": 87,
+        "8031": 6,
+        "agent_name": "Gabriel Hubert",
+        "total_calls": 299
+      },
+      {
+        "8020": 222,
+        "8021": 0,
+        "8030": 20,
+        "8031": 0,
+        "agent_name": "Alicia Yameen",
+        "total_calls": 242
+      },
+      {
+        "8020": 174,
+        "8021": 0,
+        "8030": 13,
+        "8031": 0,
+        "agent_name": "Aqsa Razzaq",
+        "total_calls": 187
+      },
+      {
+        "8020": 33,
+        "8021": 3,
+        "8030": 8,
+        "8031": 3,
+        "agent_name": "Luke Deschenes",
+        "total_calls": 47
+      },
+      {
+        "8020": 23,
+        "8021": 4,
+        "8030": 5,
+        "8031": 1,
+        "agent_name": "Diego Villegas",
+        "total_calls": 33
+      },
+      {
+        "8020": 22,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "agent_name": "Rao Arslan",
+        "total_calls": 24
+      },
+      {
+        "8020": 21,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "agent_name": "Abdul Muhaimin",
+        "total_calls": 23
+      },
+      {
+        "8020": 15,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Drew Rehman",
+        "total_calls": 15
+      },
+      {
+        "8020": 12,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "agent_name": "Syed Gillani",
+        "total_calls": 13
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 11,
+        "agent_name": "CSH - BUILDS",
+        "total_calls": 12
+      },
+      {
+        "8020": 9,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "agent_name": "Chris Olsen",
+        "total_calls": 12
+      },
+      {
+        "8020": 11,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "agent_name": "Daniel Sikander",
+        "total_calls": 12
+      },
+      {
+        "8020": 9,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "agent_name": "Kaleem Sandhu",
+        "total_calls": 12
+      },
+      {
+        "8020": 9,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "agent_name": "Braeden Tremblay",
+        "total_calls": 11
+      },
+      {
+        "8020": 10,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Robert Patrick",
+        "total_calls": 10
+      },
+      {
+        "8020": 9,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Ryan Mushtaq",
+        "total_calls": 9
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Ali Saeed",
+        "total_calls": 8
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Axen Akbar",
+        "total_calls": 8
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "agent_name": "Corey Rowsell",
+        "total_calls": 8
+      },
+      {
+        "8020": 6,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "agent_name": "Faheem Zafar",
+        "total_calls": 8
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Amandeep Kaur",
+        "total_calls": 7
+      },
+      {
+        "8020": 0,
+        "8021": 0,
+        "8030": 7,
+        "8031": 0,
+        "agent_name": "Kendra Tiller",
+        "total_calls": 7
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 1,
+        "agent_name": "Aymen Zayet",
+        "total_calls": 6
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Arsh Ali",
+        "total_calls": 5
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "agent_name": "Lisa Slover",
+        "total_calls": 4
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Suzanne Nanette",
+        "total_calls": 4
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Usama Ahmed Khan",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Cielo Nino",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Florian Nsabiyumva",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Hassan Zeitoun",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Jarod Stackhouse",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Abdel Kabore",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Eric Besserer",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Farhan Zaffar",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Karan Trivedi",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "agent_name": "Martha Canaveral",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Nick Khawaja",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "agent_name": "Scott Arthur",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Shantee Leamy",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "agent_name": "Subhan Saleem",
+        "total_calls": 1
+      }
+    ],
+    "callers": [
+      {
+        "8020": 45,
+        "8021": 2,
+        "8030": 16,
+        "8031": 0,
+        "caller_number_norm": "9052833500",
+        "total_calls": 63
+      },
+      {
+        "8020": 23,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "6042941500",
+        "total_calls": 27
+      },
+      {
+        "8020": 19,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "4256352970",
+        "total_calls": 23
+      },
+      {
+        "8020": 16,
+        "8021": 0,
+        "8030": 6,
+        "8031": 0,
+        "caller_number_norm": "6138629864",
+        "total_calls": 22
+      },
+      {
+        "8020": 17,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6132836772",
+        "total_calls": 20
+      },
+      {
+        "8020": 12,
+        "8021": 0,
+        "8030": 6,
+        "8031": 0,
+        "caller_number_norm": "6137447667",
+        "total_calls": 18
+      },
+      {
+        "8020": 14,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "6137492491",
+        "total_calls": 18
+      },
+      {
+        "8020": 11,
+        "8021": 0,
+        "8030": 6,
+        "8031": 0,
+        "caller_number_norm": "6132267381",
+        "total_calls": 17
+      },
+      {
+        "8020": 12,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "4372240746",
+        "total_calls": 16
+      },
+      {
+        "8020": 13,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6137361913",
+        "total_calls": 15
+      },
+      {
+        "8020": 12,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6132353333",
+        "total_calls": 14
+      },
+      {
+        "8020": 8,
+        "8021": 1,
+        "8030": 3,
+        "8031": 1,
+        "caller_number_norm": "6132412701",
+        "total_calls": 13
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 5,
+        "8031": 0,
+        "caller_number_norm": "6135234004",
+        "total_calls": 13
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 5,
+        "8031": 0,
+        "caller_number_norm": "6135588854",
+        "total_calls": 13
+      },
+      {
+        "8020": 9,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "7055701752",
+        "total_calls": 13
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 4,
+        "8031": 0,
+        "caller_number_norm": "6134435263",
+        "total_calls": 12
+      },
+      {
+        "8020": 10,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6135648118",
+        "total_calls": 12
+      },
+      {
+        "8020": 9,
+        "8021": 2,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136080924",
+        "total_calls": 12
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6134455200",
+        "total_calls": 11
+      },
+      {
+        "8020": 4,
+        "8021": 3,
+        "8030": 1,
+        "8031": 3,
+        "caller_number_norm": "6134470814",
+        "total_calls": 11
+      },
+      {
+        "8020": 6,
+        "8021": 1,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "3439992112",
+        "total_calls": 10
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6136128048",
+        "total_calls": 10
+      },
+      {
+        "8020": 8,
+        "8021": 1,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137949275",
+        "total_calls": 10
+      },
+      {
+        "8020": 6,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "5127230000",
+        "total_calls": 9
+      },
+      {
+        "8020": 8,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6133429333",
+        "total_calls": 9
+      },
+      {
+        "8020": 6,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6135951338",
+        "total_calls": 9
+      },
+      {
+        "8020": 6,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6136955212",
+        "total_calls": 9
+      },
+      {
+        "8020": 6,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "8885300286",
+        "total_calls": 9
+      },
+      {
+        "8020": 4,
+        "8021": 1,
+        "8030": 2,
+        "8031": 1,
+        "caller_number_norm": "5194527700",
+        "total_calls": 8
+      },
+      {
+        "8020": 4,
+        "8021": 1,
+        "8030": 2,
+        "8031": 1,
+        "caller_number_norm": "6132471440",
+        "total_calls": 8
+      },
+      {
+        "8020": 5,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6133554558",
+        "total_calls": 8
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137253832",
+        "total_calls": 8
+      },
+      {
+        "8020": 5,
+        "8021": 1,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138317122",
+        "total_calls": 8
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "3435720301",
+        "total_calls": 7
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "4166022335",
+        "total_calls": 7
+      },
+      {
+        "8020": 6,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4168579436",
+        "total_calls": 7
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132240212",
+        "total_calls": 7
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132321724",
+        "total_calls": 7
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6132448620",
+        "total_calls": 7
+      },
+      {
+        "8020": 7,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132602906",
+        "total_calls": 7
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6134305050",
+        "total_calls": 7
+      },
+      {
+        "8020": 6,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138685066",
+        "total_calls": 7
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "3063435500",
+        "total_calls": 6
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6132371320",
+        "total_calls": 6
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6132525456",
+        "total_calls": 6
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 3,
+        "8031": 0,
+        "caller_number_norm": "6134839760",
+        "total_calls": 6
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6135011528",
+        "total_calls": 6
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138253931",
+        "total_calls": 6
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138823663",
+        "total_calls": 6
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "8197771674",
+        "total_calls": 6
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "4372342654",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 1,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "5146777868",
+        "total_calls": 5
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132248000",
+        "total_calls": 5
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132884567",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6133168726",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6136391065",
+        "total_calls": 5
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137252867",
+        "total_calls": 5
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137285821",
+        "total_calls": 5
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137489388",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138043116",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138517602",
+        "total_calls": 5
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6479269047",
+        "total_calls": 5
+      },
+      {
+        "8020": 0,
+        "8021": 4,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "8197908197",
+        "total_calls": 5
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8772828857",
+        "total_calls": 5
+      },
+      {
+        "8020": 5,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8886422725",
+        "total_calls": 5
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "280",
+        "total_calls": 4
+      },
+      {
+        "8020": 0,
+        "8021": 2,
+        "8030": 0,
+        "8031": 2,
+        "caller_number_norm": "3432023236",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "3432272051",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "3435883359",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "3439619339",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "4163806431",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "4377808304",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4388761982",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132201360",
+        "total_calls": 4
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132221108",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6132230573",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6132297674",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132346533",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132587800",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132747700",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6133014594",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6133717714",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 1,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135664742",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135664760",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136179233",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137374809",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137375115",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6137427499",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137697592",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137894242",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138227400",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138227663",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138293600",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138390007",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138516153",
+        "total_calls": 4
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138589554",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138689627",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138845440",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138857923",
+        "total_calls": 4
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 2,
+        "8031": 0,
+        "caller_number_norm": "6138945419",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139147194",
+        "total_calls": 4
+      },
+      {
+        "8020": 4,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8005612983",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8193345625",
+        "total_calls": 4
+      },
+      {
+        "8020": 0,
+        "8021": 2,
+        "8030": 0,
+        "8031": 2,
+        "caller_number_norm": "8197435305",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8883144884",
+        "total_calls": 4
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3432028333",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3434517260",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3436306389",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4164597362",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4165083376",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4786549001",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5146046561",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5146556008",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5199911689",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132181805",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132236502",
+        "total_calls": 3
+      },
+      {
+        "8020": 1,
+        "8021": 1,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132248391",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132333343",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132346006",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132350101",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132407504",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132659767",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132820562",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132910867",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132935021",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132937738",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132960625",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6133195164",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133276677",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6133644076",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134002104",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134068042",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134131104",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134137259",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134383669",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135588572",
+        "total_calls": 3
+      },
+      {
+        "8020": 0,
+        "8021": 2,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6135664744",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136124284",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136140864",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136685979",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136833755",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137252692",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137907957",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137954527",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137954901",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138088085",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138232200",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138232951",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138318397",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138510278",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138544580",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138611103",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138683508",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138908056",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139133369",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139144400",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139790623",
+        "total_calls": 3
+      },
+      {
+        "8020": 1,
+        "8021": 1,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6474015352",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6475021403",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6476428648",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "7053580411",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8002686870",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8447265115",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "9028303308",
+        "total_calls": 3
+      },
+      {
+        "8020": 3,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9055603961",
+        "total_calls": 3
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "9194346906",
+        "total_calls": 3
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "104",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "2042502936",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2042954483",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2067774729",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "222",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "232",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "2367955198",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "241",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2892002682",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "2892219943",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3067165948",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3432095440",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3432978604",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3433221017",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3434536049",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435504224",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3435519632",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3435526562",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "3435580906",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435581440",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435710012",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3435757561",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3435883295",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3435883353",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883373",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3436550408",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3437770930",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3437773513",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3437779534",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3438030408",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3438030659",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "3439611133",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3439617455",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "3439617456",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439879004",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3476043903",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4032525437",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4032525496",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4034629878",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4035019075",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4036165537",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4159376671",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4162192548",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4162701019",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4163578232",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4163639933",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4163716317",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4166291866",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4166973743",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4167757821",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4188085741",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4372304784",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4375523874",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4377780497",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4378554179",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "4378604119",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "4382742917",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "4384074588",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "5063825515",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "5143164949",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5145624119",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5194042839",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5194970594",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "5196688555",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "5198782835",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "521",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "5714297911",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132036147",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132149099",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132191760",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132228573",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132229539",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132231191",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132273671",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6132286571",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6132287136",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132386949",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132392348",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132510271",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132529465",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132587680",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132613033",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6132622188",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132622893",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132639968",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132669866",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132772283",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132869704",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132935488",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6132979955",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133160788",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133245730",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133558895",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6133684615",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134077794",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134154412",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134243999",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134392113",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134470614",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134479830",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6134986844",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135015191",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135134361",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135135441",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135478070",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135621469",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135664213",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6135990008",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6136062305",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136083368",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136125529",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136125878",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136627031",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136955276",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6136969585",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136969645",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6136969723",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136986454",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137001212",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137011602",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137146823",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137199869",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137219009",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137339746",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137382721",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137456437",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6137911343",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137913895",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137986077",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138023259",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138062266",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138075742",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138092644",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138248900",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138300200",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138314600",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6138316009",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138503664",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138511809",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138541093",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138574192",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138595080",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138625523",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138648993",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "6138840739",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6138905113",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139079126",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139132115",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6139153850",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6472287999",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "6475140066",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6475773180",
+        "total_calls": 2
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 1,
+        "caller_number_norm": "7054358686",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "7097433135",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "7622142154",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7786895259",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "7809346362",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8002681220",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8004563355",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8192716830",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8196614688",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8196640533",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8196818984",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8199551864",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "8772903327",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9028653471",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9053754588",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9056141224",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9056242011",
+        "total_calls": 2
+      },
+      {
+        "8020": 2,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9057273176",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "9059212366",
+        "total_calls": 2
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "209",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2154027200",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "224",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "225",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "226",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "240",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2639996726",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "276",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2892134682",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2892314599",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "2899237220",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3432026176",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3432041394",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3432979809",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3433051495",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3433263995",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3433416114",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3434517335",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3434630017",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435044165",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435517580",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435581579",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435736889",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883270",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883276",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883280",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883296",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883297",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883356",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883357",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435883374",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3435980265",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3436550771",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3436551511",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3437777440",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3438033664",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439618312",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439877191",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439895708",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439973554",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439977090",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439977133",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "3439989286",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "374",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4032525497",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4032525499",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4039183548",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4162229394",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4164563624",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4165223588",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4166493215",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4168758708",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4168887702",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4169061428",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4169300469",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4184257716",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4302092872",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4322879502",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4372133533",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4372174412",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4372449436",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4373396824",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4377703342",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "4379928567",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "447442245077",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5142644974",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5142849943",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5143176403",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5145320154",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5145826000",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5148133061",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5149449685",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5165186012",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5195051137",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5197093491",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "5197190852",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6047893211",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6047894000",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132188710",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132207452",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132233446",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132237368",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132259588",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132297787",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132298129",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132341532",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132360921",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132444685",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132471600",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132553544",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132613390",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132623160",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132626406",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132864556",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132872026",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132905913",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132907814",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132945943",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6132979254",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133013772",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133014273",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133024687",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133144998",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133152864",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133153039",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133155732",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133241642",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133257735",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133550723",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133644019",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133644058",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133644142",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133843914",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6133919249",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134025371",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134034852",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134045935",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134080336",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134130343",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134157907",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134246560",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134472225",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134623165",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6134821318",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135013940",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135664238",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135664281",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135664729",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135664730",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6135670800",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136080720",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136121527",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136123511",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136145391",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136206736",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136212905",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136680091",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136681667",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136684346",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136969558",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136978940",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136979690",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6136989253",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137314007",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137376369",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137391535",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137415664",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137451818",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137624702",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137626666",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137693091",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137910937",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137942944",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137945325",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137952475",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6137997141",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138067078",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138074147",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138076091",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138083285",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138086279",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138184272",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138187729",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138221789",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138240756",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138351583",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138377055",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138390190",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138438038",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138510727",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138525954",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138533000",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138536159",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138570208",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138580459",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138580668",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138596854",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138660688",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138661758",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138670950",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138674483",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138679185",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138679890",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138692834",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138753867",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138754461",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138754555",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138842794",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138844759",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138893486",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138946417",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138963178",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138973949",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138990178",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6138997045",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139137537",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139148461",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139158190",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139331138",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139785339",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139816601",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139838379",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139861795",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6139868648",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6177518833",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6472076092",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6472873196",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6472879582",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6473320065",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6475146802",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6475303816",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6475603100",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6476010198",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6476756684",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6478972542",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6479896379",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "6506494669",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7057193077",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7057700076",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7097302925",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 0,
+        "8030": 1,
+        "8031": 0,
+        "caller_number_norm": "710",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7134295931",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7782381091",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7787918687",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7789961258",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "7866734043",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8006716898",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8009870543",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8134125980",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8139061056",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8196651215",
+        "total_calls": 1
+      },
+      {
+        "8020": 0,
+        "8021": 1,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8199215971",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8199628975",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8732887747",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8733768509",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8736884797",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "8882232042",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9025930683",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9052590813",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9055120919",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9057960030",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9059494955",
+        "total_calls": 1
+      },
+      {
+        "8020": 1,
+        "8021": 0,
+        "8030": 0,
+        "8031": 0,
+        "caller_number_norm": "9804255352",
+        "total_calls": 1
+      }
+    ],
+    "funnels": {
+      "English": {
+        "effective_answer_rate": 0.8467400508044031,
+        "lost": 181,
+        "lost_rate": 0.15325994919559696,
+        "overflow_answered": 162,
+        "overflow_failed": 181,
+        "overflow_received": 343,
+        "primary_answered": 834,
+        "primary_calls": 1181,
+        "primary_failed": 347,
+        "routing_match": 0.9884726224783862,
+        "unaccounted": 4
+      },
+      "French": {
+        "effective_answer_rate": 0.8787878787878788,
+        "lost": 8,
+        "lost_rate": 0.12121212121212122,
+        "overflow_answered": 22,
+        "overflow_failed": 8,
+        "overflow_received": 30,
+        "primary_answered": 32,
+        "primary_calls": 66,
+        "primary_failed": 34,
+        "routing_match": 0.8823529411764706,
+        "unaccounted": 4
+      }
+    },
+    "same_day_volume": [
+      {
+        "calls": 52,
+        "date": "2026-04-01",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-01",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 14,
+        "date": "2026-04-01",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-01",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 57,
+        "date": "2026-04-02",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-02",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 20,
+        "date": "2026-04-02",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-02",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 25,
+        "date": "2026-04-06",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-06",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 9,
+        "date": "2026-04-06",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 55,
+        "date": "2026-04-07",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-07",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 17,
+        "date": "2026-04-07",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-07",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 57,
+        "date": "2026-04-08",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-08",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 17,
+        "date": "2026-04-08",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-08",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 44,
+        "date": "2026-04-09",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-09",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 18,
+        "date": "2026-04-09",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-09",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 51,
+        "date": "2026-04-10",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-10",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 19,
+        "date": "2026-04-10",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-10",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 55,
+        "date": "2026-04-13",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 4,
+        "date": "2026-04-13",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 15,
+        "date": "2026-04-13",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-13",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 47,
+        "date": "2026-04-14",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-14",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 22,
+        "date": "2026-04-14",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-14",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 66,
+        "date": "2026-04-15",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 5,
+        "date": "2026-04-15",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 29,
+        "date": "2026-04-15",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-15",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 100,
+        "date": "2026-04-16",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 1,
+        "date": "2026-04-16",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 36,
+        "date": "2026-04-16",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 67,
+        "date": "2026-04-17",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 4,
+        "date": "2026-04-17",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 18,
+        "date": "2026-04-17",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-17",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 64,
+        "date": "2026-04-20",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 5,
+        "date": "2026-04-20",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 11,
+        "date": "2026-04-20",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-20",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 58,
+        "date": "2026-04-21",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 4,
+        "date": "2026-04-21",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 13,
+        "date": "2026-04-21",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-21",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 56,
+        "date": "2026-04-22",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-22",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 10,
+        "date": "2026-04-22",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-22",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 53,
+        "date": "2026-04-23",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-23",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 11,
+        "date": "2026-04-23",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 49,
+        "date": "2026-04-24",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 12,
+        "date": "2026-04-24",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 64,
+        "date": "2026-04-27",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 3,
+        "date": "2026-04-27",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 20,
+        "date": "2026-04-27",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 53,
+        "date": "2026-04-28",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-28",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 7,
+        "date": "2026-04-28",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 58,
+        "date": "2026-04-29",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 5,
+        "date": "2026-04-29",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 15,
+        "date": "2026-04-29",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-29",
+        "queue_id": "8031"
+      },
+      {
+        "calls": 50,
+        "date": "2026-04-30",
+        "queue_id": "8020"
+      },
+      {
+        "calls": 4,
+        "date": "2026-04-30",
+        "queue_id": "8021"
+      },
+      {
+        "calls": 10,
+        "date": "2026-04-30",
+        "queue_id": "8030"
+      },
+      {
+        "calls": 2,
+        "date": "2026-04-30",
+        "queue_id": "8031"
+      }
+    ],
+    "same_hour_no_answer": [
+      {
+        "calls": 116,
+        "hour": 8,
+        "no_answer_count": 28,
+        "no_answer_rate": 0.2413793103448276,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 170,
+        "hour": 9,
+        "no_answer_count": 48,
+        "no_answer_rate": 0.2823529411764706,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 181,
+        "hour": 10,
+        "no_answer_count": 58,
+        "no_answer_rate": 0.32044198895027626,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 143,
+        "hour": 11,
+        "no_answer_count": 37,
+        "no_answer_rate": 0.25874125874125875,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 132,
+        "hour": 12,
+        "no_answer_count": 43,
+        "no_answer_rate": 0.32575757575757575,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 139,
+        "hour": 13,
+        "no_answer_count": 46,
+        "no_answer_rate": 0.33093525179856115,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 112,
+        "hour": 14,
+        "no_answer_count": 30,
+        "no_answer_rate": 0.26785714285714285,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 123,
+        "hour": 15,
+        "no_answer_count": 40,
+        "no_answer_rate": 0.3252032520325203,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 65,
+        "hour": 16,
+        "no_answer_count": 17,
+        "no_answer_rate": 0.26153846153846155,
+        "queue_id": "8020"
+      },
+      {
+        "calls": 4,
+        "hour": 8,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.5,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 11,
+        "hour": 9,
+        "no_answer_count": 4,
+        "no_answer_rate": 0.36363636363636365,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 4,
+        "hour": 10,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.5,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 8,
+        "hour": 11,
+        "no_answer_count": 4,
+        "no_answer_rate": 0.5,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 11,
+        "hour": 12,
+        "no_answer_count": 8,
+        "no_answer_rate": 0.7272727272727273,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 12,
+        "hour": 13,
+        "no_answer_count": 7,
+        "no_answer_rate": 0.5833333333333334,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 7,
+        "hour": 14,
+        "no_answer_count": 3,
+        "no_answer_rate": 0.42857142857142855,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 4,
+        "hour": 15,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.5,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 5,
+        "hour": 16,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.4,
+        "queue_id": "8021"
+      },
+      {
+        "calls": 28,
+        "hour": 8,
+        "no_answer_count": 13,
+        "no_answer_rate": 0.4642857142857143,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 48,
+        "hour": 9,
+        "no_answer_count": 23,
+        "no_answer_rate": 0.4791666666666667,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 57,
+        "hour": 10,
+        "no_answer_count": 33,
+        "no_answer_rate": 0.5789473684210527,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 37,
+        "hour": 11,
+        "no_answer_count": 20,
+        "no_answer_rate": 0.5405405405405406,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 43,
+        "hour": 12,
+        "no_answer_count": 24,
+        "no_answer_rate": 0.5581395348837209,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 45,
+        "hour": 13,
+        "no_answer_count": 24,
+        "no_answer_rate": 0.5333333333333333,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 30,
+        "hour": 14,
+        "no_answer_count": 13,
+        "no_answer_rate": 0.43333333333333335,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 39,
+        "hour": 15,
+        "no_answer_count": 24,
+        "no_answer_rate": 0.6153846153846154,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 16,
+        "hour": 16,
+        "no_answer_count": 7,
+        "no_answer_rate": 0.4375,
+        "queue_id": "8030"
+      },
+      {
+        "calls": 1,
+        "hour": 8,
+        "no_answer_count": 0,
+        "no_answer_rate": 0.0,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 3,
+        "hour": 9,
+        "no_answer_count": 0,
+        "no_answer_rate": 0.0,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 2,
+        "hour": 10,
+        "no_answer_count": 0,
+        "no_answer_rate": 0.0,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 4,
+        "hour": 11,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.5,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 8,
+        "hour": 12,
+        "no_answer_count": 3,
+        "no_answer_rate": 0.375,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 7,
+        "hour": 13,
+        "no_answer_count": 2,
+        "no_answer_rate": 0.2857142857142857,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 2,
+        "hour": 14,
+        "no_answer_count": 0,
+        "no_answer_rate": 0.0,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 1,
+        "hour": 15,
+        "no_answer_count": 0,
+        "no_answer_rate": 0.0,
+        "queue_id": "8031"
+      },
+      {
+        "calls": 2,
+        "hour": 16,
+        "no_answer_count": 1,
+        "no_answer_rate": 0.5,
+        "queue_id": "8031"
+      }
+    ]
+  },
+  "date_range": {
+    "end": "2026-04-30",
+    "start": "2026-04-01"
+  },
+  "generated_at": "2026-05-07T07:00:46.746104+00:00",
+  "period": "month",
+  "queues": {
+    "8020": {
+      "agent_leaderboard": [
+        {
+          "agent_name": "Alicia Yameen",
+          "avg_sec": 228.45045045045046,
+          "calls": 222,
+          "median_sec": 183.0,
+          "pct_of_answered": 0.26618705035971224,
+          "total_sec": 50716.0
+        },
+        {
+          "agent_name": "Gabriel Hubert",
+          "avg_sec": 247.30769230769232,
+          "calls": 182,
+          "median_sec": 229.5,
+          "pct_of_answered": 0.2182254196642686,
+          "total_sec": 45010.0
+        },
+        {
+          "agent_name": "Aqsa Razzaq",
+          "avg_sec": 382.0287356321839,
+          "calls": 174,
+          "median_sec": 239.5,
+          "pct_of_answered": 0.20863309352517986,
+          "total_sec": 66473.0
+        },
+        {
+          "agent_name": "Luke Deschenes",
+          "avg_sec": 551.060606060606,
+          "calls": 33,
+          "median_sec": 300.0,
+          "pct_of_answered": 0.039568345323741004,
+          "total_sec": 18185.0
+        },
+        {
+          "agent_name": "Diego Villegas",
+          "avg_sec": 783.3478260869565,
+          "calls": 23,
+          "median_sec": 515.0,
+          "pct_of_answered": 0.027577937649880094,
+          "total_sec": 18017.0
+        },
+        {
+          "agent_name": "Rao Arslan",
+          "avg_sec": 389.04545454545456,
+          "calls": 22,
+          "median_sec": 300.0,
+          "pct_of_answered": 0.026378896882494004,
+          "total_sec": 8559.0
+        },
+        {
+          "agent_name": "Abdul Muhaimin",
+          "avg_sec": 483.04761904761904,
+          "calls": 21,
+          "median_sec": 428.0,
+          "pct_of_answered": 0.025179856115107913,
+          "total_sec": 10144.0
+        },
+        {
+          "agent_name": "Drew Rehman",
+          "avg_sec": 738.6666666666666,
+          "calls": 15,
+          "median_sec": 539.0,
+          "pct_of_answered": 0.017985611510791366,
+          "total_sec": 11080.0
+        },
+        {
+          "agent_name": "Syed Gillani",
+          "avg_sec": 815.3333333333334,
+          "calls": 12,
+          "median_sec": 560.0,
+          "pct_of_answered": 0.014388489208633094,
+          "total_sec": 9784.0
+        },
+        {
+          "agent_name": "Daniel Sikander",
+          "avg_sec": 398.0,
+          "calls": 11,
+          "median_sec": 413.0,
+          "pct_of_answered": 0.013189448441247002,
+          "total_sec": 4378.0
+        },
+        {
+          "agent_name": "Robert Patrick",
+          "avg_sec": 756.5,
+          "calls": 10,
+          "median_sec": 513.5,
+          "pct_of_answered": 0.011990407673860911,
+          "total_sec": 7565.0
+        },
+        {
+          "agent_name": "Braeden Tremblay",
+          "avg_sec": 428.8888888888889,
+          "calls": 9,
+          "median_sec": 296.0,
+          "pct_of_answered": 0.01079136690647482,
+          "total_sec": 3860.0
+        },
+        {
+          "agent_name": "Chris Olsen",
+          "avg_sec": 792.6666666666666,
+          "calls": 9,
+          "median_sec": 574.0,
+          "pct_of_answered": 0.01079136690647482,
+          "total_sec": 7134.0
+        },
+        {
+          "agent_name": "Kaleem Sandhu",
+          "avg_sec": 788.0,
+          "calls": 9,
+          "median_sec": 543.0,
+          "pct_of_answered": 0.01079136690647482,
+          "total_sec": 7092.0
+        },
+        {
+          "agent_name": "Ryan Mushtaq",
+          "avg_sec": 577.5555555555555,
+          "calls": 9,
+          "median_sec": 531.0,
+          "pct_of_answered": 0.01079136690647482,
+          "total_sec": 5198.0
+        },
+        {
+          "agent_name": "Ali Saeed",
+          "avg_sec": 1130.5,
+          "calls": 8,
+          "median_sec": 924.0,
+          "pct_of_answered": 0.009592326139088728,
+          "total_sec": 9044.0
+        },
+        {
+          "agent_name": "Axen Akbar",
+          "avg_sec": 517.625,
+          "calls": 8,
+          "median_sec": 632.5,
+          "pct_of_answered": 0.009592326139088728,
+          "total_sec": 4141.0
+        },
+        {
+          "agent_name": "Amandeep Kaur",
+          "avg_sec": 900.2857142857143,
+          "calls": 7,
+          "median_sec": 859.0,
+          "pct_of_answered": 0.008393285371702638,
+          "total_sec": 6302.0
+        },
+        {
+          "agent_name": "Corey Rowsell",
+          "avg_sec": 346.2857142857143,
+          "calls": 7,
+          "median_sec": 307.0,
+          "pct_of_answered": 0.008393285371702638,
+          "total_sec": 2424.0
+        },
+        {
+          "agent_name": "Faheem Zafar",
+          "avg_sec": 643.3333333333334,
+          "calls": 6,
+          "median_sec": 490.5,
+          "pct_of_answered": 0.007194244604316547,
+          "total_sec": 3860.0
+        },
+        {
+          "agent_name": "Arsh Ali",
+          "avg_sec": 570.0,
+          "calls": 5,
+          "median_sec": 617.0,
+          "pct_of_answered": 0.005995203836930456,
+          "total_sec": 2850.0
+        },
+        {
+          "agent_name": "Aymen Zayet",
+          "avg_sec": 1853.0,
+          "calls": 4,
+          "median_sec": 1306.0,
+          "pct_of_answered": 0.004796163069544364,
+          "total_sec": 7412.0
+        },
+        {
+          "agent_name": "Suzanne Nanette",
+          "avg_sec": 556.5,
+          "calls": 4,
+          "median_sec": 438.0,
+          "pct_of_answered": 0.004796163069544364,
+          "total_sec": 2226.0
+        },
+        {
+          "agent_name": "Usama Ahmed Khan",
+          "avg_sec": 1067.0,
+          "calls": 4,
+          "median_sec": 1026.5,
+          "pct_of_answered": 0.004796163069544364,
+          "total_sec": 4268.0
+        },
+        {
+          "agent_name": "Cielo Nino",
+          "avg_sec": 1234.6666666666667,
+          "calls": 3,
+          "median_sec": 1648.0,
+          "pct_of_answered": 0.0035971223021582736,
+          "total_sec": 3704.0
+        },
+        {
+          "agent_name": "Florian Nsabiyumva",
+          "avg_sec": 267.0,
+          "calls": 3,
+          "median_sec": 117.0,
+          "pct_of_answered": 0.0035971223021582736,
+          "total_sec": 801.0
+        },
+        {
+          "agent_name": "Hassan Zeitoun",
+          "avg_sec": 473.6666666666667,
+          "calls": 3,
+          "median_sec": 443.0,
+          "pct_of_answered": 0.0035971223021582736,
+          "total_sec": 1421.0
+        },
+        {
+          "agent_name": "Jarod Stackhouse",
+          "avg_sec": 340.0,
+          "calls": 2,
+          "median_sec": 340.0,
+          "pct_of_answered": 0.002398081534772182,
+          "total_sec": 680.0
+        },
+        {
+          "agent_name": "Abdel Kabore",
+          "avg_sec": 168.0,
+          "calls": 1,
+          "median_sec": 168.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 168.0
+        },
+        {
+          "agent_name": "CSH - BUILDS",
+          "avg_sec": 2206.0,
+          "calls": 1,
+          "median_sec": 2206.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 2206.0
+        },
+        {
+          "agent_name": "Eric Besserer",
+          "avg_sec": 467.0,
+          "calls": 1,
+          "median_sec": 467.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 467.0
+        },
+        {
+          "agent_name": "Farhan Zaffar",
+          "avg_sec": 521.0,
+          "calls": 1,
+          "median_sec": 521.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 521.0
+        },
+        {
+          "agent_name": "Karan Trivedi",
+          "avg_sec": 1852.0,
+          "calls": 1,
+          "median_sec": 1852.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 1852.0
+        },
+        {
+          "agent_name": "Lisa Slover",
+          "avg_sec": 48.0,
+          "calls": 1,
+          "median_sec": 48.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 48.0
+        },
+        {
+          "agent_name": "Nick Khawaja",
+          "avg_sec": 661.0,
+          "calls": 1,
+          "median_sec": 661.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 661.0
+        },
+        {
+          "agent_name": "Shantee Leamy",
+          "avg_sec": 203.0,
+          "calls": 1,
+          "median_sec": 203.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 203.0
+        },
+        {
+          "agent_name": "Subhan Saleem",
+          "avg_sec": 1701.0,
+          "calls": 1,
+          "median_sec": 1701.0,
+          "pct_of_answered": 0.001199040767386091,
+          "total_sec": 1701.0
+        }
+      ],
+      "avg_calls_per_active_day": 56.23809523809524,
+      "busiest_day": {
+        "calls": 100,
+        "date": "2026-04-16"
+      },
+      "daily_volume": [
+        {
+          "calls": 52,
+          "date": "2026-04-01"
+        },
+        {
+          "calls": 57,
+          "date": "2026-04-02"
+        },
+        {
+          "calls": 25,
+          "date": "2026-04-06"
+        },
+        {
+          "calls": 55,
+          "date": "2026-04-07"
+        },
+        {
+          "calls": 57,
+          "date": "2026-04-08"
+        },
+        {
+          "calls": 44,
+          "date": "2026-04-09"
+        },
+        {
+          "calls": 51,
+          "date": "2026-04-10"
+        },
+        {
+          "calls": 55,
+          "date": "2026-04-13"
+        },
+        {
+          "calls": 47,
+          "date": "2026-04-14"
+        },
+        {
+          "calls": 66,
+          "date": "2026-04-15"
+        },
+        {
+          "calls": 100,
+          "date": "2026-04-16"
+        },
+        {
+          "calls": 67,
+          "date": "2026-04-17"
+        },
+        {
+          "calls": 64,
+          "date": "2026-04-20"
+        },
+        {
+          "calls": 58,
+          "date": "2026-04-21"
+        },
+        {
+          "calls": 56,
+          "date": "2026-04-22"
+        },
+        {
+          "calls": 53,
+          "date": "2026-04-23"
+        },
+        {
+          "calls": 49,
+          "date": "2026-04-24"
+        },
+        {
+          "calls": 64,
+          "date": "2026-04-27"
+        },
+        {
+          "calls": 53,
+          "date": "2026-04-28"
+        },
+        {
+          "calls": 58,
+          "date": "2026-04-29"
+        },
+        {
+          "calls": 50,
+          "date": "2026-04-30"
+        }
+      ],
+      "days_with_calls": 21,
+      "dow_volume": [
+        {
+          "calls": 167,
+          "dow": "Friday"
+        },
+        {
+          "calls": 208,
+          "dow": "Monday"
+        },
+        {
+          "calls": 304,
+          "dow": "Thursday"
+        },
+        {
+          "calls": 213,
+          "dow": "Tuesday"
+        },
+        {
+          "calls": 289,
+          "dow": "Wednesday"
+        }
+      ],
+      "duration_distributions": {
+        "agent_sec": {
+          "count": 834,
+          "max": 4496.0,
+          "mean": 395.8693045563549,
+          "median": 245.5,
+          "min": 0.0,
+          "p25": 135.0,
+          "p75": 447.75,
+          "std": 470.77519116589275
+        },
+        "hold_sec": {
+          "count": 69,
+          "max": 451.0,
+          "mean": 114.10144927536231,
+          "median": 118.0,
+          "min": 1.0,
+          "p25": 13.0,
+          "p75": 183.0,
+          "std": 101.08719953403309
+        },
+        "queue_sec": {
+          "count": 1181,
+          "max": 19.0,
+          "mean": 7.350550381033023,
+          "median": 7.0,
+          "min": 0.0,
+          "p25": 6.0,
+          "p75": 10.0,
+          "std": 2.180979437544861
+        }
+      },
+      "handled_calls": 834,
+      "hourly_volume": [
+        {
+          "calls": 116,
+          "hour": 8,
+          "no_answer_count": 28,
+          "no_answer_rate": 0.2413793103448276
+        },
+        {
+          "calls": 170,
+          "hour": 9,
+          "no_answer_count": 48,
+          "no_answer_rate": 0.2823529411764706
+        },
+        {
+          "calls": 181,
+          "hour": 10,
+          "no_answer_count": 58,
+          "no_answer_rate": 0.32044198895027626
+        },
+        {
+          "calls": 143,
+          "hour": 11,
+          "no_answer_count": 37,
+          "no_answer_rate": 0.25874125874125875
+        },
+        {
+          "calls": 132,
+          "hour": 12,
+          "no_answer_count": 43,
+          "no_answer_rate": 0.32575757575757575
+        },
+        {
+          "calls": 139,
+          "hour": 13,
+          "no_answer_count": 46,
+          "no_answer_rate": 0.33093525179856115
+        },
+        {
+          "calls": 112,
+          "hour": 14,
+          "no_answer_count": 30,
+          "no_answer_rate": 0.26785714285714285
+        },
+        {
+          "calls": 123,
+          "hour": 15,
+          "no_answer_count": 40,
+          "no_answer_rate": 0.3252032520325203
+        },
+        {
+          "calls": 65,
+          "hour": 16,
+          "no_answer_count": 17,
+          "no_answer_rate": 0.26153846153846155
+        }
+      ],
+      "no_agent_calls": 347,
+      "no_agent_rate": 0.2938187976291279,
+      "queue_id": "8020",
+      "quietest_day": {
+        "calls": 25,
+        "date": "2026-04-06"
+      },
+      "release_reasons": {
+        "agent": [
+          {
+            "calls": 385,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 338,
+            "reason": "No Answer"
+          },
+          {
+            "calls": 326,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 120,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 5,
+            "reason": "Abandoned"
+          },
+          {
+            "calls": 3,
+            "reason": "Not Available"
+          },
+          {
+            "calls": 2,
+            "reason": "Term: 503"
+          },
+          {
+            "calls": 1,
+            "reason": "No Dial Rule"
+          }
+        ],
+        "queue": [
+          {
+            "calls": 386,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 342,
+            "reason": "No Answer"
+          },
+          {
+            "calls": 326,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 120,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 4,
+            "reason": "Abandoned"
+          },
+          {
+            "calls": 2,
+            "reason": "Term: 503"
+          },
+          {
+            "calls": 1,
+            "reason": "No Dial Rule"
+          }
+        ]
+      },
+      "top_callers": [
+        {
+          "caller_number_norm": "9052833500",
+          "calls": 45
+        },
+        {
+          "caller_number_norm": "6042941500",
+          "calls": 23
+        },
+        {
+          "caller_number_norm": "4256352970",
+          "calls": 19
+        },
+        {
+          "caller_number_norm": "6132836772",
+          "calls": 17
+        },
+        {
+          "caller_number_norm": "6138629864",
+          "calls": 16
+        },
+        {
+          "caller_number_norm": "6137492491",
+          "calls": 14
+        },
+        {
+          "caller_number_norm": "6137361913",
+          "calls": 13
+        },
+        {
+          "caller_number_norm": "4372240746",
+          "calls": 12
+        },
+        {
+          "caller_number_norm": "6132353333",
+          "calls": 12
+        },
+        {
+          "caller_number_norm": "6137447667",
+          "calls": 12
+        }
+      ],
+      "total_calls": 1181
+    },
+    "8021": {
+      "agent_leaderboard": [
+        {
+          "agent_name": "Gabriel Hubert",
+          "avg_sec": 239.875,
+          "calls": 24,
+          "median_sec": 200.0,
+          "pct_of_answered": 0.75,
+          "total_sec": 5757.0
+        },
+        {
+          "agent_name": "Diego Villegas",
+          "avg_sec": 973.25,
+          "calls": 4,
+          "median_sec": 1057.0,
+          "pct_of_answered": 0.125,
+          "total_sec": 3893.0
+        },
+        {
+          "agent_name": "Luke Deschenes",
+          "avg_sec": 1184.3333333333333,
+          "calls": 3,
+          "median_sec": 346.0,
+          "pct_of_answered": 0.09375,
+          "total_sec": 3553.0
+        },
+        {
+          "agent_name": "Chris Olsen",
+          "avg_sec": 138.0,
+          "calls": 1,
+          "median_sec": 138.0,
+          "pct_of_answered": 0.03125,
+          "total_sec": 138.0
+        }
+      ],
+      "avg_calls_per_active_day": 3.3,
+      "busiest_day": {
+        "calls": 5,
+        "date": "2026-04-15"
+      },
+      "daily_volume": [
+        {
+          "calls": 3,
+          "date": "2026-04-01"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-02"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-06"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-07"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-08"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-09"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-10"
+        },
+        {
+          "calls": 4,
+          "date": "2026-04-13"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-14"
+        },
+        {
+          "calls": 5,
+          "date": "2026-04-15"
+        },
+        {
+          "calls": 1,
+          "date": "2026-04-16"
+        },
+        {
+          "calls": 4,
+          "date": "2026-04-17"
+        },
+        {
+          "calls": 5,
+          "date": "2026-04-20"
+        },
+        {
+          "calls": 4,
+          "date": "2026-04-21"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-22"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-23"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-27"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-28"
+        },
+        {
+          "calls": 5,
+          "date": "2026-04-29"
+        },
+        {
+          "calls": 4,
+          "date": "2026-04-30"
+        }
+      ],
+      "days_with_calls": 20,
+      "dow_volume": [
+        {
+          "calls": 7,
+          "dow": "Friday"
+        },
+        {
+          "calls": 15,
+          "dow": "Monday"
+        },
+        {
+          "calls": 14,
+          "dow": "Thursday"
+        },
+        {
+          "calls": 12,
+          "dow": "Tuesday"
+        },
+        {
+          "calls": 18,
+          "dow": "Wednesday"
+        }
+      ],
+      "duration_distributions": {
+        "agent_sec": {
+          "count": 32,
+          "max": 3081.0,
+          "mean": 416.90625,
+          "median": 221.5,
+          "min": 2.0,
+          "p25": 137.25,
+          "p75": 394.25,
+          "std": 582.4146820738307
+        },
+        "hold_sec": {
+          "count": 9,
+          "max": 224.0,
+          "mean": 83.55555555555556,
+          "median": 96.0,
+          "min": 1.0,
+          "p25": 1.0,
+          "p75": 119.0,
+          "std": 76.64546808375415
+        },
+        "queue_sec": {
+          "count": 66,
+          "max": 10.0,
+          "mean": 8.242424242424242,
+          "median": 9.0,
+          "min": 0.0,
+          "p25": 8.0,
+          "p75": 10.0,
+          "std": 2.5604122628418566
+        }
+      },
+      "handled_calls": 32,
+      "hourly_volume": [
+        {
+          "calls": 4,
+          "hour": 8,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.5
+        },
+        {
+          "calls": 11,
+          "hour": 9,
+          "no_answer_count": 4,
+          "no_answer_rate": 0.36363636363636365
+        },
+        {
+          "calls": 4,
+          "hour": 10,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.5
+        },
+        {
+          "calls": 8,
+          "hour": 11,
+          "no_answer_count": 4,
+          "no_answer_rate": 0.5
+        },
+        {
+          "calls": 11,
+          "hour": 12,
+          "no_answer_count": 8,
+          "no_answer_rate": 0.7272727272727273
+        },
+        {
+          "calls": 12,
+          "hour": 13,
+          "no_answer_count": 7,
+          "no_answer_rate": 0.5833333333333334
+        },
+        {
+          "calls": 7,
+          "hour": 14,
+          "no_answer_count": 3,
+          "no_answer_rate": 0.42857142857142855
+        },
+        {
+          "calls": 4,
+          "hour": 15,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.5
+        },
+        {
+          "calls": 5,
+          "hour": 16,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.4
+        }
+      ],
+      "no_agent_calls": 34,
+      "no_agent_rate": 0.5151515151515151,
+      "queue_id": "8021",
+      "quietest_day": {
+        "calls": 1,
+        "date": "2026-04-16"
+      },
+      "release_reasons": {
+        "agent": [
+          {
+            "calls": 29,
+            "reason": "No Answer"
+          },
+          {
+            "calls": 14,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 12,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 6,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 4,
+            "reason": "Abandoned"
+          }
+        ],
+        "queue": [
+          {
+            "calls": 30,
+            "reason": "No Answer"
+          },
+          {
+            "calls": 14,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 12,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 6,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 4,
+            "reason": "Abandoned"
+          }
+        ]
+      },
+      "top_callers": [
+        {
+          "caller_number_norm": "8197908197",
+          "calls": 4
+        },
+        {
+          "caller_number_norm": "6134470814",
+          "calls": 3
+        },
+        {
+          "caller_number_norm": "3432023236",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "6135664744",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "6136080924",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "8197435305",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "9052833500",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "3433051495",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "3435580906",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "3435736889",
+          "calls": 1
+        }
+      ],
+      "total_calls": 66
+    },
+    "8030": {
+      "agent_leaderboard": [
+        {
+          "agent_name": "Gabriel Hubert",
+          "avg_sec": 249.26436781609195,
+          "calls": 87,
+          "median_sec": 218.0,
+          "pct_of_answered": 0.5370370370370371,
+          "total_sec": 21686.0
+        },
+        {
+          "agent_name": "Alicia Yameen",
+          "avg_sec": 335.05,
+          "calls": 20,
+          "median_sec": 149.5,
+          "pct_of_answered": 0.12345679012345678,
+          "total_sec": 6701.0
+        },
+        {
+          "agent_name": "Aqsa Razzaq",
+          "avg_sec": 600.4615384615385,
+          "calls": 13,
+          "median_sec": 563.0,
+          "pct_of_answered": 0.08024691358024691,
+          "total_sec": 7806.0
+        },
+        {
+          "agent_name": "Luke Deschenes",
+          "avg_sec": 627.0,
+          "calls": 8,
+          "median_sec": 574.0,
+          "pct_of_answered": 0.04938271604938271,
+          "total_sec": 5016.0
+        },
+        {
+          "agent_name": "Kendra Tiller",
+          "avg_sec": 153.57142857142858,
+          "calls": 7,
+          "median_sec": 123.0,
+          "pct_of_answered": 0.043209876543209874,
+          "total_sec": 1075.0
+        },
+        {
+          "agent_name": "Diego Villegas",
+          "avg_sec": 901.0,
+          "calls": 5,
+          "median_sec": 1016.0,
+          "pct_of_answered": 0.030864197530864196,
+          "total_sec": 4505.0
+        },
+        {
+          "agent_name": "Kaleem Sandhu",
+          "avg_sec": 1759.6666666666667,
+          "calls": 3,
+          "median_sec": 1310.0,
+          "pct_of_answered": 0.018518518518518517,
+          "total_sec": 5279.0
+        },
+        {
+          "agent_name": "Lisa Slover",
+          "avg_sec": 324.6666666666667,
+          "calls": 3,
+          "median_sec": 255.0,
+          "pct_of_answered": 0.018518518518518517,
+          "total_sec": 974.0
+        },
+        {
+          "agent_name": "Abdul Muhaimin",
+          "avg_sec": 862.5,
+          "calls": 2,
+          "median_sec": 862.5,
+          "pct_of_answered": 0.012345679012345678,
+          "total_sec": 1725.0
+        },
+        {
+          "agent_name": "Braeden Tremblay",
+          "avg_sec": 602.5,
+          "calls": 2,
+          "median_sec": 602.5,
+          "pct_of_answered": 0.012345679012345678,
+          "total_sec": 1205.0
+        },
+        {
+          "agent_name": "Chris Olsen",
+          "avg_sec": 855.5,
+          "calls": 2,
+          "median_sec": 855.5,
+          "pct_of_answered": 0.012345679012345678,
+          "total_sec": 1711.0
+        },
+        {
+          "agent_name": "Faheem Zafar",
+          "avg_sec": 60.5,
+          "calls": 2,
+          "median_sec": 60.5,
+          "pct_of_answered": 0.012345679012345678,
+          "total_sec": 121.0
+        },
+        {
+          "agent_name": "Rao Arslan",
+          "avg_sec": 1076.5,
+          "calls": 2,
+          "median_sec": 1076.5,
+          "pct_of_answered": 0.012345679012345678,
+          "total_sec": 2153.0
+        },
+        {
+          "agent_name": "Aymen Zayet",
+          "avg_sec": 659.0,
+          "calls": 1,
+          "median_sec": 659.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 659.0
+        },
+        {
+          "agent_name": "Corey Rowsell",
+          "avg_sec": 148.0,
+          "calls": 1,
+          "median_sec": 148.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 148.0
+        },
+        {
+          "agent_name": "Daniel Sikander",
+          "avg_sec": 175.0,
+          "calls": 1,
+          "median_sec": 175.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 175.0
+        },
+        {
+          "agent_name": "Martha Canaveral",
+          "avg_sec": 660.0,
+          "calls": 1,
+          "median_sec": 660.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 660.0
+        },
+        {
+          "agent_name": "Scott Arthur",
+          "avg_sec": 857.0,
+          "calls": 1,
+          "median_sec": 857.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 857.0
+        },
+        {
+          "agent_name": "Syed Gillani",
+          "avg_sec": 131.0,
+          "calls": 1,
+          "median_sec": 131.0,
+          "pct_of_answered": 0.006172839506172839,
+          "total_sec": 131.0
+        }
+      ],
+      "avg_calls_per_active_day": 16.333333333333332,
+      "busiest_day": {
+        "calls": 36,
+        "date": "2026-04-16"
+      },
+      "daily_volume": [
+        {
+          "calls": 14,
+          "date": "2026-04-01"
+        },
+        {
+          "calls": 20,
+          "date": "2026-04-02"
+        },
+        {
+          "calls": 9,
+          "date": "2026-04-06"
+        },
+        {
+          "calls": 17,
+          "date": "2026-04-07"
+        },
+        {
+          "calls": 17,
+          "date": "2026-04-08"
+        },
+        {
+          "calls": 18,
+          "date": "2026-04-09"
+        },
+        {
+          "calls": 19,
+          "date": "2026-04-10"
+        },
+        {
+          "calls": 15,
+          "date": "2026-04-13"
+        },
+        {
+          "calls": 22,
+          "date": "2026-04-14"
+        },
+        {
+          "calls": 29,
+          "date": "2026-04-15"
+        },
+        {
+          "calls": 36,
+          "date": "2026-04-16"
+        },
+        {
+          "calls": 18,
+          "date": "2026-04-17"
+        },
+        {
+          "calls": 11,
+          "date": "2026-04-20"
+        },
+        {
+          "calls": 13,
+          "date": "2026-04-21"
+        },
+        {
+          "calls": 10,
+          "date": "2026-04-22"
+        },
+        {
+          "calls": 11,
+          "date": "2026-04-23"
+        },
+        {
+          "calls": 12,
+          "date": "2026-04-24"
+        },
+        {
+          "calls": 20,
+          "date": "2026-04-27"
+        },
+        {
+          "calls": 7,
+          "date": "2026-04-28"
+        },
+        {
+          "calls": 15,
+          "date": "2026-04-29"
+        },
+        {
+          "calls": 10,
+          "date": "2026-04-30"
+        }
+      ],
+      "days_with_calls": 21,
+      "dow_volume": [
+        {
+          "calls": 49,
+          "dow": "Friday"
+        },
+        {
+          "calls": 55,
+          "dow": "Monday"
+        },
+        {
+          "calls": 95,
+          "dow": "Thursday"
+        },
+        {
+          "calls": 59,
+          "dow": "Tuesday"
+        },
+        {
+          "calls": 85,
+          "dow": "Wednesday"
+        }
+      ],
+      "duration_distributions": {
+        "agent_sec": {
+          "count": 162,
+          "max": 2970.0,
+          "mean": 386.3395061728395,
+          "median": 261.0,
+          "min": 1.0,
+          "p25": 128.0,
+          "p75": 423.75,
+          "std": 458.0205881561547
+        },
+        "hold_sec": {
+          "count": 44,
+          "max": 512.0,
+          "mean": 107.0,
+          "median": 93.0,
+          "min": 1.0,
+          "p25": 1.0,
+          "p75": 168.75,
+          "std": 105.31105642168424
+        },
+        "queue_sec": {
+          "count": 343,
+          "max": 20.0,
+          "mean": 16.854227405247812,
+          "median": 19.0,
+          "min": 0.0,
+          "p25": 14.0,
+          "p75": 20.0,
+          "std": 3.6685447224865864
+        }
+      },
+      "handled_calls": 162,
+      "hourly_volume": [
+        {
+          "calls": 28,
+          "hour": 8,
+          "no_answer_count": 13,
+          "no_answer_rate": 0.4642857142857143
+        },
+        {
+          "calls": 48,
+          "hour": 9,
+          "no_answer_count": 23,
+          "no_answer_rate": 0.4791666666666667
+        },
+        {
+          "calls": 57,
+          "hour": 10,
+          "no_answer_count": 33,
+          "no_answer_rate": 0.5789473684210527
+        },
+        {
+          "calls": 37,
+          "hour": 11,
+          "no_answer_count": 20,
+          "no_answer_rate": 0.5405405405405406
+        },
+        {
+          "calls": 43,
+          "hour": 12,
+          "no_answer_count": 24,
+          "no_answer_rate": 0.5581395348837209
+        },
+        {
+          "calls": 45,
+          "hour": 13,
+          "no_answer_count": 24,
+          "no_answer_rate": 0.5333333333333333
+        },
+        {
+          "calls": 30,
+          "hour": 14,
+          "no_answer_count": 13,
+          "no_answer_rate": 0.43333333333333335
+        },
+        {
+          "calls": 39,
+          "hour": 15,
+          "no_answer_count": 24,
+          "no_answer_rate": 0.6153846153846154
+        },
+        {
+          "calls": 16,
+          "hour": 16,
+          "no_answer_count": 7,
+          "no_answer_rate": 0.4375
+        }
+      ],
+      "no_agent_calls": 181,
+      "no_agent_rate": 0.5276967930029155,
+      "queue_id": "8030",
+      "quietest_day": {
+        "calls": 7,
+        "date": "2026-04-28"
+      },
+      "release_reasons": {
+        "agent": [
+          {
+            "calls": 178,
+            "reason": "ForwardNoAns"
+          },
+          {
+            "calls": 61,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 58,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 42,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 2,
+            "reason": "Abandoned"
+          },
+          {
+            "calls": 1,
+            "reason": "ForwardNotReg"
+          },
+          {
+            "calls": 1,
+            "reason": "Term: 503"
+          }
+        ],
+        "queue": [
+          {
+            "calls": 178,
+            "reason": "ForwardNoAns"
+          },
+          {
+            "calls": 61,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 58,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 42,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 2,
+            "reason": "Abandoned"
+          },
+          {
+            "calls": 1,
+            "reason": "ForwardNotReg"
+          },
+          {
+            "calls": 1,
+            "reason": "Term: 503"
+          }
+        ]
+      },
+      "top_callers": [
+        {
+          "caller_number_norm": "9052833500",
+          "calls": 16
+        },
+        {
+          "caller_number_norm": "6132267381",
+          "calls": 6
+        },
+        {
+          "caller_number_norm": "6137447667",
+          "calls": 6
+        },
+        {
+          "caller_number_norm": "6138629864",
+          "calls": 6
+        },
+        {
+          "caller_number_norm": "6135234004",
+          "calls": 5
+        },
+        {
+          "caller_number_norm": "6135588854",
+          "calls": 5
+        },
+        {
+          "caller_number_norm": "4256352970",
+          "calls": 4
+        },
+        {
+          "caller_number_norm": "4372240746",
+          "calls": 4
+        },
+        {
+          "caller_number_norm": "6042941500",
+          "calls": 4
+        },
+        {
+          "caller_number_norm": "6134435263",
+          "calls": 4
+        }
+      ],
+      "total_calls": 343
+    },
+    "8031": {
+      "agent_leaderboard": [
+        {
+          "agent_name": "CSH - BUILDS",
+          "avg_sec": 264.1818181818182,
+          "calls": 11,
+          "median_sec": 249.0,
+          "pct_of_answered": 0.5,
+          "total_sec": 2906.0
+        },
+        {
+          "agent_name": "Gabriel Hubert",
+          "avg_sec": 273.0,
+          "calls": 6,
+          "median_sec": 281.5,
+          "pct_of_answered": 0.2727272727272727,
+          "total_sec": 1638.0
+        },
+        {
+          "agent_name": "Luke Deschenes",
+          "avg_sec": 581.6666666666666,
+          "calls": 3,
+          "median_sec": 457.0,
+          "pct_of_answered": 0.13636363636363635,
+          "total_sec": 1745.0
+        },
+        {
+          "agent_name": "Aymen Zayet",
+          "avg_sec": 58.0,
+          "calls": 1,
+          "median_sec": 58.0,
+          "pct_of_answered": 0.045454545454545456,
+          "total_sec": 58.0
+        },
+        {
+          "agent_name": "Diego Villegas",
+          "avg_sec": 1125.0,
+          "calls": 1,
+          "median_sec": 1125.0,
+          "pct_of_answered": 0.045454545454545456,
+          "total_sec": 1125.0
+        }
+      ],
+      "avg_calls_per_active_day": 2.0,
+      "busiest_day": {
+        "calls": 3,
+        "date": "2026-04-02"
+      },
+      "daily_volume": [
+        {
+          "calls": 1,
+          "date": "2026-04-01"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-02"
+        },
+        {
+          "calls": 1,
+          "date": "2026-04-07"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-08"
+        },
+        {
+          "calls": 1,
+          "date": "2026-04-09"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-10"
+        },
+        {
+          "calls": 1,
+          "date": "2026-04-13"
+        },
+        {
+          "calls": 1,
+          "date": "2026-04-14"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-15"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-17"
+        },
+        {
+          "calls": 3,
+          "date": "2026-04-20"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-21"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-22"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-29"
+        },
+        {
+          "calls": 2,
+          "date": "2026-04-30"
+        }
+      ],
+      "days_with_calls": 15,
+      "dow_volume": [
+        {
+          "calls": 6,
+          "dow": "Friday"
+        },
+        {
+          "calls": 4,
+          "dow": "Monday"
+        },
+        {
+          "calls": 6,
+          "dow": "Thursday"
+        },
+        {
+          "calls": 4,
+          "dow": "Tuesday"
+        },
+        {
+          "calls": 10,
+          "dow": "Wednesday"
+        }
+      ],
+      "duration_distributions": {
+        "agent_sec": {
+          "count": 22,
+          "max": 1136.0,
+          "mean": 339.6363636363636,
+          "median": 249.5,
+          "min": 37.0,
+          "p25": 155.25,
+          "p75": 403.75,
+          "std": 300.83242376138116
+        },
+        "hold_sec": {
+          "count": 8,
+          "max": 429.0,
+          "mean": 151.625,
+          "median": 126.0,
+          "min": 1.0,
+          "p25": 52.75,
+          "p75": 196.5,
+          "std": 147.38863834870622
+        },
+        "queue_sec": {
+          "count": 30,
+          "max": 20.0,
+          "mean": 15.666666666666666,
+          "median": 16.5,
+          "min": 10.0,
+          "p25": 12.0,
+          "p75": 18.0,
+          "std": 3.366501646120693
+        }
+      },
+      "handled_calls": 22,
+      "hourly_volume": [
+        {
+          "calls": 1,
+          "hour": 8,
+          "no_answer_count": 0,
+          "no_answer_rate": 0.0
+        },
+        {
+          "calls": 3,
+          "hour": 9,
+          "no_answer_count": 0,
+          "no_answer_rate": 0.0
+        },
+        {
+          "calls": 2,
+          "hour": 10,
+          "no_answer_count": 0,
+          "no_answer_rate": 0.0
+        },
+        {
+          "calls": 4,
+          "hour": 11,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.5
+        },
+        {
+          "calls": 8,
+          "hour": 12,
+          "no_answer_count": 3,
+          "no_answer_rate": 0.375
+        },
+        {
+          "calls": 7,
+          "hour": 13,
+          "no_answer_count": 2,
+          "no_answer_rate": 0.2857142857142857
+        },
+        {
+          "calls": 2,
+          "hour": 14,
+          "no_answer_count": 0,
+          "no_answer_rate": 0.0
+        },
+        {
+          "calls": 1,
+          "hour": 15,
+          "no_answer_count": 0,
+          "no_answer_rate": 0.0
+        },
+        {
+          "calls": 2,
+          "hour": 16,
+          "no_answer_count": 1,
+          "no_answer_rate": 0.5
+        }
+      ],
+      "no_agent_calls": 8,
+      "no_agent_rate": 0.26666666666666666,
+      "queue_id": "8031",
+      "quietest_day": {
+        "calls": 1,
+        "date": "2026-04-01"
+      },
+      "release_reasons": {
+        "agent": [
+          {
+            "calls": 11,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 8,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 7,
+            "reason": "ForwardNoAns"
+          },
+          {
+            "calls": 3,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 1,
+            "reason": "Abandoned"
+          }
+        ],
+        "queue": [
+          {
+            "calls": 11,
+            "reason": "Transferred"
+          },
+          {
+            "calls": 8,
+            "reason": "Term: Bye"
+          },
+          {
+            "calls": 7,
+            "reason": "ForwardNoAns"
+          },
+          {
+            "calls": 3,
+            "reason": "Orig: Bye"
+          },
+          {
+            "calls": 1,
+            "reason": "Abandoned"
+          }
+        ]
+      },
+      "top_callers": [
+        {
+          "caller_number_norm": "6134470814",
+          "calls": 3
+        },
+        {
+          "caller_number_norm": "3432023236",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "8197435305",
+          "calls": 2
+        },
+        {
+          "caller_number_norm": "3435580906",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "3439611133",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "4382742917",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "4384074588",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "5143164949",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "5194527700",
+          "calls": 1
+        },
+        {
+          "caller_number_norm": "6132230573",
+          "calls": 1
+        }
+      ],
+      "total_calls": 30
+    }
+  },
+  "source_gaps": [],
+  "validation": {
+    "status": "success"
+  }
+}

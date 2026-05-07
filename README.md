@@ -36,3 +36,29 @@ Backfills support arbitrary `--start` and `--end` dates. If a CSV export contain
 ```bash
 pytest
 ```
+
+## Dashboard
+
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+
+The dashboard defaults to:
+
+```text
+/data/reports/month_2026-04-01_2026-04-30/metrics.json
+```
+
+For local static serving, copy a generated report bundle into:
+
+```text
+dashboard/public/data/reports/
+```
+
+To refresh the April report:
+
+```bash
+python -m pipeline.main --source csv --period month --start 2026-04-01 --end 2026-04-30
+```

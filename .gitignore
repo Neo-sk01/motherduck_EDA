@@ -18,3 +18,8 @@ data/csv-uploads/
 *.duckdb.wal
 node_modules/
 dist/
+*.tsbuildinfo
+dashboard/node_modules/
+dashboard/dist/
+dashboard/vite.config.js
+dashboard/vite.config.d.ts
