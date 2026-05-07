@@ -8,6 +8,8 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 *.pyc
+*.egg-info/
+uv.lock
 data/raw/
 data/curated/
 data/reports/

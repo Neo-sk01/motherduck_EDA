@@ -42,7 +42,7 @@ class AppConfig:
 
     @classmethod
     def from_env(cls) -> "AppConfig":
-        load_dotenv()
+        load_dotenv(Path.cwd() / ".env")
         return cls(
             motherduck_database=os.getenv("MOTHERDUCK_DATABASE", "csh_analytics_v2"),
             source=parse_source_mode(os.getenv("SOURCE", "csv")),
