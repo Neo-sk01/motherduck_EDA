@@ -229,6 +229,128 @@ resource functionKvAdmin 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
   }
 }
 
+// ---------- Azure Container Registry ----------
+
+resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
+  name: acrName
+  location: location
+  sku: { name: 'Basic' }
+  properties: { adminUserEnabled: false }
+}
+
+var roleAcrPull = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+
+resource pipelineAcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: acr
+  name: guid(acr.id, pipelineIdentity.id, roleAcrPull)
+  properties: {
+    principalId: pipelineIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleAcrPull)
+  }
+}
+
+// ---------- Container Apps Environment ----------
+
+resource containerAppsEnv 'Microsoft.App/managedEnvironments@2024-03-01' = {
+  name: containerAppsEnvName
+  location: location
+  properties: {
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: logAnalytics.properties.customerId
+        sharedKey: listKeys(logAnalytics.id, '2023-09-01').primarySharedKey
+      }
+    }
+  }
+}
+
+// ---------- Container Apps Job ----------
+
+resource containerAppJob 'Microsoft.App/jobs@2024-03-01' = {
+  name: containerAppJobName
+  location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${pipelineIdentity.id}': {}
+    }
+  }
+  properties: {
+    environmentId: containerAppsEnv.id
+    configuration: {
+      triggerType: 'Schedule'
+      replicaTimeout: 3600
+      replicaRetryLimit: 0
+      scheduleTriggerConfig: {
+        cronExpression: '0 9 1 * *'
+        parallelism: 1
+        replicaCompletionCount: 1
+      }
+      registries: [
+        {
+          server: '${acr.name}.azurecr.io'
+          identity: pipelineIdentity.id
+        }
+      ]
+      secrets: [
+        { name: 'motherduck-token-rw', identity: pipelineIdentity.id, keyVaultUrl: '${keyVault.properties.vaultUri}secrets/motherduck-token-rw' }
+        { name: 'versature-client-id', identity: pipelineIdentity.id, keyVaultUrl: '${keyVault.properties.vaultUri}secrets/versature-client-id' }
+        { name: 'versature-client-secret', identity: pipelineIdentity.id, keyVaultUrl: '${keyVault.properties.vaultUri}secrets/versature-client-secret' }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: 'pipeline'
+          image: containerJobImage
+          resources: { cpu: 1, memory: '2Gi' }
+          env: [
+            { name: 'PERIOD_MODE', value: 'previous-month' }
+            { name: 'PERIOD_TYPE', value: 'month' }
+            { name: 'API_CACHE_MODE', value: 'auto' }
+            { name: 'WRITE_STORE', value: '1' }
+            { name: 'SOURCE', value: 'api' }
+            { name: 'DATA_DIR', value: '/data' }
+            { name: 'TIMEZONE', value: timezone }
+            { name: 'MOTHERDUCK_DATABASE', value: motherduckDatabase }
+            { name: 'QUEUE_ENGLISH', value: queueEnglish }
+            { name: 'QUEUE_FRENCH', value: queueFrench }
+            { name: 'QUEUE_AI_OVERFLOW_EN', value: queueAiOverflowEn }
+            { name: 'QUEUE_AI_OVERFLOW_FR', value: queueAiOverflowFr }
+            { name: 'DNIS_PRIMARY', value: dnisPrimary }
+            { name: 'DNIS_SECONDARY', value: dnisSecondary }
+            { name: 'AZURE_CLIENT_ID', value: pipelineIdentity.properties.clientId }
+            { name: 'REPORTS_STORAGE_ACCOUNT_URL', value: 'https://${storage.name}.blob.${environment().suffixes.storage}' }
+            { name: 'REPORTS_CONTAINER', value: 'reports' }
+            { name: 'MOTHERDUCK_TOKEN_RW', secretRef: 'motherduck-token-rw' }
+            { name: 'VERSATURE_CLIENT_ID', secretRef: 'versature-client-id' }
+            { name: 'VERSATURE_CLIENT_SECRET', secretRef: 'versature-client-secret' }
+          ]
+        }
+      ]
+    }
+  }
+}
+
+// Container Apps Jobs Operator: grants jobs/start/action, jobs/stop/action, read.
+var roleContainerAppJobsOperator = 'b9a307c4-5aa3-4b52-ba60-2b17c136cd7b'
+
+resource functionJobsOperator 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: containerAppJob
+  name: guid(containerAppJob.id, functionIdentity.id, roleContainerAppJobsOperator)
+  properties: {
+    principalId: functionIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleContainerAppJobsOperator)
+  }
+}
+
 output pipelineIdentityResourceId string = pipelineIdentity.id
 output functionIdentityResourceId string = functionIdentity.id
 output keyVaultUri string = keyVault.properties.vaultUri
+output containerAppJobName string = containerAppJob.name
+output acrLoginServer string = '${acr.name}.azurecr.io'
+output storageAccountName string = storage.name
+output reportsBaseUrl string = '${storage.properties.primaryEndpoints.blob}reports'
