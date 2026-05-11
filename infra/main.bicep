@@ -347,6 +347,66 @@ resource functionJobsOperator 'Microsoft.Authorization/roleAssignments@2022-04-0
   }
 }
 
+// ---------- Function App ----------
+
+resource functionStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: functionStorageName
+  location: location
+  kind: 'StorageV2'
+  sku: { name: 'Standard_LRS' }
+  properties: { minimumTlsVersion: 'TLS1_2' }
+}
+
+resource functionPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: '${namePrefix}-fn-plan'
+  location: location
+  sku: { name: 'Y1', tier: 'Dynamic' }
+  properties: { reserved: true }
+}
+
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: functionAppName
+  location: location
+  kind: 'functionapp,linux'
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${functionIdentity.id}': {}
+    }
+  }
+  properties: {
+    serverFarmId: functionPlan.id
+    httpsOnly: true
+    keyVaultReferenceIdentity: functionIdentity.id
+    siteConfig: {
+      linuxFxVersion: 'Python|3.12'
+      ftpsState: 'Disabled'
+      appSettings: [
+        { name: 'FUNCTIONS_EXTENSION_VERSION', value: '~4' }
+        { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'python' }
+        { name: 'AzureWebJobsStorage', value: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(functionStorage.id, '2023-05-01').keys[0].value}' }
+        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
+        { name: 'AZURE_CLIENT_ID', value: functionIdentity.properties.clientId }
+        { name: 'AZURE_SUBSCRIPTION_ID', value: subscription().subscriptionId }
+        { name: 'AZURE_RESOURCE_GROUP', value: resourceGroup().name }
+        { name: 'CONTAINER_APP_JOB_NAME', value: containerAppJob.name }
+        { name: 'ADMIN_API_KEY', value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=admin-api-key)' }
+      ]
+    }
+  }
+}
+
+// ---------- Static Web App ----------
+
+resource swa 'Microsoft.Web/staticSites@2023-12-01' = {
+  name: swaName
+  location: 'centralus'
+  sku: { name: 'Free', tier: 'Free' }
+  properties: {
+    provider: 'GitHub'
+  }
+}
+
 output pipelineIdentityResourceId string = pipelineIdentity.id
 output functionIdentityResourceId string = functionIdentity.id
 output keyVaultUri string = keyVault.properties.vaultUri
@@ -354,3 +414,7 @@ output containerAppJobName string = containerAppJob.name
 output acrLoginServer string = '${acr.name}.azurecr.io'
 output storageAccountName string = storage.name
 output reportsBaseUrl string = '${storage.properties.primaryEndpoints.blob}reports'
+output functionAppName string = functionApp.name
+output functionAppHostname string = functionApp.properties.defaultHostName
+output swaName string = swa.name
+output swaHostname string = swa.properties.defaultHostname
