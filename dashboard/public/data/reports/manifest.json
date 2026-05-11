@@ -1,0 +1,49 @@
+{
+  "reports": [
+    {
+      "end": "2026-04-30",
+      "key": "2026-04",
+      "label": "April 2026",
+      "path": "/data/reports/month_2026-04-01_2026-04-30/metrics.json",
+      "source": "excel_reference_overlay",
+      "start": "2026-04-01",
+      "validation_status": "success"
+    },
+    {
+      "end": "2026-03-31",
+      "key": "2026-03",
+      "label": "March 2026",
+      "path": "/data/reports/month_2026-03-01_2026-03-31/metrics.json",
+      "source": "api",
+      "start": "2026-03-01",
+      "validation_status": "success"
+    },
+    {
+      "end": "2026-02-28",
+      "key": "2026-02",
+      "label": "February 2026",
+      "path": "/data/reports/month_2026-02-01_2026-02-28/metrics.json",
+      "source": "api",
+      "start": "2026-02-01",
+      "validation_status": "success"
+    },
+    {
+      "end": "2026-01-31",
+      "key": "2026-01",
+      "label": "January 2026",
+      "path": "/data/reports/month_2026-01-01_2026-01-31/metrics.json",
+      "source": "api",
+      "start": "2026-01-01",
+      "validation_status": "success"
+    },
+    {
+      "end": "2025-12-31",
+      "key": "2025-12",
+      "label": "December 2025",
+      "path": "/data/reports/month_2025-12-01_2025-12-31/metrics.json",
+      "source": "api",
+      "start": "2025-12-01",
+      "validation_status": "success"
+    }
+  ]
+}

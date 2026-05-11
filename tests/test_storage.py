@@ -5,6 +5,85 @@ from pipeline.curate import curate_csv_calls
 from pipeline.storage import AnalyticsStore
 
 
+def test_store_initializes_schema_once_per_connection_instance():
+    class RecordingConnection:
+        def __init__(self):
+            self.sql = []
+
+        def execute(self, sql, params=None):
+            self.sql.append(sql.strip().lower())
+            return self
+
+    connection = RecordingConnection()
+    store = AnalyticsStore(connection)
+
+    store.initialize_schema()
+    store.initialize_schema()
+
+    create_table_statements = [sql for sql in connection.sql if sql.startswith("create table")]
+    assert len(create_table_statements) == 16
+
+
+def test_store_does_not_mark_schema_initialized_when_ddl_fails():
+    class FailingConnection:
+        def execute(self, sql, params=None):
+            if "raw_call_legs" in sql:
+                raise RuntimeError("DDL failed")
+            return self
+
+    store = AnalyticsStore(FailingConnection())
+
+    try:
+        store.initialize_schema()
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError("initialize_schema should fail")
+
+    assert store._schema_initialized is False
+
+
+def test_replace_raw_call_legs_uses_registered_bulk_insert():
+    class RecordingConnection:
+        def __init__(self):
+            self.calls = []
+
+        def execute(self, sql, params=None):
+            self.calls.append(("execute", sql.strip().lower(), params))
+            return self
+
+        def executemany(self, sql, rows):
+            self.calls.append(("executemany", sql.strip().lower(), rows))
+            return self
+
+        def register(self, name, frame):
+            self.calls.append(("register", name, len(frame)))
+
+        def unregister(self, name):
+            self.calls.append(("unregister", name))
+
+    connection = RecordingConnection()
+    store = AnalyticsStore(connection)
+    store._schema_initialized = True
+    raw = pd.DataFrame(
+        [
+            {
+                "source_queue_id": "8020",
+                "Orig CallID": "call-1",
+                "source_file": "versature_api",
+                "Call Time": "03/01/2026 8:00 am",
+            }
+        ]
+    )
+
+    store.replace_raw_call_legs("2026-03-01", "2026-03-31", raw, "api")
+
+    call_kinds = [call[0] for call in connection.calls]
+    assert "executemany" not in call_kinds
+    assert ("register", "raw_call_legs_input", 1) in connection.calls
+    assert ("unregister", "raw_call_legs_input") in connection.calls
+
+
 def test_store_creates_tables_and_replaces_period(tmp_path):
     db_path = tmp_path / "analytics.duckdb"
     store = AnalyticsStore.local(db_path)

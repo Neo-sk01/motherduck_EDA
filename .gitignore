@@ -16,6 +16,12 @@ data/reports/
 data/csv-uploads/
 *.duckdb
 *.duckdb.wal
+*.DS_Store
+dashboard/public/data/api_extracts/
+dashboard/public/data/api_inventory/
+dashboard/public/data/reports/**/diagnostics/
+dashboard/public/data/reports/**/metrics_*.json
+dashboard/public/data/reports/**/neolore-queue-analytics-*.csv
 node_modules/
 dist/
 *.tsbuildinfo

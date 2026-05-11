@@ -86,7 +86,47 @@ def test_compute_crossqueue_metrics_funnel_and_consolidation():
     assert english["lost"] == 1
     assert english["lost_rate"] == 1 / 3
     assert english["effective_answer_rate"] == pytest.approx(2 / 3)
+    assert english["drop_definition"] == "final_dropped_after_overflow"
+    assert english["final_dropped_calls"] == 1
     assert metrics["agents"][0]["agent_name"] == "Gabriel Hubert"
     assert metrics["agents"][0]["total_calls"] == 2
     assert metrics["callers"][0]["caller_number_norm"] == "9052833500"
     assert metrics["callers"][0]["total_calls"] == 3
+
+
+def test_compute_crossqueue_metrics_labels_primary_only_no_agent_when_overflow_missing():
+    df = pd.DataFrame(
+        [
+            {
+                "queue_id": "8020",
+                "language": "English",
+                "role": "primary",
+                "call_id": "answered",
+                "agent_name": "Alicia",
+                "caller_number_norm": "9052833500",
+                "date": "2026-01-02",
+                "hour": 8,
+                "agent_sec": 120.0,
+            },
+            {
+                "queue_id": "8020",
+                "language": "English",
+                "role": "primary",
+                "call_id": "handoff",
+                "agent_name": None,
+                "caller_number_norm": "6135551212",
+                "date": "2026-01-02",
+                "hour": 9,
+                "agent_sec": 0.0,
+            },
+        ]
+    )
+
+    english = compute_crossqueue_metrics(df)["funnels"]["English"]
+
+    assert english["primary_calls"] == 2
+    assert english["primary_no_agent_calls"] == 1
+    assert english["final_dropped_available"] is False
+    assert english["final_dropped_calls"] is None
+    assert english["drop_definition"] == "primary_no_agent_handoff_candidates_overflow_missing"
+    assert english["lost"] == 1

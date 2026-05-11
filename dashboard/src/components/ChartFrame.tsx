@@ -6,10 +6,12 @@ interface ChartFrameProps {
   title: string;
   caption: string;
   filename: string;
+  control?: ReactNode;
+  bodyClassName?: string;
   children: ReactNode;
 }
 
-export function ChartFrame({ title, caption, filename, children }: ChartFrameProps) {
+export function ChartFrame({ title, caption, filename, control, bodyClassName, children }: ChartFrameProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,9 +32,12 @@ export function ChartFrame({ title, caption, filename, children }: ChartFramePro
           <h3>{title}</h3>
           <p>{caption}</p>
         </div>
-        <ExportButton label={`Export ${title} PNG`} onClick={handleExport} />
+        <div className="frame-actions">
+          {control}
+          <ExportButton label={`Export ${title} PNG`} onClick={handleExport} />
+        </div>
       </div>
-      <div className="chart-body">{children}</div>
+      <div className={["chart-body", bodyClassName].filter(Boolean).join(" ")}>{children}</div>
       {error ? <p className="inline-error">{error}</p> : null}
     </section>
   );

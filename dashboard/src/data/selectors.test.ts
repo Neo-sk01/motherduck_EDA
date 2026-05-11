@@ -24,8 +24,8 @@ describe("dashboard selectors", () => {
 
   it("finds the April top agent and caller reference values", () => {
     expect(getTopAgent(report)).toMatchObject({
-      agent_name: "Gabriel Hubert",
-      total_calls: 299,
+      agent_name: "Alicia Yameen",
+      total_calls: 241,
     });
     expect(getTopCaller(report)).toMatchObject({
       caller_number_norm: "9052833500",
@@ -36,7 +36,7 @@ describe("dashboard selectors", () => {
   it("keeps raw funnel values available", () => {
     const funnels = getLanguageFunnels(report);
     expect(funnels[0].language).toBe("English");
-    expect(funnels[0].funnel.routing_match).toBeCloseTo(0.988, 3);
+    expect(funnels[0].funnel.routing_match).toBeCloseTo(0.983, 3);
     expect(funnels[1].language).toBe("French");
     expect(funnels[1].funnel.effective_answer_rate).toBeCloseTo(0.879, 3);
   });

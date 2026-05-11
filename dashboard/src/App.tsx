@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { AppShell } from "./components/AppShell";
 import { EmptyState } from "./components/EmptyState";
 import { DEFAULT_REPORT_PATH, loadReport } from "./data/reportLoader";
+import {
+  DEFAULT_REPORT_OPTION,
+  loadReportManifest,
+  type ReportOption,
+} from "./data/reportManifest";
 import type { DashboardReport, QueueId, ReportLoadResult, ViewKey } from "./data/reportTypes";
+import { downloadFullReportCsv } from "./utils/reportExport";
 import { CrossQueueView } from "./views/CrossQueueView";
 import { FunnelDetailView } from "./views/FunnelDetailView";
 import { OverviewView } from "./views/OverviewView";
@@ -12,8 +18,24 @@ export default function App() {
   const [activeView, setActiveView] = useState<ViewKey>("overview");
   const [selectedQueueId, setSelectedQueueId] = useState<QueueId>("8020");
   const [reportPath, setReportPath] = useState(DEFAULT_REPORT_PATH);
+  const [reportOptions, setReportOptions] = useState<ReportOption[]>([DEFAULT_REPORT_OPTION]);
+  const [selectedReportKey, setSelectedReportKey] = useState(DEFAULT_REPORT_OPTION.key);
   const [reloadToken, setReloadToken] = useState(0);
   const [loadResult, setLoadResult] = useState<ReportLoadResult | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadReportManifest().then((options) => {
+      if (cancelled) return;
+      setReportOptions(options);
+      const selected = options.find((option) => option.path === reportPath) ?? options[0];
+      setSelectedReportKey(selected.key);
+      setReportPath(selected.path);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -27,6 +49,12 @@ export default function App() {
   }, [reloadToken, reportPath]);
 
   const report = loadResult?.status === "loaded" ? loadResult.report : null;
+  const handleReportKeyChange = (key: string) => {
+    const option = reportOptions.find((candidate) => candidate.key === key);
+    if (!option) return;
+    setSelectedReportKey(option.key);
+    setReportPath(option.path);
+  };
 
   return (
     <AppShell
@@ -34,9 +62,13 @@ export default function App() {
       onViewChange={setActiveView}
       report={report}
       loadResult={loadResult}
-      reportPath={reportPath}
-      onReportPathChange={setReportPath}
+      reportOptions={reportOptions}
+      selectedReportKey={selectedReportKey}
+      onReportKeyChange={handleReportKeyChange}
       onReload={() => setReloadToken((current) => current + 1)}
+      onExportReportCsv={() => {
+        if (report) downloadFullReportCsv(report);
+      }}
     >
       {renderContent({
         activeView,

@@ -6,7 +6,7 @@ describe("reportLoader", () => {
   it("validates the April fixture", () => {
     const report = validateReport(fixture);
     expect(report.queues["8020"].total_calls).toBe(1181);
-    expect(report.crossqueue.funnels.English.routing_match).toBeCloseTo(0.988, 3);
+    expect(report.crossqueue.funnels.English.routing_match).toBeCloseTo(0.983, 3);
   });
 
   it("rejects missing funnel data", () => {

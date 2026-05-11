@@ -40,6 +40,7 @@ CURATED_COLUMNS = [
 class AnalyticsStore:
     def __init__(self, connection: duckdb.DuckDBPyConnection):
         self.connection = connection
+        self._schema_initialized = False
 
     @classmethod
     def local(cls, path: Path) -> "AnalyticsStore":
@@ -52,6 +53,8 @@ class AnalyticsStore:
         return cls(conn)
 
     def initialize_schema(self) -> None:
+        if self._schema_initialized:
+            return
         self.connection.execute(
             """
             create table if not exists curated_calls (
@@ -255,6 +258,7 @@ class AnalyticsStore:
             )
             """
         )
+        self._schema_initialized = True
 
     def replace_queue_dimension(self, queues: tuple[QueueConfig, ...]) -> None:
         self.initialize_schema()
@@ -266,31 +270,61 @@ class AnalyticsStore:
     def replace_raw_call_legs(self, start: str, end: str, df: pd.DataFrame, source_mode: str) -> None:
         self.initialize_schema()
         self.connection.execute("begin transaction")
+        registered_input = False
         try:
             self.connection.execute(
                 "delete from raw_call_legs where period_start = ? and period_end = ? and source_mode = ?",
                 [start, end, source_mode],
             )
-            rows = [
-                (
-                    start,
-                    end,
-                    source_mode,
-                    _nullable(row.get("source_queue_id")),
-                    _nullable(row.get("Orig CallID")),
-                    _nullable(row.get("source_file")),
-                    _json_dumps(row),
+            rows = pd.DataFrame(
+                [
+                    {
+                        "period_start": start,
+                        "period_end": end,
+                        "source_mode": source_mode,
+                        "queue_id": _nullable(row.get("source_queue_id")),
+                        "call_id": _nullable(row.get("Orig CallID")),
+                        "source_file": _nullable(row.get("source_file")),
+                        "raw_json": _json_dumps(row),
+                    }
+                    for row in df.to_dict("records")
+                ]
+            )
+            if not rows.empty:
+                self.connection.register("raw_call_legs_input", rows)
+                registered_input = True
+                self.connection.execute(
+                    """
+                    insert into raw_call_legs (
+                        period_start,
+                        period_end,
+                        source_mode,
+                        queue_id,
+                        call_id,
+                        source_file,
+                        raw_json
+                    )
+                    select
+                        period_start,
+                        period_end,
+                        source_mode,
+                        queue_id,
+                        call_id,
+                        source_file,
+                        raw_json::json
+                    from raw_call_legs_input
+                    """
                 )
-                for row in df.to_dict("records")
-            ]
-            if rows:
-                self.connection.executemany(
-                    "insert into raw_call_legs values (?, ?, ?, ?, ?, ?, ?)",
-                    rows,
-                )
+                self.connection.unregister("raw_call_legs_input")
+                registered_input = False
             self.connection.execute("commit")
         except Exception:
             self.connection.execute("rollback")
+            if registered_input:
+                try:
+                    self.connection.unregister("raw_call_legs_input")
+                except duckdb.InvalidInputException:
+                    pass
             raise
 
     def replace_curated_calls(self, start: str, end: str, df: pd.DataFrame) -> None:
@@ -351,6 +385,136 @@ class AnalyticsStore:
             "comparative_series",
             "anomalies",
         ]
+        queue_period_rows = []
+        queue_daily_rows = []
+        queue_hourly_rows = []
+        queue_dow_rows = []
+        agent_queue_rows = []
+        caller_queue_rows = []
+        release_reason_rows = []
+        funnel_language_rows = []
+        crossqueue_agent_rows = []
+        crossqueue_caller_rows = []
+        comparative_series_rows = []
+        anomaly_rows = []
+        for queue_id, metrics in queue_metrics.items():
+            queue_period_rows.append([start, end, queue_id, _json_dumps(metrics)])
+            for row in metrics.get("daily_volume", []):
+                queue_daily_rows.append([start, end, queue_id, row["date"], row["calls"]])
+            for row in metrics.get("hourly_volume", []):
+                queue_hourly_rows.append(
+                    [start, end, queue_id, row["hour"], row["calls"], row["no_answer_count"], row["no_answer_rate"]]
+                )
+            for row in metrics.get("dow_volume", []):
+                queue_dow_rows.append([start, end, queue_id, row["dow"], row["calls"]])
+            for row in metrics.get("agent_leaderboard", []):
+                agent_queue_rows.append([start, end, queue_id, row["agent_name"], row["calls"], _json_dumps(row)])
+            for row in metrics.get("top_callers", []):
+                caller_queue_rows.append([start, end, queue_id, row["caller_number_norm"], row["calls"]])
+            for reason_type, rows in metrics.get("release_reasons", {}).items():
+                for row in rows:
+                    release_reason_rows.append([start, end, queue_id, reason_type, row["reason"], row["calls"]])
+        for language, metrics in crossqueue.get("funnels", {}).items():
+            funnel_language_rows.append([start, end, language, _json_dumps(metrics)])
+        for row in crossqueue.get("agents", []):
+            crossqueue_agent_rows.append([start, end, row["agent_name"], row["total_calls"], _json_dumps(row)])
+        for row in crossqueue.get("callers", []):
+            crossqueue_caller_rows.append(
+                [start, end, row["caller_number_norm"], row["total_calls"], _json_dumps(row)]
+            )
+        for series_name in ("same_hour_no_answer", "same_day_volume"):
+            for row in crossqueue.get(series_name, []):
+                comparative_series_rows.append(
+                    [
+                        start,
+                        end,
+                        series_name,
+                        row.get("queue_id"),
+                        str(row.get("hour", row.get("date"))),
+                        _json_dumps(row),
+                    ]
+                )
+        for row in anomalies:
+            anomaly_rows.append(
+                [
+                    start,
+                    end,
+                    row.get("kind"),
+                    row.get("severity"),
+                    _json_dumps(row.get("target", {})),
+                    _json_dumps(row),
+                ]
+            )
+        bulk_tables = [
+            (
+                "queue_period_metrics",
+                ["period_start", "period_end", "queue_id", "metrics_json"],
+                queue_period_rows,
+            ),
+            (
+                "queue_daily_metrics",
+                ["period_start", "period_end", "queue_id", "date", "calls"],
+                queue_daily_rows,
+            ),
+            (
+                "queue_hourly_metrics",
+                [
+                    "period_start",
+                    "period_end",
+                    "queue_id",
+                    "hour",
+                    "calls",
+                    "no_answer_count",
+                    "no_answer_rate",
+                ],
+                queue_hourly_rows,
+            ),
+            (
+                "queue_dow_metrics",
+                ["period_start", "period_end", "queue_id", "dow", "calls"],
+                queue_dow_rows,
+            ),
+            (
+                "agent_queue_metrics",
+                ["period_start", "period_end", "queue_id", "agent_name", "calls", "metrics_json"],
+                agent_queue_rows,
+            ),
+            (
+                "caller_queue_metrics",
+                ["period_start", "period_end", "queue_id", "caller_number_norm", "calls"],
+                caller_queue_rows,
+            ),
+            (
+                "release_reason_metrics",
+                ["period_start", "period_end", "queue_id", "reason_type", "reason", "calls"],
+                release_reason_rows,
+            ),
+            (
+                "funnel_language_metrics",
+                ["period_start", "period_end", "language", "metrics_json"],
+                funnel_language_rows,
+            ),
+            (
+                "crossqueue_agent_metrics",
+                ["period_start", "period_end", "agent_name", "total_calls", "metrics_json"],
+                crossqueue_agent_rows,
+            ),
+            (
+                "crossqueue_caller_metrics",
+                ["period_start", "period_end", "caller_number_norm", "total_calls", "metrics_json"],
+                crossqueue_caller_rows,
+            ),
+            (
+                "comparative_series",
+                ["period_start", "period_end", "series_name", "queue_id", "bucket", "metrics_json"],
+                comparative_series_rows,
+            ),
+            (
+                "anomalies",
+                ["period_start", "period_end", "kind", "severity", "target_json", "anomaly_json"],
+                anomaly_rows,
+            ),
+        ]
         self.connection.execute("begin transaction")
         try:
             for table in metric_tables:
@@ -362,86 +526,32 @@ class AnalyticsStore:
                 "insert into report_runs values (?, ?, ?, ?, ?, ?, current_timestamp)",
                 [start, end, period, source_mode, "success", _json_dumps(validation or {"status": "success"})],
             )
-            for queue_id, metrics in queue_metrics.items():
-                self.connection.execute(
-                    "insert into queue_period_metrics values (?, ?, ?, ?)",
-                    [start, end, queue_id, _json_dumps(metrics)],
-                )
-                for row in metrics.get("daily_volume", []):
-                    self.connection.execute(
-                        "insert into queue_daily_metrics values (?, ?, ?, ?, ?)",
-                        [start, end, queue_id, row["date"], row["calls"]],
-                    )
-                for row in metrics.get("hourly_volume", []):
-                    self.connection.execute(
-                        "insert into queue_hourly_metrics values (?, ?, ?, ?, ?, ?, ?)",
-                        [start, end, queue_id, row["hour"], row["calls"], row["no_answer_count"], row["no_answer_rate"]],
-                    )
-                for row in metrics.get("dow_volume", []):
-                    self.connection.execute(
-                        "insert into queue_dow_metrics values (?, ?, ?, ?, ?)",
-                        [start, end, queue_id, row["dow"], row["calls"]],
-                    )
-                for row in metrics.get("agent_leaderboard", []):
-                    self.connection.execute(
-                        "insert into agent_queue_metrics values (?, ?, ?, ?, ?, ?)",
-                        [start, end, queue_id, row["agent_name"], row["calls"], _json_dumps(row)],
-                    )
-                for row in metrics.get("top_callers", []):
-                    self.connection.execute(
-                        "insert into caller_queue_metrics values (?, ?, ?, ?, ?)",
-                        [start, end, queue_id, row["caller_number_norm"], row["calls"]],
-                    )
-                for reason_type, rows in metrics.get("release_reasons", {}).items():
-                    for row in rows:
-                        self.connection.execute(
-                            "insert into release_reason_metrics values (?, ?, ?, ?, ?, ?)",
-                            [start, end, queue_id, reason_type, row["reason"], row["calls"]],
-                        )
-            for language, metrics in crossqueue.get("funnels", {}).items():
-                self.connection.execute(
-                    "insert into funnel_language_metrics values (?, ?, ?, ?)",
-                    [start, end, language, _json_dumps(metrics)],
-                )
-            for row in crossqueue.get("agents", []):
-                self.connection.execute(
-                    "insert into crossqueue_agent_metrics values (?, ?, ?, ?, ?)",
-                    [start, end, row["agent_name"], row["total_calls"], _json_dumps(row)],
-                )
-            for row in crossqueue.get("callers", []):
-                self.connection.execute(
-                    "insert into crossqueue_caller_metrics values (?, ?, ?, ?, ?)",
-                    [start, end, row["caller_number_norm"], row["total_calls"], _json_dumps(row)],
-                )
-            for series_name in ("same_hour_no_answer", "same_day_volume"):
-                for row in crossqueue.get(series_name, []):
-                    self.connection.execute(
-                        "insert into comparative_series values (?, ?, ?, ?, ?, ?)",
-                        [
-                            start,
-                            end,
-                            series_name,
-                            row.get("queue_id"),
-                            str(row.get("hour", row.get("date"))),
-                            _json_dumps(row),
-                        ],
-                    )
-            for row in anomalies:
-                self.connection.execute(
-                    "insert into anomalies values (?, ?, ?, ?, ?, ?)",
-                    [
-                        start,
-                        end,
-                        row.get("kind"),
-                        row.get("severity"),
-                        _json_dumps(row.get("target", {})),
-                        _json_dumps(row),
-                    ],
-                )
+            for table, columns, rows in bulk_tables:
+                self._insert_rows(table, columns, rows)
             self.connection.execute("commit")
         except Exception:
-            self.connection.execute("rollback")
+            try:
+                self.connection.execute("rollback")
+            except duckdb.Error:
+                pass
             raise
+
+    def _insert_rows(self, table: str, columns: list[str], rows: list[list[Any]]) -> None:
+        if not rows:
+            return
+        view_name = f"{table}_input"
+        frame = pd.DataFrame(rows, columns=columns)
+        quoted_columns = ", ".join(_quote_identifier(column) for column in columns)
+        self.connection.register(view_name, frame)
+        try:
+            self.connection.execute(
+                f"insert into {table} ({quoted_columns}) select {quoted_columns} from {view_name}"
+            )
+        finally:
+            try:
+                self.connection.unregister(view_name)
+            except duckdb.InvalidInputException:
+                pass
 
 
 def _nullable(value: Any) -> Any:
@@ -457,6 +567,10 @@ def _nullable(value: Any) -> Any:
 
 def _json_dumps(value: Any) -> str:
     return json.dumps(_json_ready(value), allow_nan=False, sort_keys=True, default=str)
+
+
+def _quote_identifier(value: str) -> str:
+    return f'"{value.replace('"', '""')}"'
 
 
 def _json_ready(value: Any) -> Any:

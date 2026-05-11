@@ -1,10 +1,11 @@
-import { AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { AlertTriangle, ScrollText } from "lucide-react";
 import { ChartFrame } from "../components/ChartFrame";
 import { MetricCard } from "../components/MetricCard";
 import { QueueCard } from "../components/QueueCard";
 import { FunnelChart } from "../charts/FunnelChart";
 import type { DashboardReport, QueueId, ViewKey } from "../data/reportTypes";
-import { getLanguageFunnels, getQueueSummaries } from "../data/selectors";
+import { getLanguageFunnels, getQueueSummaries, getTopAgent, getTopCaller } from "../data/selectors";
 import { formatInteger, formatPercent, titleCase } from "../utils/format";
 
 interface OverviewViewProps {
@@ -16,6 +17,9 @@ interface OverviewViewProps {
 export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewViewProps) {
   const funnels = getLanguageFunnels(report);
   const summaries = getQueueSummaries(report);
+  const topAgent = getTopAgent(report);
+  const topCaller = getTopCaller(report);
+  const [scrollableFunnels, setScrollableFunnels] = useState<Record<string, boolean>>({});
 
   return (
     <div className="view-stack">
@@ -25,8 +29,13 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
           <p>Primary queues, overflow routing, and operational risks for the selected report.</p>
         </div>
         <div className="reference-row" aria-label="April reference values">
-          <span>Gabriel Hubert 299</span>
-          <span>Caller 9052833500 63</span>
+          <span>Queue 8020 {formatInteger(report.queues["8020"].total_calls)}</span>
+          <span>{topAgent ? `${topAgent.agent_name} ${formatInteger(topAgent.total_calls)}` : "Top agent n/a"}</span>
+          <span>
+            {topCaller
+              ? `Caller ${topCaller.caller_number_norm} ${formatInteger(topCaller.total_calls)}`
+              : "Top caller n/a"}
+          </span>
         </div>
       </section>
 
@@ -37,6 +46,26 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
             title={`${item.language} Funnel`}
             caption={`${item.language} routing match is ${formatPercent(item.funnel.routing_match)} for the period.`}
             filename={`${item.language.toLowerCase()}-funnel.png`}
+            bodyClassName={scrollableFunnels[item.language] ? "chart-body--scrollable" : undefined}
+            control={
+              <label className="toggle toggle--switch">
+                <input
+                  type="checkbox"
+                  checked={Boolean(scrollableFunnels[item.language])}
+                  onChange={(event) =>
+                    setScrollableFunnels((current) => ({
+                      ...current,
+                      [item.language]: event.target.checked,
+                    }))
+                  }
+                />
+                <span className="toggle-track" aria-hidden="true">
+                  <span />
+                </span>
+                <ScrollText aria-hidden="true" size={14} />
+                <span>Scroll</span>
+              </label>
+            }
           >
             <FunnelChart {...item} />
           </ChartFrame>

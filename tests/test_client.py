@@ -136,3 +136,65 @@ def test_get_json_does_not_retry_permanent_client_errors():
     with pytest.raises(httpx.HTTPStatusError):
         client.get_cdr_users(start_date="2026-04-01", end_date="2026-04-30")
     assert requests == 1
+
+
+def test_get_cdr_users_refreshes_access_token_after_unauthorized_response():
+    requests: list[str | None] = []
+    tokens = iter(["fresh-token"])
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request.headers.get("Authorization"))
+        if len(requests) == 1:
+            return httpx.Response(401, request=request)
+        return httpx.Response(200, json={"result": [{"id": "ok"}], "more": False}, request=request)
+
+    client = VersatureClient(
+        base_url="https://api.example.test/",
+        api_version="application/vnd.versature.v1+json",
+        access_token="expired-token",
+        refresh_access_token=lambda: next(tokens),
+        transport=httpx.MockTransport(handler),
+    )
+
+    assert client.get_cdr_users(start_date="2026-04-01", end_date="2026-04-30") == [{"id": "ok"}]
+    assert requests == ["Bearer expired-token", "Bearer fresh-token"]
+
+
+def test_get_cdr_users_retries_rate_limit_responses():
+    requests = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal requests
+        requests += 1
+        if requests < 4:
+            return httpx.Response(429, headers={"Retry-After": "0"}, request=request)
+        return httpx.Response(200, json={"result": [{"id": "ok"}], "more": False})
+
+    client = VersatureClient(
+        base_url="https://api.example.test/",
+        api_version="application/vnd.versature.v1+json",
+        access_token="token",
+        transport=httpx.MockTransport(handler),
+    )
+
+    assert client.get_cdr_users(start_date="2026-04-01", end_date="2026-04-30") == [{"id": "ok"}]
+    assert requests == 4
+
+
+def test_get_call_queue_stats_returns_single_stats_object():
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/call_queues/8020/stats/"
+        assert "start_date=2026-04-01" in str(request.url)
+        return httpx.Response(200, json=[{"queue": "8020", "calls_offered": 767}], request=request)
+
+    client = VersatureClient(
+        base_url="https://api.example.test/",
+        api_version="application/vnd.versature.v1+json",
+        access_token="token",
+        transport=httpx.MockTransport(handler),
+    )
+
+    assert client.get_call_queue_stats("8020", "2026-04-01", "2026-04-30") == {
+        "queue": "8020",
+        "calls_offered": 767,
+    }

@@ -48,6 +48,42 @@ def test_write_report_bundle_can_record_source_gaps(tmp_path):
     assert metrics["validation"] == {"status": "source_gap"}
 
 
+def test_write_report_bundle_updates_monthly_manifest(tmp_path):
+    write_report_bundle(
+        data_dir=tmp_path,
+        period="month",
+        start="2026-03-01",
+        end="2026-03-31",
+        queue_metrics={"8020": {"queue_id": "8020", "total_calls": 1}},
+        crossqueue={},
+        anomalies=[],
+        source_mode="api",
+    )
+    write_report_bundle(
+        data_dir=tmp_path,
+        period="month",
+        start="2026-04-01",
+        end="2026-04-30",
+        queue_metrics={"8020": {"queue_id": "8020", "total_calls": 2}},
+        crossqueue={},
+        anomalies=[],
+        source_mode="csv",
+    )
+
+    manifest = json.loads((tmp_path / "reports" / "manifest.json").read_text())
+
+    assert [row["key"] for row in manifest["reports"]] == ["2026-04", "2026-03"]
+    assert manifest["reports"][0] == {
+        "key": "2026-04",
+        "label": "April 2026",
+        "start": "2026-04-01",
+        "end": "2026-04-30",
+        "path": "/data/reports/month_2026-04-01_2026-04-30/metrics.json",
+        "source": "csv",
+        "validation_status": "success",
+    }
+
+
 def test_write_report_bundle_rejects_non_finite_json_values(tmp_path):
     with pytest.raises(ValueError, match="Out of range float values"):
         write_report_bundle(

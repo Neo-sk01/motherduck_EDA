@@ -5,6 +5,8 @@ from typing import Any
 
 import pandas as pd
 
+from pipeline.classify import answered_mask, valid_agent_name
+
 
 def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
     df = curated[curated["queue_id"].astype(str) == str(queue_id)].copy()
@@ -14,12 +16,14 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
             "total_calls": 0,
             "handled_calls": 0,
             "no_agent_calls": 0,
+            "answer_rate": 0.0,
             "no_agent_rate": 0.0,
             "days_with_calls": 0,
             "avg_calls_per_active_day": 0.0,
             "busiest_day": None,
             "quietest_day": None,
             "daily_volume": [],
+            "weekly_volume": [],
             "hourly_volume": [],
             "dow_volume": [],
             "duration_distributions": {
@@ -32,14 +36,19 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
             "top_callers": [],
         }
     handled_mask = _handled_mask(df)
-    handled = df[handled_mask & df["agent_name"].notna()]
+    handled = df[handled_mask & valid_agent_name(df["agent_name"])]
     daily = df.groupby("date").size().rename("calls").reset_index()
     daily_records = daily.sort_values("date").to_dict("records")
+    weekly = _weekly_volume(df)
     dow = df.groupby("dow").size().rename("calls").reset_index()
     hourly = (
         df.assign(no_answer=~handled_mask)
         .groupby("hour")
-        .agg(calls=("call_id", "count"), no_answer_count=("no_answer", "sum"))
+        .agg(
+            calls=("call_id", "count"),
+            no_answer_count=("no_answer", "sum"),
+            avg_agent_sec=("agent_sec", lambda s: pd.to_numeric(s.where(handled_mask.loc[s.index]), errors="coerce").mean()),
+        )
         .reset_index()
     )
     hourly["no_answer_rate"] = hourly["no_answer_count"] / hourly["calls"]
@@ -70,14 +79,22 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
         "total_calls": int(len(df)),
         "handled_calls": int(handled_mask.sum()),
         "no_agent_calls": int((~handled_mask).sum()),
+        "answer_rate": float(handled_mask.sum() / len(df)) if len(df) else 0.0,
         "no_agent_rate": float((~handled_mask).sum() / len(df)) if len(df) else 0.0,
         "days_with_calls": int(daily["date"].nunique()),
         "avg_calls_per_active_day": float(len(df) / daily["date"].nunique()) if len(daily) else 0.0,
         "busiest_day": {"date": str(busiest["date"]), "calls": int(busiest["calls"])},
         "quietest_day": {"date": str(quietest["date"]), "calls": int(quietest["calls"])},
         "daily_volume": [{"date": str(r["date"]), "calls": int(r["calls"])} for r in daily_records],
+        "weekly_volume": weekly,
         "hourly_volume": [
-            {"hour": int(r["hour"]), "calls": int(r["calls"]), "no_answer_count": int(r["no_answer_count"]), "no_answer_rate": float(r["no_answer_rate"])}
+            {
+                "hour": int(r["hour"]),
+                "calls": int(r["calls"]),
+                "no_answer_count": int(r["no_answer_count"]),
+                "no_answer_rate": float(r["no_answer_rate"]),
+                "avg_agent_sec": _json_number(r["avg_agent_sec"]),
+            }
             for r in hourly.sort_values("hour").to_dict("records")
         ],
         "dow_volume": [
@@ -112,9 +129,11 @@ def compute_queue_metrics(curated: pd.DataFrame, queue_id: str) -> dict:
 
 
 def _handled_mask(df: pd.DataFrame) -> pd.Series:
+    if "agent_sec" in df.columns or "agent_name" in df.columns:
+        return answered_mask(df)
     if "handled_flag" in df.columns:
         return df["handled_flag"].eq("Handled")
-    return df["agent_sec"].fillna(0).gt(0)
+    return pd.Series(False, index=df.index)
 
 
 def _duration_distribution(series: pd.Series) -> dict[str, int | float | None]:
@@ -140,6 +159,25 @@ def _duration_distribution(series: pd.Series) -> dict[str, int | float | None]:
         "p75": _json_number(values.quantile(0.75)),
         "max": _json_number(values.max()),
     }
+
+
+def _weekly_volume(df: pd.DataFrame) -> list[dict[str, int | str]]:
+    dates = pd.to_datetime(df["date"], errors="coerce")
+    weekly = (
+        df.assign(
+            week_start=dates.dt.to_period("W-SUN").dt.start_time.dt.strftime("%Y-%m-%d"),
+            week_end=dates.dt.to_period("W-SUN").dt.end_time.dt.strftime("%Y-%m-%d"),
+        )
+        .groupby(["week_start", "week_end"])
+        .size()
+        .rename("calls")
+        .reset_index()
+        .sort_values("week_start")
+    )
+    return [
+        {"week_start": str(r["week_start"]), "week_end": str(r["week_end"]), "calls": int(r["calls"])}
+        for r in weekly.to_dict("records")
+    ]
 
 
 def _reason_counts(df: pd.DataFrame, column: str) -> list[dict[str, int | str]]:

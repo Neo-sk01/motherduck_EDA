@@ -12,7 +12,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -26,12 +27,12 @@ button {
 
 .topbar {
   display: grid;
-  grid-template-columns: minmax(220px, 0.9fr) auto minmax(280px, 0.9fr);
+  grid-template-columns: minmax(330px, 1fr) auto minmax(280px, 0.85fr);
   gap: 18px;
   align-items: center;
   padding: 18px 24px 14px;
   border-bottom: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.94);
   position: sticky;
   top: 0;
   z-index: 5;
@@ -46,6 +47,23 @@ main > *,
   min-width: 0;
 }
 
+.brand-block {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-block img {
+  width: clamp(128px, 12vw, 190px);
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.brand-block > div {
+  min-width: 0;
+}
+
 .brand-block h1,
 .view-heading h2 {
   margin: 0;
@@ -55,7 +73,7 @@ main > *,
 }
 
 .brand-block h1 {
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1.05;
 }
 
@@ -101,7 +119,7 @@ main > *,
 
 .tabs button.is-active,
 .segmented-control button.is-active {
-  background: var(--text);
+  background: var(--teal);
   color: #fff;
 }
 
@@ -112,7 +130,7 @@ main > *,
 
 .report-controls {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   gap: 8px;
   align-items: end;
 }
@@ -126,7 +144,8 @@ main > *,
   color: var(--muted);
 }
 
-.report-controls input {
+.report-controls input,
+.report-controls select {
   min-width: 0;
   width: 100%;
   border: 1px solid var(--border);
@@ -149,10 +168,17 @@ main > *,
 .text-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 8px 11px;
   font-family: var(--mono-font);
   font-size: 12px;
+  white-space: nowrap;
+}
+
+.text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .icon-button {
@@ -168,6 +194,7 @@ main > *,
   gap: 12px;
   padding: 9px 24px;
   border-bottom: 1px solid var(--border);
+  background: #fbfcfa;
   font-family: var(--mono-font);
   font-size: 11px;
 }
@@ -209,10 +236,10 @@ main {
 
 .reference-row span {
   max-width: 100%;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(47, 122, 63, 0.24);
   border-radius: 999px;
   padding: 7px 10px;
-  background: #fff;
+  background: #f8fbf6;
   color: var(--text);
   font-family: var(--mono-font);
   font-size: 12px;
@@ -268,7 +295,7 @@ main {
 }
 
 .metric-card--good {
-  border-color: rgba(43, 122, 75, 0.35);
+  border-color: rgba(47, 122, 63, 0.42);
 }
 
 .metric-card--risk {
@@ -291,10 +318,31 @@ main {
   padding: 15px;
   text-align: left;
   color: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
-.queue-card:hover {
-  border-color: var(--border-strong);
+.queue-card:hover,
+.queue-card:focus-visible,
+.anomaly-card:hover,
+.anomaly-card:focus-visible {
+  border-color: rgba(47, 122, 63, 0.72);
+  box-shadow:
+    0 0 0 3px rgba(47, 122, 63, 0.12),
+    0 0 26px rgba(47, 122, 63, 0.2),
+    var(--shadow);
+  transform: translateY(-1px);
+}
+
+.queue-card:active,
+.anomaly-card:active {
+  box-shadow:
+    0 0 0 2px rgba(47, 122, 63, 0.12),
+    0 0 18px rgba(47, 122, 63, 0.16),
+    var(--shadow);
+  transform: translateY(0);
 }
 
 .queue-card h3,
@@ -363,6 +411,12 @@ main {
   padding: 14px;
 }
 
+.data-table-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .frame-heading {
   display: flex;
   justify-content: space-between;
@@ -375,8 +429,24 @@ main {
   font-style: italic;
 }
 
+.frame-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
 .chart-body {
   min-height: 120px;
+}
+
+.chart-body--scrollable {
+  max-height: 248px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
 }
 
 .funnel-chart {
@@ -413,7 +483,7 @@ main {
   min-width: 0;
   height: 20px;
   border-radius: 5px;
-  background: #ece9e2;
+  background: #e4ece1;
   overflow: hidden;
 }
 
@@ -450,6 +520,11 @@ main {
   text-align: left;
   display: grid;
   gap: 5px;
+  color: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .anomaly-card span {
@@ -471,7 +546,12 @@ main {
 }
 
 .table-scroller {
-  overflow-x: auto;
+  max-height: clamp(320px, 52vh, 520px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  scrollbar-gutter: stable;
 }
 
 table {
@@ -493,6 +573,11 @@ th {
   color: var(--muted);
   font-family: var(--mono-font);
   font-size: 11px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--border);
 }
 
 th button {
@@ -518,6 +603,50 @@ th button {
   font-family: var(--mono-font);
   font-size: 12px;
   color: var(--muted);
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggle--switch {
+  white-space: nowrap;
+}
+
+.toggle-track {
+  width: 30px;
+  height: 17px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-subtle);
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.toggle-track span {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 140ms ease, background 140ms ease;
+}
+
+.toggle input:checked + .toggle-track {
+  border-color: rgba(47, 122, 63, 0.55);
+  background: rgba(47, 122, 63, 0.14);
+}
+
+.toggle input:checked + .toggle-track span {
+  transform: translateX(13px);
+  background: var(--teal);
+}
+
+.toggle:focus-within .toggle-track {
+  outline: 3px solid rgba(24, 95, 165, 0.35);
+  outline-offset: 2px;
 }
 
 .language-detail {
@@ -566,7 +695,7 @@ th button {
   }
 
   .report-controls {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
   }
 
   .metric-grid,
@@ -605,7 +734,8 @@ th button {
     white-space: normal;
   }
 
-  .report-controls input {
+  .report-controls input,
+  .report-controls select {
     font-size: 10px;
   }
 
@@ -647,6 +777,15 @@ th button {
 
   .funnel-row strong {
     font-size: 11px;
+  }
+
+  .frame-heading,
+  .frame-actions {
+    align-items: flex-start;
+  }
+
+  .frame-actions {
+    flex-wrap: wrap;
   }
 
   .queue-card dl {

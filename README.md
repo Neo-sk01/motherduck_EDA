@@ -31,6 +31,36 @@ python -m pipeline.main --source csv --period month --start 2026-04-01 --end 202
 
 Backfills support arbitrary `--start` and `--end` dates. If a CSV export contains a broader range, rows outside the requested period are filtered before deduplication and metric computation.
 
+## API Backfill
+
+API mode is staged and restartable. It first pulls Versature CDRs plus queue stats into a durable local extract under `DATA_DIR/api_extracts/{start}_{end}/`, then transforms that extract into report JSON and, when requested, MotherDuck tables. If a MotherDuck write fails, rerun with `--api-cache-mode reuse` to replay the saved extract without pulling the API again.
+
+Use either `VERSATURE_ACCESS_TOKEN`, or `VERSATURE_CLIENT_ID` plus `VERSATURE_CLIENT_SECRET` so the pipeline can request a one-hour access token:
+
+```bash
+DATA_DIR=dashboard/public/data python -m pipeline.main --source api --period month --start 2026-03-01 --end 2026-03-31
+```
+
+Cache modes:
+
+- `--api-cache-mode auto` is the default. Reuse a complete extract if one exists; otherwise pull from the API and save it.
+- `--api-cache-mode refresh` always pulls from the API and replaces the local extract.
+- `--api-cache-mode reuse` requires an existing complete extract and never calls the API.
+
+For a clean historical pull, force a fresh extract:
+
+```bash
+DATA_DIR=dashboard/public/data python -m pipeline.main --source api --period month --start 2026-03-01 --end 2026-03-31 --api-cache-mode refresh
+```
+
+To replace the matching period in MotherDuck from that saved extract:
+
+```bash
+DATA_DIR=dashboard/public/data python -m pipeline.main --source api --period month --start 2026-03-01 --end 2026-03-31 --api-cache-mode reuse --write-store
+```
+
+For the approved first historical pass, run full calendar months from January through March 2026.
+
 ## Tests
 
 ```bash
@@ -62,3 +92,5 @@ To refresh the April report:
 ```bash
 python -m pipeline.main --source csv --period month --start 2026-04-01 --end 2026-04-30
 ```
+
+The dashboard reads `dashboard/public/data/reports/manifest.json` and exposes available months through the `Report month` selector.

@@ -36,12 +36,42 @@ def test_curate_csv_calls_adds_derived_fields_and_handled_flag():
                 "source_language": "English",
                 "source_role": "primary",
             },
+            {
+                "Call Time": "04/01/2026 8:37 am",
+                "Caller Number": "613-227-1624",
+                "Orig CallID": "c",
+                "Time in Queue": "00:03",
+                "Agent Name": "Gabriel Hubert",
+                "Agent Time": "00:00",
+                "Hold Time": "00:00",
+                "Queue Release Reason": "Abandoned",
+                "Agent Release Reason": "Abandoned",
+                "source_queue_id": "8020",
+                "source_queue_name": "CSR English",
+                "source_language": "English",
+                "source_role": "primary",
+            },
+            {
+                "Call Time": "04/01/2026 8:39 am",
+                "Caller Number": "343-987-9004",
+                "Orig CallID": "d",
+                "Time in Queue": "00:06",
+                "Agent Name": "Alicia Yameen",
+                "Agent Time": "00:00",
+                "Hold Time": "00:00",
+                "Queue Release Reason": "Term: 503",
+                "Agent Release Reason": "Term: 503",
+                "source_queue_id": "8020",
+                "source_queue_name": "CSR English",
+                "source_language": "English",
+                "source_role": "primary",
+            },
         ]
     )
     out = curate_csv_calls(raw)
-    assert list(out["queue_id"]) == ["8020", "8020"]
-    assert list(out["call_id"]) == ["a", "b"]
-    assert list(out["handled_flag"]) == ["Handled", "No Agent"]
+    assert list(out["queue_id"]) == ["8020", "8020", "8020", "8020"]
+    assert list(out["call_id"]) == ["a", "b", "c", "d"]
+    assert list(out["handled_flag"]) == ["Handled", "No Agent", "No Agent", "No Agent"]
     assert out.loc[0, "queue_sec"] == 9
     assert out.loc[0, "agent_sec"] == 244
     assert out.loc[0, "date"] == "2026-04-01"

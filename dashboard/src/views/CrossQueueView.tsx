@@ -4,7 +4,7 @@ import { DataTable, type DataColumn } from "../components/DataTable";
 import { SameDayVolumeOverlay, SameHourNoAnswerOverlay } from "../charts/OverlayCharts";
 import type { ConsolidatedAgent, ConsolidatedCaller, DashboardReport } from "../data/reportTypes";
 import { QUEUE_ORDER } from "../data/reportTypes";
-import { getAgentRows, getCallerRows, queueColumnValue } from "../data/selectors";
+import { getAgentRows, getCallerRows, getTopCaller, queueColumnValue } from "../data/selectors";
 import { formatInteger } from "../utils/format";
 
 interface CrossQueueViewProps {
@@ -16,6 +16,8 @@ export function CrossQueueView({ report }: CrossQueueViewProps) {
   const [volumeMode, setVolumeMode] = useState<"raw" | "normalized">("raw");
   const agentRows = getAgentRows(report);
   const callerRows = getCallerRows(report, { multiQueueOnly });
+  const topAgent = agentRows[0];
+  const topCaller = getTopCaller(report);
   const agentColumns: Array<DataColumn<ConsolidatedAgent & Record<string, unknown>>> = [
     { key: "agent_name", header: "Agent", value: (row) => row.agent_name },
     ...QUEUE_ORDER.map((queueId) => ({
@@ -59,8 +61,12 @@ export function CrossQueueView({ report }: CrossQueueViewProps) {
           <p>Consolidated agents, callers, no-answer timing, and same-day volume.</p>
         </div>
         <div className="reference-row">
-          <span>Gabriel Hubert 299</span>
-          <span>9052833500 63</span>
+          <span>{topAgent ? `${topAgent.agent_name} ${formatInteger(topAgent.total_calls)}` : "Top agent n/a"}</span>
+          <span>
+            {topCaller
+              ? `${topCaller.caller_number_norm} ${formatInteger(topCaller.total_calls)}`
+              : "Top caller n/a"}
+          </span>
         </div>
       </section>
 

@@ -5,6 +5,8 @@ from typing import Any
 
 import pandas as pd
 
+from pipeline.classify import answered_mask
+
 
 def compute_crossqueue_metrics(curated: pd.DataFrame) -> dict:
     funnels = {language: _language_funnel(curated, language) for language in ["English", "French"]}
@@ -31,11 +33,19 @@ def _language_funnel(curated: pd.DataFrame, language: str) -> dict:
     overflow_answered = int(overflow_handled.sum())
     overflow_failed = overflow_received - overflow_answered
     unaccounted = primary_failed - overflow_received
-    lost = overflow_failed
+    final_dropped_available = bool(overflow_received or primary_failed == 0)
+    lost = overflow_failed if final_dropped_available else primary_failed
+    drop_definition = (
+        "final_dropped_after_overflow"
+        if final_dropped_available
+        else "primary_no_agent_handoff_candidates_overflow_missing"
+    )
     return {
         "primary_calls": int(primary_calls),
         "primary_answered": int(primary_answered),
         "primary_failed": int(primary_failed),
+        "primary_no_agent_calls": int(primary_failed),
+        "primary_no_agent_rate": float(primary_failed / primary_calls) if primary_calls else 0.0,
         "overflow_received": int(overflow_received),
         "routing_match": float(overflow_received / primary_failed) if primary_failed else 0.0,
         "overflow_answered": int(overflow_answered),
@@ -44,6 +54,9 @@ def _language_funnel(curated: pd.DataFrame, language: str) -> dict:
         "lost_rate": float(lost / primary_calls) if primary_calls else 0.0,
         "effective_answer_rate": float(1 - (lost / primary_calls)) if primary_calls else 0.0,
         "unaccounted": int(unaccounted),
+        "final_dropped_available": final_dropped_available,
+        "final_dropped_calls": int(overflow_failed) if final_dropped_available else None,
+        "drop_definition": drop_definition,
     }
 
 
@@ -96,11 +109,11 @@ def _same_day_volume(curated: pd.DataFrame) -> list[dict]:
 
 
 def _handled_mask(df: pd.DataFrame) -> pd.Series:
+    if "agent_sec" in df.columns or "agent_name" in df.columns:
+        return answered_mask(df)
     if "handled_flag" in df.columns:
         return df["handled_flag"].eq("Handled")
-    if "agent_sec" in df.columns:
-        return df["agent_sec"].fillna(0).gt(0)
-    return df["agent_name"].notna()
+    return pd.Series(False, index=df.index)
 
 
 def _json_row(row: dict[str, Any], text_fields: set[str]) -> dict:

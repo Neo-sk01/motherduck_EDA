@@ -3,8 +3,9 @@ import json
 import pandas as pd
 import pytest
 
+from pipeline.api_extract import write_api_extract
 from pipeline.config import AppConfig, build_default_queues
-from pipeline.main import main, parse_args, run_csv
+from pipeline.main import main, parse_args, run_api, run_csv
 from pipeline.storage import AnalyticsStore
 
 
@@ -74,6 +75,26 @@ def test_parse_args_supports_backfill_dates():
     assert args.start == "2025-01-01"
     assert args.end == "2025-01-31"
     assert args.write_store is False
+    assert args.api_cache_mode == "auto"
+
+
+def test_parse_args_supports_api_cache_mode():
+    args = parse_args(
+        [
+            "--source",
+            "api",
+            "--period",
+            "month",
+            "--start",
+            "2025-01-01",
+            "--end",
+            "2025-01-31",
+            "--api-cache-mode",
+            "reuse",
+        ]
+    )
+
+    assert args.api_cache_mode == "reuse"
 
 
 def test_run_csv_writes_report_and_optional_store_for_backfill(tmp_path):
@@ -182,8 +203,17 @@ def test_run_csv_records_source_gap_report_before_failing(tmp_path):
 
 
 def test_main_rejects_api_mode_at_this_milestone():
-    with pytest.raises(SystemExit) as exc:
-        main(
+    calls = []
+
+    def fake_run_api(config, period, start, end, store=None, client=None, api_cache_mode="auto"):
+        calls.append((period, start, end, store, client, api_cache_mode))
+        return config.data_dir / "reports" / f"{period}_{start}_{end}"
+
+    pytest.importorskip("pipeline.ingest_api")
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setenv("VERSATURE_ACCESS_TOKEN", "token")
+        monkeypatch.setattr("pipeline.main.run_api", fake_run_api)
+        assert main(
             [
                 "--source",
                 "api",
@@ -194,16 +224,314 @@ def test_main_rejects_api_mode_at_this_milestone():
                 "--end",
                 "2025-01-31",
             ]
-        )
+        ) == 0
 
-    assert str(exc.value) == (
-        "Only CSV orchestration is executable at this milestone; API and hybrid modules are "
-        "implemented separately."
+    assert [(period, start, end, store, api_cache_mode) for period, start, end, store, _, api_cache_mode in calls] == [
+        ("month", "2025-01-01", "2025-01-31", None, "auto")
+    ]
+
+
+def test_main_api_mode_rejects_invalid_environment_source_after_dispatch(monkeypatch):
+    monkeypatch.setenv("SOURCE", "invalid")
+    monkeypatch.setenv("VERSATURE_ACCESS_TOKEN", "token")
+    monkeypatch.setattr(
+        "pipeline.main.run_api",
+        lambda config, period, start, end, store=None, client=None: config.data_dir / "reports" / f"{period}_{start}_{end}",
     )
 
+    with pytest.raises(ValueError, match="SOURCE must be one of"):
+        main(
+            [
+                "--source",
+                "api",
+                "--period",
+                "month",
+                "--start",
+                "2025-01-01",
+                "--end",
+                "2025-01-31",
+            ]
+        )
 
-def test_main_rejects_api_mode_before_loading_environment(monkeypatch):
-    monkeypatch.setenv("SOURCE", "invalid")
+
+def test_run_api_reopens_motherduck_store_after_long_fetch_before_writes(tmp_path, monkeypatch):
+    class FakeClient:
+        def get_cdr_users(self, start_date, end_date):
+            return [
+                {
+                    "from": {"call_id": "call-1", "number": "9052833500"},
+                    "to": {"call_id": "20250115101100000000-a", "user": {"name": "Agent One"}},
+                    "by": {"user": "8020"},
+                    "start_time": "2025-01-15T10:11:00-05:00",
+                    "answer_time": "2025-01-15T10:11:09-05:00",
+                    "duration": 42,
+                    "queue_time": 9,
+                    "hold_time": 0,
+                    "release_reason": "Orig: Bye",
+                }
+            ]
+
+        def get_call_queue_stats(self, queue_id, start, end):
+            return {"queue": queue_id, "calls_offered": 1, "calls_forwarded": 0, "abandoned_calls": 0}
+
+    class FakeStore:
+        def __init__(self, label):
+            self.label = label
+            self.calls = []
+
+        def replace_queue_dimension(self, queues):
+            self.calls.append(("queue_dim", len(queues)))
+
+        def replace_raw_call_legs(self, start, end, df, source_mode):
+            self.calls.append(("raw", len(df), source_mode))
+
+        def replace_curated_calls(self, start, end, df):
+            self.calls.append(("curated", len(df)))
+
+        def replace_report_outputs(self, *args, **kwargs):
+            self.calls.append(("report", kwargs.get("validation", {}).get("status")))
+
+    stale_store = FakeStore("stale")
+    fresh_store = FakeStore("fresh")
+    monkeypatch.setenv("MOTHERDUCK_TOKEN_RW", "present")
+    monkeypatch.setattr("pipeline.main.AnalyticsStore.motherduck", lambda database: fresh_store)
+    config = AppConfig(
+        motherduck_database="test_db",
+        source="api",
+        csv_dir=tmp_path / "csv",
+        data_dir=tmp_path / "data",
+        timezone="America/Toronto",
+        queues=tuple(build_default_queues()),
+    )
+
+    run_api(
+        config,
+        period="month",
+        start="2025-01-01",
+        end="2025-01-31",
+        store=stale_store,
+        client=FakeClient(),
+    )
+
+    assert stale_store.calls == []
+    assert [call[0] for call in fresh_store.calls] == ["queue_dim", "raw", "curated", "report"]
+
+
+def test_run_api_retries_retryable_motherduck_write_without_refetching_records(tmp_path, monkeypatch):
+    class FakeClient:
+        def __init__(self):
+            self.cdr_fetches = 0
+
+        def get_cdr_users(self, start_date, end_date):
+            self.cdr_fetches += 1
+            return [
+                {
+                    "from": {"call_id": "call-1", "number": "9052833500"},
+                    "to": {"call_id": "20250115101100000000-a", "user": {"name": "Agent One"}},
+                    "by": {"user": "8020"},
+                    "start_time": "2025-01-15T10:11:00-05:00",
+                    "answer_time": "2025-01-15T10:11:09-05:00",
+                    "duration": 42,
+                    "queue_time": 9,
+                    "hold_time": 0,
+                    "release_reason": "Orig: Bye",
+                }
+            ]
+
+        def get_call_queue_stats(self, queue_id, start, end):
+            return {"queue": queue_id, "calls_offered": 1, "calls_forwarded": 0, "abandoned_calls": 0}
+
+    class FakeStore:
+        def __init__(self, fail_raw=False):
+            self.fail_raw = fail_raw
+            self.calls = []
+
+        def replace_queue_dimension(self, queues):
+            self.calls.append(("queue_dim", len(queues)))
+
+        def replace_raw_call_legs(self, start, end, df, source_mode):
+            self.calls.append(("raw", len(df), source_mode))
+            if self.fail_raw:
+                raise RuntimeError("Catalog Error: Remote catalog has changed. Please rerun query.")
+
+        def replace_curated_calls(self, start, end, df):
+            self.calls.append(("curated", len(df)))
+
+        def replace_report_outputs(self, *args, **kwargs):
+            self.calls.append(("report", kwargs.get("validation", {}).get("status")))
+
+    first_store = FakeStore(fail_raw=True)
+    retry_store = FakeStore()
+    stores = [first_store, retry_store]
+    client = FakeClient()
+
+    monkeypatch.setenv("MOTHERDUCK_TOKEN_RW", "present")
+    monkeypatch.setattr("pipeline.main.AnalyticsStore.motherduck", lambda database: stores.pop(0))
+    config = AppConfig(
+        motherduck_database="test_db",
+        source="api",
+        csv_dir=tmp_path / "csv",
+        data_dir=tmp_path / "data",
+        timezone="America/Toronto",
+        queues=tuple(build_default_queues()),
+    )
+
+    run_api(
+        config,
+        period="month",
+        start="2025-01-01",
+        end="2025-01-31",
+        store=FakeStore(),
+        client=client,
+    )
+
+    assert client.cdr_fetches == 1
+    assert [call[0] for call in first_store.calls] == ["queue_dim", "raw"]
+    assert [call[0] for call in retry_store.calls] == ["queue_dim", "raw", "curated", "report"]
+
+
+def test_run_api_can_reuse_completed_api_extract_without_fetching_from_api(tmp_path):
+    class FailIfCalledClient:
+        def get_cdr_users(self, start_date, end_date):
+            raise AssertionError("CDR extract should be loaded from disk")
+
+        def get_call_queue_stats(self, queue_id, start, end):
+            raise AssertionError("Queue stats should be loaded from disk")
+
+    config = AppConfig(
+        motherduck_database="test_db",
+        source="api",
+        csv_dir=tmp_path / "csv",
+        data_dir=tmp_path / "data",
+        timezone="America/Toronto",
+        queues=tuple(build_default_queues()),
+    )
+    write_api_extract(
+        config.data_dir,
+        period="month",
+        start="2025-01-01",
+        end="2025-01-31",
+        records=[
+            {
+                "from": {"call_id": "call-1", "number": "9052833500"},
+                "to": {"call_id": "20250115101100000000-a", "user": {"name": "Agent One"}},
+                "by": {"user": "8020"},
+                "start_time": "2025-01-15T10:11:00-05:00",
+                "answer_time": "2025-01-15T10:11:09-05:00",
+                "duration": 42,
+                "queue_time": 9,
+                "hold_time": 0,
+                "release_reason": "Orig: Bye",
+            }
+        ],
+        stats_by_queue={
+            queue.queue_id: {"queue": queue.queue_id, "calls_offered": 1, "calls_forwarded": 0, "abandoned_calls": 0}
+            for queue in config.queues
+        },
+        queues=config.queues,
+    )
+
+    out_dir = run_api(
+        config,
+        period="month",
+        start="2025-01-01",
+        end="2025-01-31",
+        client=FailIfCalledClient(),
+        api_cache_mode="reuse",
+    )
+
+    metrics = json.loads((out_dir / "metrics.json").read_text())
+    assert metrics["validation"]["record_count"] == 1
+    assert metrics["queues"]["8020"]["total_calls"] == 1
+
+
+def test_run_api_auto_mode_writes_extract_after_fetching_once(tmp_path):
+    class FakeClient:
+        def __init__(self):
+            self.cdr_fetches = 0
+            self.stats_fetches = []
+
+        def get_cdr_users(self, start_date, end_date):
+            self.cdr_fetches += 1
+            return [
+                {
+                    "from": {"call_id": "call-1", "number": "9052833500"},
+                    "to": {"call_id": "20250115101100000000-a", "user": {"name": "Agent One"}},
+                    "by": {"user": "8020"},
+                    "start_time": "2025-01-15T10:11:00-05:00",
+                    "answer_time": "2025-01-15T10:11:09-05:00",
+                    "duration": 42,
+                    "queue_time": 9,
+                    "hold_time": 0,
+                    "release_reason": "Orig: Bye",
+                }
+            ]
+
+        def get_call_queue_stats(self, queue_id, start, end):
+            self.stats_fetches.append(queue_id)
+            return {"queue": queue_id, "calls_offered": 1, "calls_forwarded": 0, "abandoned_calls": 0}
+
+    config = AppConfig(
+        motherduck_database="test_db",
+        source="api",
+        csv_dir=tmp_path / "csv",
+        data_dir=tmp_path / "data",
+        timezone="America/Toronto",
+        queues=tuple(build_default_queues()),
+    )
+    client = FakeClient()
+
+    run_api(
+        config,
+        period="month",
+        start="2025-01-01",
+        end="2025-01-31",
+        client=client,
+        api_cache_mode="auto",
+    )
+
+    manifest = json.loads(
+        (config.data_dir / "api_extracts" / "2025-01-01_2025-01-31" / "manifest.json").read_text()
+    )
+    assert client.cdr_fetches == 1
+    assert client.stats_fetches == ["8020", "8021", "8030", "8031"]
+    assert manifest["status"] == "complete"
+    assert manifest["record_count"] == 1
+
+
+def test_main_write_store_opts_into_motherduck_for_api(monkeypatch):
+    sentinel_store = object()
+    stores = []
+
+    def fake_run_api(config, period, start, end, store=None, client=None, api_cache_mode="auto"):
+        stores.append(store)
+        return config.data_dir / "reports" / f"{period}_{start}_{end}"
+
+    monkeypatch.setenv("MOTHERDUCK_TOKEN_RW", "present")
+    monkeypatch.setenv("VERSATURE_ACCESS_TOKEN", "token")
+    monkeypatch.setattr("pipeline.main.run_api", fake_run_api)
+    monkeypatch.setattr("pipeline.main.AnalyticsStore.motherduck", lambda database: sentinel_store)
+
+    assert main(
+        [
+            "--source",
+            "api",
+            "--period",
+            "month",
+            "--start",
+            "2025-01-01",
+            "--end",
+            "2025-01-31",
+            "--write-store",
+        ]
+    ) == 0
+    assert stores == [sentinel_store]
+
+
+def test_main_api_requires_authentication_settings(monkeypatch):
+    monkeypatch.delenv("VERSATURE_ACCESS_TOKEN", raising=False)
+    monkeypatch.delenv("VERSATURE_CLIENT_ID", raising=False)
+    monkeypatch.delenv("VERSATURE_CLIENT_SECRET", raising=False)
 
     with pytest.raises(SystemExit) as exc:
         main(
@@ -220,8 +548,8 @@ def test_main_rejects_api_mode_before_loading_environment(monkeypatch):
         )
 
     assert str(exc.value) == (
-        "Only CSV orchestration is executable at this milestone; API and hybrid modules are "
-        "implemented separately."
+        "API mode requires VERSATURE_ACCESS_TOKEN or both VERSATURE_CLIENT_ID and "
+        "VERSATURE_CLIENT_SECRET."
     )
 
 

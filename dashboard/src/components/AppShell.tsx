@@ -1,5 +1,6 @@
-import { RefreshCw } from "lucide-react";
+import { Download, RefreshCw } from "lucide-react";
 import type { ReactNode } from "react";
+import type { ReportOption } from "../data/reportManifest";
 import type { DashboardReport, ReportLoadResult, ViewKey } from "../data/reportTypes";
 
 export const VIEWS: Array<{ key: ViewKey; label: string }> = [
@@ -14,9 +15,11 @@ interface AppShellProps {
   onViewChange: (view: ViewKey) => void;
   report: DashboardReport | null;
   loadResult: ReportLoadResult | null;
-  reportPath: string;
-  onReportPathChange: (path: string) => void;
+  reportOptions: ReportOption[];
+  selectedReportKey: string;
+  onReportKeyChange: (key: string) => void;
   onReload: () => void;
+  onExportReportCsv: () => void;
   children: ReactNode;
 }
 
@@ -25,9 +28,11 @@ export function AppShell({
   onViewChange,
   report,
   loadResult,
-  reportPath,
-  onReportPathChange,
+  reportOptions,
+  selectedReportKey,
+  onReportKeyChange,
   onReload,
+  onExportReportCsv,
   children,
 }: AppShellProps) {
   const validation = report?.validation.status ?? "pending";
@@ -37,12 +42,15 @@ export function AppShell({
     <div className="app-shell">
       <header className="topbar">
         <div className="brand-block">
-          <h1>NeoLore Queue Analytics</h1>
-          <p>
-            {report
-              ? `${report.date_range.start} through ${report.date_range.end}`
-              : "Loading report"}
-          </p>
+          <img src="/neolore-logo.svg" alt="NeoLore Networks Inc." />
+          <div>
+            <h1>NeoLore Queue Analytics</h1>
+            <p>
+              {report
+                ? `${report.date_range.start} through ${report.date_range.end}`
+                : "Loading report"}
+            </p>
+          </div>
         </div>
         <nav className="tabs" aria-label="Dashboard views">
           {VIEWS.map((view) => (
@@ -58,15 +66,30 @@ export function AppShell({
         </nav>
         <div className="report-controls">
           <label>
-            <span>Report path</span>
-            <input
-              value={reportPath}
-              onChange={(event) => onReportPathChange(event.target.value)}
-            />
+            <span>Report month</span>
+            <select
+              value={selectedReportKey}
+              onChange={(event) => onReportKeyChange(event.target.value)}
+            >
+              {reportOptions.map((option) => (
+                <option key={option.key} value={option.key}>
+                  {option.label} · {formatSourceLabel(option.source)}
+                </option>
+              ))}
+            </select>
           </label>
           <button className="text-button" type="button" onClick={onReload}>
             <RefreshCw aria-hidden="true" size={15} />
             Reload
+          </button>
+          <button
+            className="text-button"
+            type="button"
+            onClick={onExportReportCsv}
+            disabled={!report}
+          >
+            <Download aria-hidden="true" size={15} />
+            Export CSV
           </button>
         </div>
       </header>
@@ -81,4 +104,9 @@ export function AppShell({
       <main>{children}</main>
     </div>
   );
+}
+
+function formatSourceLabel(source: string): string {
+  if (source === "excel_reference_overlay") return "Excel";
+  return source.toUpperCase();
 }

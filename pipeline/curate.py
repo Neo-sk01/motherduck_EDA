@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from pipeline.classify import answered_mask
 from pipeline.parse import normalize_caller_number, parse_csv_call_time, to_seconds
 
 
@@ -33,10 +34,6 @@ def curate_csv_calls(df: pd.DataFrame) -> pd.DataFrame:
     out["hold_sec"] = df["Hold Time"].map(to_seconds)
     out["agent_release_reason"] = df.get("Agent Release Reason")
     out["queue_release_reason"] = df.get("Queue Release Reason")
-    agent_present = (
-        out["agent_name"].notna()
-        & out["agent_name"].astype(str).str.strip().ne("")
-        & out["agent_name"].astype(str).str.strip().str.casefold().ne("null")
-    )
-    out["handled_flag"] = agent_present.map({True: "Handled", False: "No Agent"})
+    answered = answered_mask(out)
+    out["handled_flag"] = answered.map({True: "Handled", False: "No Agent"})
     return out

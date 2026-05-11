@@ -55,17 +55,17 @@ def test_april_2026_reference_csv_metrics(tmp_path):
         "8030": 343,
         "8031": 30,
     }
-    assert metrics["queues"]["8020"]["handled_calls"] == 834
-    assert metrics["queues"]["8020"]["no_agent_calls"] == 347
+    assert metrics["queues"]["8020"]["handled_calls"] == 832
+    assert metrics["queues"]["8020"]["no_agent_calls"] == 349
 
     english = metrics["crossqueue"]["funnels"]["English"]
     french = metrics["crossqueue"]["funnels"]["French"]
-    assert english["primary_answered"] == 834
-    assert english["primary_failed"] == 347
+    assert english["primary_answered"] == 832
+    assert english["primary_failed"] == 349
     assert english["overflow_received"] == 343
     assert english["overflow_answered"] == 162
     assert english["lost"] == 181
-    assert round(english["routing_match"], 3) == 0.988
+    assert round(english["routing_match"], 3) == 0.983
     assert round(english["effective_answer_rate"], 3) == 0.847
     assert french["primary_answered"] == 32
     assert french["primary_failed"] == 34
@@ -77,12 +77,12 @@ def test_april_2026_reference_csv_metrics(tmp_path):
 
     gabriel = next(row for row in metrics["crossqueue"]["agents"] if row["agent_name"] == "Gabriel Hubert")
     assert gabriel == {
-        "8020": 182,
+        "8020": 181,
         "8021": 24,
         "8030": 87,
         "8031": 6,
         "agent_name": "Gabriel Hubert",
-        "total_calls": 299,
+        "total_calls": 298,
     }
     callers = {row["caller_number_norm"]: row for row in metrics["crossqueue"]["callers"]}
     assert callers["9052833500"]["total_calls"] == 63
