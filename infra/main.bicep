@@ -357,6 +357,29 @@ resource functionStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   properties: { minimumTlsVersion: 'TLS1_2' }
 }
 
+// AzureWebJobsStorage connection string stored in Key Vault so the cleartext
+// account key does not appear in the Function's appSettings UI or in the ARM
+// deployment history visible via `az deployment group show`. Linux Y1
+// Consumption does not support identity-based AzureWebJobsStorage; this is
+// the next-best hardening without changing SKU.
+resource secretFunctionStorageConnection 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'function-storage-connection'
+  properties: {
+    value: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${functionStorage.listKeys().keys[0].value}'
+  }
+}
+
+resource functionKvStorageConn 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: secretFunctionStorageConnection
+  name: guid(secretFunctionStorageConnection.id, functionIdentity.id)
+  properties: {
+    principalId: functionIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretsUser)
+  }
+}
+
 resource functionPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: '${namePrefix}-fn-plan'
   location: location
@@ -384,7 +407,7 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
       appSettings: [
         { name: 'FUNCTIONS_EXTENSION_VERSION', value: '~4' }
         { name: 'FUNCTIONS_WORKER_RUNTIME', value: 'python' }
-        { name: 'AzureWebJobsStorage', value: 'DefaultEndpointsProtocol=https;AccountName=${functionStorage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(functionStorage.id, '2023-05-01').keys[0].value}' }
+        { name: 'AzureWebJobsStorage', value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=function-storage-connection)' }
         { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: appInsights.properties.ConnectionString }
         { name: 'AZURE_CLIENT_ID', value: functionIdentity.properties.clientId }
         { name: 'AZURE_SUBSCRIPTION_ID', value: subscription().subscriptionId }
