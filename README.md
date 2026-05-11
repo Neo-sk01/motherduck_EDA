@@ -125,7 +125,7 @@ Reports are served from a public blob container for the dashboard. Treat generat
      --parameters infra/parameters.json \
      --parameters @infra/parameters.local.json
    ```
-3. Collect outputs (`acrLoginServer`, `containerAppJobName`, `reportsBaseUrl`, `swaHostname`, `functionAppHostname`) and set them as GitHub repo secrets per Task 18.
+3. Collect outputs (`acrLoginServer`, `containerAppJobName`, `reportsBaseUrl`, `swaHostname`, `functionAppHostname`) and set them as GitHub repo secrets per Task 18. Required GitHub secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `ACR_NAME`, `CONTAINER_APP_JOB_NAME`, `VITE_REPORTS_BASE_URL`, `SWA_DEPLOYMENT_TOKEN`.
 4. Push to `main`. The three GitHub Actions workflows fire:
    - Dashboard builds and uploads to SWA.
    - Pipeline image builds, pushes to ACR, and updates the Job.

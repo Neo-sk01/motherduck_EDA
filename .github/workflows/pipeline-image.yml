@@ -56,8 +56,10 @@ jobs:
       - name: Update Container Apps Job to new image
         env:
           IMAGE: ${{ secrets.ACR_NAME }}.azurecr.io/neolore-pipeline:${{ github.sha }}
+          JOB_NAME: ${{ secrets.CONTAINER_APP_JOB_NAME }}
+          RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
         run: |
           az containerapp job update \
-            --name ${{ secrets.CONTAINER_APP_JOB_NAME }} \
-            --resource-group rg-neolore-queue-analytics \
-            --image $IMAGE
+            --name "$JOB_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --image "$IMAGE"
