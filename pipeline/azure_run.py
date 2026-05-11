@@ -3,6 +3,7 @@ from __future__ import annotations
 import calendar
 import logging
 import os
+import threading
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -106,14 +107,24 @@ def main() -> int:
     return 0
 
 
+LEASE_DURATION_SECONDS = 60
+LEASE_RENEWAL_INTERVAL_SECONDS = 30
+
+
 @contextmanager
 def _acquire_period_lease(period_dir_name: str):
-    """Acquire a blob lease on .locks/<period_dir_name>.lock to serialize concurrent runs."""
+    """Acquire a blob lease on .locks/<period_dir_name>.lock to serialize concurrent runs.
+
+    A 60s lease is renewed every 30s by a daemon thread so the lock survives runs
+    longer than the lease duration. Lease conflicts raise SystemExit with a
+    BLOB_LEASE_HELD prefix for clear visibility in Job execution status and logs.
+    """
     account_url = os.environ.get("REPORTS_STORAGE_ACCOUNT_URL")
     if not account_url:
         yield
         return
 
+    from azure.core.exceptions import HttpResponseError, ResourceExistsError
     from azure.storage.blob import BlobServiceClient
     from pipeline.blob_upload import _build_credential
 
@@ -122,16 +133,44 @@ def _acquire_period_lease(period_dir_name: str):
     blob = service.get_blob_client(container=container_name, blob=f".locks/{period_dir_name}.lock")
     try:
         blob.upload_blob(b"", overwrite=False)
-    except Exception:
-        pass
-    lease = blob.acquire_lease(lease_duration=60)
+    except ResourceExistsError:
+        pass  # placeholder already there; expected after the first run for this period
+
+    try:
+        lease = blob.acquire_lease(lease_duration=LEASE_DURATION_SECONDS)
+    except HttpResponseError as exc:
+        if getattr(exc, "error_code", None) == "LeaseAlreadyPresent" or exc.status_code == 409:
+            raise SystemExit(
+                f"BLOB_LEASE_HELD: another execution is processing {period_dir_name}; aborting."
+            ) from exc
+        raise
+
+    stop = threading.Event()
+    renewer = threading.Thread(
+        target=_renew_lease_periodically,
+        args=(lease, stop, period_dir_name),
+        name=f"lease-renewer-{period_dir_name}",
+        daemon=True,
+    )
+    renewer.start()
     try:
         yield
     finally:
+        stop.set()
+        renewer.join(timeout=5)
         try:
             lease.release()
         except Exception:
             log.warning("failed to release lease on %s", period_dir_name)
+
+
+def _renew_lease_periodically(lease, stop: threading.Event, period_dir_name: str) -> None:
+    """Renew the blob lease every LEASE_RENEWAL_INTERVAL_SECONDS until stop is set."""
+    while not stop.wait(LEASE_RENEWAL_INTERVAL_SECONDS):
+        try:
+            lease.renew()
+        except Exception:
+            log.warning("lease renewal failed for %s; lock may expire", period_dir_name)
 
 
 if __name__ == "__main__":
