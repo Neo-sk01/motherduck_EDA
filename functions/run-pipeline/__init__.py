@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from datetime import date
 
 import azure.functions as func
+import httpx
+from azure.identity import ManagedIdentityCredential
 
 log = logging.getLogger(__name__)
 
@@ -57,12 +59,86 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         validated = parse_and_validate(body)
     except ValueError as exc:
         return func.HttpResponse(str(exc), status_code=400)
+
     log.info(
-        "validated request: period=%s start=%s end=%s cache=%s",
+        "validated: period=%s start=%s end=%s cache=%s source_ip=%s",
         validated.period, validated.start, validated.end, validated.api_cache_mode,
+        req.headers.get("x-forwarded-for", "?"),
     )
+
+    try:
+        execution_name = _start_job(validated)
+    except Exception as exc:
+        log.exception("job start failed")
+        return func.HttpResponse(f"job start failed: {exc}", status_code=502)
     return func.HttpResponse(
-        json.dumps({"execution_name": "stub-not-yet-implemented"}),
-        status_code=501,
+        json.dumps({"execution_name": execution_name}),
+        status_code=202,
         mimetype="application/json",
     )
+
+
+@dataclass
+class JobUrls:
+    get_template: str
+    start: str
+
+
+ARM_BASE = "https://management.azure.com"
+API_VERSION = "2024-03-01"
+
+
+def build_job_urls(subscription_id: str, resource_group: str, job_name: str) -> JobUrls:
+    base = (
+        f"{ARM_BASE}/subscriptions/{subscription_id}/resourceGroups/{resource_group}"
+        f"/providers/Microsoft.App/jobs/{job_name}"
+    )
+    return JobUrls(
+        get_template=f"{base}?api-version={API_VERSION}",
+        start=f"{base}/start?api-version={API_VERSION}",
+    )
+
+
+def mutate_template(template: dict, env_overrides: dict[str, str]) -> dict:
+    """Return a new JobExecutionTemplate dict with env_overrides applied."""
+    out = json.loads(json.dumps(template))
+    containers = out.get("containers") or []
+    if not containers:
+        raise ValueError("template has no containers")
+    container = containers[0]
+    env = container.get("env") or []
+    by_name = {item["name"]: dict(item) for item in env}
+    for name, value in env_overrides.items():
+        by_name[name] = {"name": name, "value": value}
+    container["env"] = list(by_name.values())
+    out["containers"] = [container] + containers[1:]
+    out["initContainers"] = out.get("initContainers") or []
+    return out
+
+
+def _start_job(validated: ValidatedRequest) -> str:
+    subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
+    resource_group = os.environ["AZURE_RESOURCE_GROUP"]
+    job_name = os.environ["CONTAINER_APP_JOB_NAME"]
+    client_id = os.environ["AZURE_CLIENT_ID"]
+
+    credential = ManagedIdentityCredential(client_id=client_id)
+    token = credential.get_token("https://management.azure.com/.default").token
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    urls = build_job_urls(subscription_id, resource_group, job_name)
+
+    with httpx.Client(timeout=30.0) as http:
+        get_resp = http.get(urls.get_template, headers=headers)
+        get_resp.raise_for_status()
+        template = get_resp.json()["properties"]["template"]
+        mutated = mutate_template(template, {
+            "PERIOD_MODE": "explicit",
+            "PERIOD_TYPE": validated.period,
+            "PERIOD_START": validated.start,
+            "PERIOD_END": validated.end,
+            "API_CACHE_MODE": validated.api_cache_mode,
+        })
+        start_resp = http.post(urls.start, headers=headers, json=mutated)
+        start_resp.raise_for_status()
+    location = start_resp.headers.get("location", "")
+    return location.rsplit("/", 1)[-1] if location else "unknown"
