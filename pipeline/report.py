@@ -60,7 +60,7 @@ def _update_manifest(data_dir: Path, start: str, end: str, source_mode: str, val
         "label": _month_label(start),
         "start": start,
         "end": end,
-        "path": f"/data/reports/month_{start}_{end}/metrics.json",
+        "path": f"month_{start}_{end}/metrics.json",
         "source": source_mode,
         "validation_status": str(validation.get("status", "success")),
     }

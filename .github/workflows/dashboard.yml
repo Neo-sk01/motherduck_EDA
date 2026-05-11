@@ -1,0 +1,48 @@
+name: Deploy Dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - '.github/workflows/dashboard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install
+        working-directory: dashboard
+        run: npm ci
+
+      - name: Test
+        working-directory: dashboard
+        run: npm test -- --run
+
+      - name: Build with prod env
+        working-directory: dashboard
+        env:
+          VITE_REPORTS_BASE_URL: ${{ secrets.VITE_REPORTS_BASE_URL }}
+        run: npm run build
+
+      - name: Deploy to SWA
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_DEPLOYMENT_TOKEN }}
+          action: 'upload'
+          app_location: 'dashboard/dist'
+          skip_app_build: true

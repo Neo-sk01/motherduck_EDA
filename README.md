@@ -94,3 +94,105 @@ python -m pipeline.main --source csv --period month --start 2026-04-01 --end 202
 ```
 
 The dashboard reads `dashboard/public/data/reports/manifest.json` and exposes available months through the `Report month` selector.
+
+## Deploying to Azure
+
+Production runs in Azure using a Container Apps Job (pipeline), a Function App (manual trigger), Blob Storage (reports), and Static Web Apps (dashboard). Design is in `docs/superpowers/specs/2026-05-11-azure-deployment-design.md`; implementation steps are in `docs/superpowers/plans/2026-05-11-azure-deployment-implementation.md`.
+
+Reports are served from a public blob container for the dashboard. Treat generated report JSON as public-facing data and avoid placing raw call records, caller PII, or secrets in the report bundle.
+
+### First deploy
+
+1. Create a local `infra/parameters.local.json` (gitignored) with real secret values:
+   ```json
+   {
+     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+     "contentVersion": "1.0.0.0",
+     "parameters": {
+       "motherduckTokenRw": { "value": "<real token>" },
+       "versatureClientId": { "value": "<real client id>" },
+       "versatureClientSecret": { "value": "<real secret>" },
+       "adminApiKey": { "value": "<choose a long random string>" }
+     }
+   }
+   ```
+2. Create the resource group and deploy Bicep:
+   ```bash
+   az group create --name rg-neolore-queue-analytics --location canadacentral
+   az deployment group create \
+     --resource-group rg-neolore-queue-analytics \
+     --template-file infra/main.bicep \
+     --parameters infra/parameters.json \
+     --parameters @infra/parameters.local.json
+   ```
+3. Collect outputs (`acrLoginServer`, `containerAppJobName`, `reportsBaseUrl`, `swaHostname`, `functionAppHostname`) and set them as GitHub repo secrets per Task 18. Required GitHub secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `ACR_NAME`, `CONTAINER_APP_JOB_NAME`, `VITE_REPORTS_BASE_URL`, `SWA_DEPLOYMENT_TOKEN`.
+4. Push to `main`. The three GitHub Actions workflows fire:
+   - Dashboard builds and uploads to SWA.
+   - Pipeline image builds, pushes to ACR, and updates the Job.
+   - Function code deploys.
+5. Seed a first report:
+   ```bash
+   curl -X POST "https://<function-hostname>/api/run-pipeline" \
+     -H "x-admin-key: <admin-api-key>" \
+     -H "content-type: application/json" \
+     -d '{"period":"month","start":"2026-04-01","end":"2026-04-30","api_cache_mode":"auto"}'
+   ```
+   Response is `202` with `{"execution_name": "..."}`. Watch the execution in the Azure portal under the Container Apps Job; wait for status = Succeeded. Verify the dashboard loads the April 2026 report.
+
+### Operator runbook
+
+Manual run for any prior month:
+
+```bash
+curl -X POST "https://<function-hostname>/api/run-pipeline" \
+  -H "x-admin-key: <admin-api-key>" \
+  -H "content-type: application/json" \
+  -d '{"period":"month","start":"YYYY-MM-01","end":"YYYY-MM-DD","api_cache_mode":"auto"}'
+```
+
+Force a fresh API pull (ignore cache):
+
+```bash
+curl -X POST "https://<function-hostname>/api/run-pipeline" \
+  -H "x-admin-key: <admin-api-key>" \
+  -H "content-type: application/json" \
+  -d '{"period":"month","start":"YYYY-MM-01","end":"YYYY-MM-DD","api_cache_mode":"refresh"}'
+```
+
+Replay from saved extract without calling Versature:
+
+```bash
+curl -X POST "https://<function-hostname>/api/run-pipeline" \
+  -H "x-admin-key: <admin-api-key>" \
+  -H "content-type: application/json" \
+  -d '{"period":"month","start":"YYYY-MM-01","end":"YYYY-MM-DD","api_cache_mode":"reuse"}'
+```
+
+Note: the `reuse` cache mode requires the extract to exist on the container's ephemeral disk; in practice this matches `auto` for a fresh container.
+
+Watch execution status:
+
+```bash
+az containerapp job execution list \
+  --name <container-app-job-name> \
+  --resource-group rg-neolore-queue-analytics \
+  --query '[].{name:name,status:properties.status,start:properties.startTime}' -o table
+```
+
+Tail container logs for a specific execution:
+
+```bash
+az containerapp job logs show \
+  --name <container-app-job-name> \
+  --resource-group rg-neolore-queue-analytics \
+  --execution <execution-name> --follow
+```
+
+Rollback the pipeline image:
+
+```bash
+az containerapp job update \
+  --name <container-app-job-name> \
+  --resource-group rg-neolore-queue-analytics \
+  --image <acr-name>.azurecr.io/neolore-pipeline:<previous-sha>
+```

@@ -29,3 +29,4 @@ dashboard/node_modules/
 dashboard/dist/
 dashboard/vite.config.js
 dashboard/vite.config.d.ts
+infra/parameters.local.json
