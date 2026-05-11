@@ -53,3 +53,20 @@ describe("reportLoader", () => {
     vi.unstubAllGlobals();
   });
 });
+
+describe("loadReport with fixture fallback gate", () => {
+  it("returns error status in production when fetch fails (no fixture)", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500 })));
+    const result = await loadReport({ path: "https://x/foo.json", env: { DEV: false } });
+    expect(result.status).toBe("error");
+    vi.unstubAllGlobals();
+  });
+
+  it("returns fixture in dev when fetch fails", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500 })));
+    const result = await loadReport({ path: "https://x/foo.json", env: { DEV: true } });
+    expect(result.status).toBe("loaded");
+    expect(result.source).toBe("fixture");
+    vi.unstubAllGlobals();
+  });
+});

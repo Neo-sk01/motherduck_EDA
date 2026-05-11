@@ -2,8 +2,19 @@ import fixtureReport from "../fixtures/april-2026-metrics.json";
 import type { DashboardReport, QueueId, ReportLoadResult } from "./reportTypes";
 import { QUEUE_ORDER } from "./reportTypes";
 
-export const DEFAULT_REPORT_PATH =
-  "/data/reports/month_2026-04-01_2026-04-30/metrics.json";
+interface ImportMetaEnvLike {
+  VITE_REPORTS_BASE_URL?: string;
+  VITE_ENABLE_FIXTURE_FALLBACK?: string;
+  DEV?: boolean;
+}
+
+function resolveBase(env: ImportMetaEnvLike = import.meta.env as ImportMetaEnvLike): string {
+  const raw = env.VITE_REPORTS_BASE_URL;
+  if (typeof raw === "string" && raw.length > 0) return raw.replace(/\/+$/, "");
+  return "/data/reports";
+}
+
+export const DEFAULT_REPORT_PATH = `${resolveBase()}/month_2026-04-01_2026-04-30/metrics.json`;
 
 export class ReportValidationError extends Error {
   constructor(message: string) {
@@ -53,9 +64,12 @@ export function validateReport(value: unknown): DashboardReport {
 export async function loadReport(options?: {
   path?: string;
   useFixtureFallback?: boolean;
+  env?: ImportMetaEnvLike;
 }): Promise<ReportLoadResult> {
+  const env = options?.env ?? (import.meta.env as ImportMetaEnvLike);
   const path = options?.path ?? DEFAULT_REPORT_PATH;
-  const useFixtureFallback = options?.useFixtureFallback ?? true;
+  const allowFixture = env.DEV === true || env.VITE_ENABLE_FIXTURE_FALLBACK === "true";
+  const useFixtureFallback = options?.useFixtureFallback ?? allowFixture;
 
   try {
     if (typeof fetch !== "function") {
