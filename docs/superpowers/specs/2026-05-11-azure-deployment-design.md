@@ -1,7 +1,7 @@
 # Azure Deployment Design — NeoLore Queue Analytics
 
 **Date:** 2026-05-11
-**Status:** Approved design (revised after two rounds of code review), ready for implementation planning
+**Status:** Approved design (revised after three rounds of code review), ready for implementation planning
 **Scope:** Deploy the existing Python batch pipeline and React/Vite static dashboard to Azure.
 
 ## Goal
@@ -60,9 +60,10 @@ These mitigations only reduce search-engine discovery of the **dashboard origin*
 │   1. Schedule  →  cron `0 9 1 * *` UTC (≈ 04:00–05:00 ET on 1st)  │
 │                   with PERIOD_MODE=previous-month                 │
 │   2. Manual    →  Function GETs current job template, mutates    │
-│                   PERIOD_* env vars in-place, POSTs full template │
-│                   to Jobs-Start (Container Apps REST replaces the │
-│                   whole template on /start; no partial patch).    │
+│                   PERIOD_* env vars in-place, POSTs the           │
+│                   JobExecutionTemplate body (containers[], etc.)  │
+│                   to /start.  Container Apps replaces the whole   │
+│                   per-execution template; no partial patch.       │
 └────────┬────────────────────────────────────────────┬─────────────┘
          │ writes durable analytics tables             │ writes report JSON
          ▼                                             ▼
@@ -124,12 +125,13 @@ Plus two supporting user-assigned Managed Identities for least-privilege separat
   - `PERIOD_TYPE=month`
   - `API_CACHE_MODE=auto`
   - `WRITE_STORE=1`
-- **Manual trigger:** Container Apps `Jobs - Start` does not accept a partial template patch — if a template is supplied, it replaces the job's template wholesale for that execution. The Function therefore:
-  1. `GET` the Job (`Microsoft.App/jobs/<name>`), reads `properties.template`.
-  2. Locates the single container entry, sets/overwrites env vars `PERIOD_MODE=explicit`, `PERIOD_START`, `PERIOD_END`, `API_CACHE_MODE`. All other env vars, image, resources, command, secrets, and replica settings are preserved from the fetched template.
-  3. `POST` to `/start` with `{ "template": <mutated template> }`.
+- **Manual trigger:** Container Apps `Jobs - Start` does not accept a partial template patch — if a template is supplied, it replaces the job's per-execution template wholesale. The Function therefore:
+  1. `GET` the Job (`Microsoft.App/jobs/<name>`), reads `properties.template` (a `JobExecutionTemplate` containing `containers`, `initContainers`, etc.).
+  2. Locates the single container entry, sets/overwrites env vars `PERIOD_MODE=explicit`, `PERIOD_TYPE=<request.period>`, `PERIOD_START`, `PERIOD_END`, `API_CACHE_MODE`. All other env vars, image, resources, command, secrets, and init containers are preserved from the fetched template.
+  3. `POST` to `/start` with the **JobExecutionTemplate body at the top level** (e.g. `{ "containers": [...], "initContainers": [...] }`) — **not** wrapped in a `{ "template": ... }` object. The wrapper appears only in the GET response, not in the start body.
+
   Returns the execution name in the response.
-- Replica timeout: 60 minutes. ParallelExecutions: 1, ReplicaCompletionCount: 1 (so a manual + scheduled overlap on the same execution would queue).
+- Replica timeout: 60 minutes. `parallelism: 1`, `replicaCompletionCount: 1` — these control replicas *within* one execution, not how many executions of the job can run concurrently. Multiple executions (e.g. an in-flight scheduled run plus a manual run) can run at the same time; correctness on overlap is enforced by the per-period blob lease and manifest ETag CAS, not by the Job's parallelism settings.
 - Secrets pulled from Key Vault via Container App secret refs.
 - Logs to shared Log Analytics workspace.
 
@@ -144,9 +146,14 @@ Plus two supporting user-assigned Managed Identities for least-privilege separat
   - `(end - start)` ≤ 92 days (covers any single calendar month with margin).
   - `api_cache_mode` ∈ {`auto`, `refresh`, `reuse`}; defaults to `auto` if absent.
   - `period` ∈ {`day`, `week`, `month`}; defaults to `month`.
-- On success: performs the GET-mutate-POST sequence described in Component 2. Returns `{ "execution_name": "..." }`.
+- On success: performs the GET-mutate-POST sequence described in Component 2 with env vars `PERIOD_MODE=explicit`, `PERIOD_TYPE=<request.period>`, `PERIOD_START=<request.start>`, `PERIOD_END=<request.end>`, `API_CACHE_MODE=<request.api_cache_mode>`. Returns `{ "execution_name": "..." }` once the Container Apps REST `Jobs - Start` accepts the request.
+- The Function returns as soon as the execution is *accepted* by Container Apps — it does **not** wait for the container to finish or even to acquire its blob lease. A lease collision (e.g. the operator triggers a manual run for a period that the scheduled run is already processing) surfaces only in the container's logs as a `BLOB_LEASE_HELD` exit and in the Job execution's "Failed" status — not in the Function's HTTP response. Operators check execution status / Log Analytics to confirm a manual run actually started doing work. Documented as a v1 limitation.
 - Logs (info level) for every request: timestamp, source IP, user-agent, requested period range, resolved execution name, and whether admin-key matched. No PII in logs.
-- Uses `id-neolore-function` for both the Key Vault reference to `ADMIN_API_KEY` and the Container Apps REST calls. The Function's app settings include `keyVaultReferenceIdentity = <resource id of id-neolore-function>` — without this, Functions defaults to system-assigned identity for Key Vault references and the secret read fails. Stays on Consumption tier.
+- Uses `id-neolore-function` for both the Key Vault reference to `ADMIN_API_KEY` and the Container Apps REST calls. Bicep configures the Function with:
+  - `keyVaultReferenceIdentity = <resource id of id-neolore-function>` — required for UAMI-backed Key Vault references; otherwise Functions defaults to system-assigned identity and the secret read fails.
+  - `AZURE_CLIENT_ID = <client id of id-neolore-function>` app setting — required for `ManagedIdentityCredential` in the Function code to acquire tokens from the correct UAMI for the Container Apps REST calls. Function code uses `ManagedIdentityCredential(client_id=os.environ["AZURE_CLIENT_ID"])`.
+
+  Stays on Consumption tier.
 - **Recommended hardening for production (not v1):** front with APIM IP-allowlist or replace `x-admin-key` with Entra (App Roles) auth. Documented in README but out of scope for first deploy.
 
 ### 4. Static Web App (`neolore-dashboard`)
@@ -175,7 +182,9 @@ Plus two supporting user-assigned Managed Identities for least-privilege separat
 
 This wrapper keeps `pipeline/main.py` and its CLI contract unchanged. Local CLI usage is unaffected.
 
-**`pipeline/blob_upload.py` (new, ~120 lines).** Uses `azure-identity.DefaultAzureCredential` + `azure-storage-blob.BlobServiceClient`. Two stages:
+**`pipeline/blob_upload.py` (new, ~120 lines).** Uses `azure.identity.ManagedIdentityCredential(client_id=os.environ["AZURE_CLIENT_ID"])` + `azure.storage.blob.BlobServiceClient`. Reads the UAMI client id from the `AZURE_CLIENT_ID` env var that Bicep sets on the Container App (= `id-neolore-pipeline.properties.clientId`). This is required even though only one UAMI is attached: the IMDS token endpoint inside Container Apps defaults to the system-assigned identity (absent here) when no client id is supplied, which makes the credential fail with a confusing 400. Falls back to `DefaultAzureCredential()` for local development when `AZURE_CLIENT_ID` is unset (so `az login` still works locally).
+
+Two stages:
 
 1. **Period files:** walks `DATA_DIR/reports/month_*/`, uploads every file under that directory as a full overwrite by path. No concurrency issue — each period's directory is partitioned by name and is protected by the per-period lease already held by the wrapper.
 2. **Manifest merge with ETag CAS** (this is the critical step that fixes the single-month-overwrite bug):
@@ -284,7 +293,7 @@ The dashboard prepends `VITE_REPORTS_BASE_URL` at fetch time.
 |---|---|---|
 | `MOTHERDUCK_TOKEN_RW` (Key Vault) | `id-neolore-pipeline` | Key Vault `Secrets User` on the secret, exposed to the container via Container Apps secret ref |
 | `VERSATURE_CLIENT_ID` / `VERSATURE_CLIENT_SECRET` (Key Vault) | `id-neolore-pipeline` | Same as above |
-| Blob read+write on `reports` container | `id-neolore-pipeline` | `Storage Blob Data Contributor` on the storage account |
+| Blob read+write on `reports` container | `id-neolore-pipeline` | `Storage Blob Data Contributor` scoped to the **`reports` container** (not the storage account), keeping the role assignment as narrow as Azure RBAC allows. |
 | ACR image pull | `id-neolore-pipeline` | `AcrPull` on the registry (referenced from the Job's `registries` block) |
 | `ADMIN_API_KEY` (Key Vault) | `id-neolore-function` | Key Vault `Secrets User`; Function app setting `keyVaultReferenceIdentity` set to this UAMI's resource id |
 | Start + read Container Apps Job | `id-neolore-function` | `Container Apps Jobs Operator` on the Job (start/cancel/read execution; cannot mutate config) |
@@ -312,7 +321,7 @@ Non-secret config (queue IDs, DNIS numbers, timezone) lives in plain Container A
 
 1. **Pipeline failure** → container exits non-zero, lease auto-released after 60s, alert fires (see below).
 2. **Function failure** (invalid request, REST call failure) → returns 4xx/5xx with body explaining why; caller retries.
-3. **Concurrency collision** → lease acquisition fails with a clear `BLOB_LEASE_HELD` error; operator sees this in Log Analytics or in the Function response if they triggered it.
+3. **Concurrency collision** → the container that loses the lease race exits non-zero with a `BLOB_LEASE_HELD` message. Visible in the Job execution's "Failed" status and in Log Analytics. **Not** visible in the Function HTTP response (the Function returns as soon as the execution is accepted; the lease attempt happens later inside the container). Operators verify manual runs landed by checking execution status.
 4. **Logging:** Container Apps Job stdout/stderr flows to Log Analytics via the Container Apps Environment's `logAnalyticsConfiguration`. Function logs flow via the linked Application Insights instance (App Insights workspace-based mode pointing at the same Log Analytics workspace). Blob Storage data-plane logs require an explicit `Microsoft.Insights/diagnosticSettings` resource on the Blob service in Bicep — included in the deployment; logs `StorageRead`, `StorageWrite`, `StorageDelete` to the same workspace.
 5. **Alerting (v1):** one alert rule — "Container Apps Job execution failed in last 1h" → email to a configurable address. Plus one rule for "Function 5xx > 0 in 15m" as a low-priority canary.
 6. **First-month seed:** after initial deploy, operator manually triggers a run for the most recent completed month (`api_cache_mode: auto`) to populate the dashboard with at least one report before users see it.
@@ -383,7 +392,9 @@ All workflows authenticate to Azure via OIDC federated credentials — no long-l
 
 ### First-time deploy order
 
-1. `az login` → `az group create` → `az deployment group create -f infra/main.bicep`. Bicep creates: `id-neolore-pipeline` and `id-neolore-function` UAMIs, Storage Account + `reports` container, Blob diagnostic setting to Log Analytics, ACR, Key Vault (with secrets pre-populated via `--parameters`), Log Analytics workspace, App Insights (workspace-based, linked to the workspace), Container Apps Env, Container Apps Job (image initially `mcr.microsoft.com/k8se/quickstart-jobs:latest`), Function App with `keyVaultReferenceIdentity` set, SWA, and all role assignments (`Storage Blob Data Contributor`, `AcrPull`, `Key Vault Secrets User`, `Container Apps Jobs Operator`).
+1. `az login` → `az group create` → `az deployment group create -f infra/main.bicep`. Bicep creates: `id-neolore-pipeline` and `id-neolore-function` UAMIs, Storage Account + `reports` container, Blob diagnostic setting to Log Analytics, ACR, Key Vault (with secrets pre-populated via `--parameters`), Log Analytics workspace, App Insights (workspace-based, linked to the workspace), Container Apps Env, Container Apps Job (image initially `mcr.microsoft.com/k8se/quickstart-jobs:latest`, with `AZURE_CLIENT_ID` env var on the container set to `id-neolore-pipeline.clientId`), Function App with `keyVaultReferenceIdentity` set and `AZURE_CLIENT_ID` app setting = `id-neolore-function.clientId`, SWA, and all role assignments:
+   - `id-neolore-pipeline`: `Storage Blob Data Contributor` scoped to the `reports` container, `AcrPull` on the registry, `Key Vault Secrets User` on the MotherDuck and Versature secrets.
+   - `id-neolore-function`: `Container Apps Jobs Operator` on the Job, `Key Vault Secrets User` on the `ADMIN_API_KEY` secret.
 2. Set GitHub repo secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `SWA_DEPLOYMENT_TOKEN`, `VITE_REPORTS_BASE_URL`, `ACR_NAME`, `CONTAINER_APP_JOB_NAME`.
 3. Push to `main`; all three workflows run. The pipeline-image workflow replaces the placeholder image with our actual one.
 4. Manually trigger the Job for the most recent completed month via the Function endpoint to seed a first report; verify the dashboard shows it.
