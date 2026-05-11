@@ -102,6 +102,133 @@ resource secretAdminApiKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   properties: { value: adminApiKey }
 }
 
+// ---------- Log Analytics + App Insights ----------
+
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsName
+  location: location
+  properties: {
+    sku: { name: 'PerGB2018' }
+    retentionInDays: 30
+  }
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsightsName
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalytics.id
+  }
+}
+
+// ---------- Storage account + reports container ----------
+
+resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: storageAccountName
+  location: location
+  kind: 'StorageV2'
+  sku: { name: 'Standard_LRS' }
+  properties: {
+    allowBlobPublicAccess: true
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: true
+  }
+}
+
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
+  parent: storage
+  name: 'default'
+  properties: {
+    cors: {
+      corsRules: [
+        {
+          allowedOrigins: [ 'https://*.azurestaticapps.net' ]
+          allowedMethods: [ 'GET', 'HEAD' ]
+          allowedHeaders: [ '*' ]
+          exposedHeaders: [ '*' ]
+          maxAgeInSeconds: 3600
+        }
+      ]
+    }
+  }
+}
+
+resource reportsContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
+  parent: blobService
+  name: 'reports'
+  properties: {
+    publicAccess: 'Blob'
+  }
+}
+
+resource blobDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: blobService
+  name: 'blob-to-law'
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [
+      { category: 'StorageWrite', enabled: true }
+      { category: 'StorageDelete', enabled: true }
+    ]
+  }
+}
+
+var roleStorageBlobDataContributor = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+
+resource pipelineBlobRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: reportsContainer
+  name: guid(reportsContainer.id, pipelineIdentity.id, roleStorageBlobDataContributor)
+  properties: {
+    principalId: pipelineIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleStorageBlobDataContributor)
+  }
+}
+
+var roleKeyVaultSecretsUser = '4633458b-17de-408a-b874-0445c86b69e6'
+
+resource pipelineKvMd 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: secretMotherduckTokenRw
+  name: guid(secretMotherduckTokenRw.id, pipelineIdentity.id)
+  properties: {
+    principalId: pipelineIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretsUser)
+  }
+}
+
+resource pipelineKvVersId 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: secretVersatureClientId
+  name: guid(secretVersatureClientId.id, pipelineIdentity.id)
+  properties: {
+    principalId: pipelineIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretsUser)
+  }
+}
+
+resource pipelineKvVersSecret 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: secretVersatureClientSecret
+  name: guid(secretVersatureClientSecret.id, pipelineIdentity.id)
+  properties: {
+    principalId: pipelineIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretsUser)
+  }
+}
+
+resource functionKvAdmin 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: secretAdminApiKey
+  name: guid(secretAdminApiKey.id, functionIdentity.id)
+  properties: {
+    principalId: functionIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretsUser)
+  }
+}
+
 output pipelineIdentityResourceId string = pipelineIdentity.id
 output functionIdentityResourceId string = functionIdentity.id
 output keyVaultUri string = keyVault.properties.vaultUri
