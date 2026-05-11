@@ -78,10 +78,41 @@ def test_write_report_bundle_updates_monthly_manifest(tmp_path):
         "label": "April 2026",
         "start": "2026-04-01",
         "end": "2026-04-30",
-        "path": "/data/reports/month_2026-04-01_2026-04-30/metrics.json",
+        "path": "month_2026-04-01_2026-04-30/metrics.json",
         "source": "csv",
         "validation_status": "success",
     }
+
+
+def test_manifest_path_is_relative(tmp_path):
+    write_report_bundle(
+        data_dir=tmp_path,
+        period="month",
+        start="2026-04-01",
+        end="2026-04-30",
+        queue_metrics={"8020": {"queue_id": "8020"}},
+        crossqueue={},
+        anomalies=[],
+    )
+    manifest = json.loads((tmp_path / "reports" / "manifest.json").read_text())
+    assert manifest["reports"][0]["path"] == "month_2026-04-01_2026-04-30/metrics.json"
+
+
+def test_manifest_replaces_existing_entry_for_same_period(tmp_path):
+    for source in ("csv", "api"):
+        write_report_bundle(
+            data_dir=tmp_path,
+            period="month",
+            start="2026-04-01",
+            end="2026-04-30",
+            queue_metrics={"8020": {"queue_id": "8020"}},
+            crossqueue={},
+            anomalies=[],
+            source_mode=source,
+        )
+    manifest = json.loads((tmp_path / "reports" / "manifest.json").read_text())
+    assert len(manifest["reports"]) == 1
+    assert manifest["reports"][0]["source"] == "api"
 
 
 def test_write_report_bundle_rejects_non_finite_json_values(tmp_path):
