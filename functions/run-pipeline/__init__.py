@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hmac
 import json
 import logging
 import os
@@ -46,9 +47,9 @@ def parse_and_validate(body: dict, now: date | None = None) -> ValidatedRequest:
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    expected_key = os.environ.get("ADMIN_API_KEY")
-    provided_key = req.headers.get("x-admin-key")
-    if not expected_key or not provided_key or provided_key != expected_key:
+    expected_key = os.environ.get("ADMIN_API_KEY") or ""
+    provided_key = req.headers.get("x-admin-key") or ""
+    if not expected_key or not hmac.compare_digest(provided_key, expected_key):
         log.info("admin key mismatch from %s", req.headers.get("x-forwarded-for", "?"))
         return func.HttpResponse("unauthorized", status_code=401)
     try:
@@ -68,9 +69,19 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         execution_name = _start_job(validated)
+    except httpx.HTTPStatusError as exc:
+        log.error(
+            "job start failed: status=%s reason=%s",
+            exc.response.status_code, exc.response.reason_phrase,
+        )
+        return func.HttpResponse(
+            f"job start failed: HTTP {exc.response.status_code}", status_code=502,
+        )
     except Exception as exc:
-        log.exception("job start failed")
-        return func.HttpResponse(f"job start failed: {exc}", status_code=502)
+        log.error("job start failed: %s: %s", type(exc).__name__, exc)
+        return func.HttpResponse(
+            f"job start failed: {type(exc).__name__}", status_code=502,
+        )
     return func.HttpResponse(
         json.dumps({"execution_name": execution_name}),
         status_code=202,
