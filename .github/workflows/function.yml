@@ -18,6 +18,9 @@ jobs:
     env:
       RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
       FUNCTION_APP_NAME: neolore-queue-fn
+      STORAGE_ACCOUNT: neolorequeuefngnqgt5titv
+      CONTAINER: scm-releases
+      SHA: ${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,13 +30,27 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install
+      - name: Install (dev + test)
         run: |
           python -m pip install --upgrade pip
           pip install -r functions/requirements.txt pytest
 
       - name: Test
         run: pytest functions/tests -v
+
+      - name: Vendor runtime deps into function package
+        run: |
+          pip install \
+            -r functions/requirements.txt \
+            --target=functions/.python_packages/lib/site-packages \
+            --no-compile
+
+      - name: Package function app
+        run: |
+          cd functions
+          zip -r ../functionapp.zip . \
+            -x "tests/*" "**/__pycache__/*" "*.pyc" ".pytest_cache/*"
+          ls -lh ../functionapp.zip
 
       - name: Azure login (OIDC)
         uses: azure/login@v2
@@ -42,23 +59,33 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Ensure remote build app settings
+      - name: Upload package to scm-releases container
         run: |
+          BLOB_NAME="functionapp-$SHA.zip"
+          az storage blob upload \
+            --account-name "$STORAGE_ACCOUNT" \
+            --container-name "$CONTAINER" \
+            --name "$BLOB_NAME" \
+            --file functionapp.zip \
+            --auth-mode login \
+            --overwrite \
+            --output none
+          echo "BLOB_NAME=$BLOB_NAME" >> "$GITHUB_ENV"
+
+      - name: Point WEBSITE_RUN_FROM_PACKAGE at the new blob
+        run: |
+          BLOB_URL="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER}/${BLOB_NAME}"
           az functionapp config appsettings set \
             --name "$FUNCTION_APP_NAME" \
             --resource-group "$RESOURCE_GROUP" \
-            --settings SCM_DO_BUILD_DURING_DEPLOYMENT=1 ENABLE_ORYX_BUILD=true \
+            --settings "WEBSITE_RUN_FROM_PACKAGE=$BLOB_URL" \
             --output none
 
-      - name: Package function app
+      - name: Sync function triggers
         run: |
-          cd functions
-          zip -r ../functionapp.zip . \
-            -x "tests/*" "**/__pycache__/*" "*.pyc" ".pytest_cache/*"
-
-      - name: Deploy via CLI zip deploy
-        run: |
-          az functionapp deployment source config-zip \
+          az resource invoke-action \
             --resource-group "$RESOURCE_GROUP" \
             --name "$FUNCTION_APP_NAME" \
-            --src functionapp.zip
+            --resource-type Microsoft.Web/sites \
+            --action syncfunctiontriggers \
+            --output none

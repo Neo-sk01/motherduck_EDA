@@ -357,6 +357,47 @@ resource functionStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   properties: { minimumTlsVersion: 'TLS1_2' }
 }
 
+resource functionBlobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
+  parent: functionStorage
+  name: 'default'
+}
+
+// Private container holding identity-fetched RUN_FROM_PACKAGE zips. Y1 Linux
+// Consumption requires the URL form of WEBSITE_RUN_FROM_PACKAGE; using MI auth
+// avoids SAS rotation and keeps no cleartext credentials anywhere.
+resource scmReleasesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
+  parent: functionBlobService
+  name: 'scm-releases'
+  properties: {
+    publicAccess: 'None'
+  }
+}
+
+var roleStorageBlobDataReader = '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
+resource functionScmBlobReader 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: scmReleasesContainer
+  name: guid(scmReleasesContainer.id, functionIdentity.id, roleStorageBlobDataReader)
+  properties: {
+    principalId: functionIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleStorageBlobDataReader)
+  }
+}
+
+resource oidcIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-07-31-preview' existing = {
+  name: 'id-github-actions-oidc'
+}
+
+resource oidcScmBlobContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: scmReleasesContainer
+  name: guid(scmReleasesContainer.id, oidcIdentity.id, roleStorageBlobDataContributor)
+  properties: {
+    principalId: oidcIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleStorageBlobDataContributor)
+  }
+}
+
 // AzureWebJobsStorage connection string stored in Key Vault so the cleartext
 // account key does not appear in the Function's appSettings UI or in the ARM
 // deployment history visible via `az deployment group show`. Linux Y1
@@ -414,6 +455,7 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'AZURE_RESOURCE_GROUP', value: resourceGroup().name }
         { name: 'CONTAINER_APP_JOB_NAME', value: containerAppJob.name }
         { name: 'ADMIN_API_KEY', value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=admin-api-key)' }
+        { name: 'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID', value: functionIdentity.id }
       ]
     }
   }
