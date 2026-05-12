@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.12, `azure-identity`, `azure-storage-blob`, `httpx`, Azure Functions Python worker, Azure Container Apps, Azure Static Web Apps, Bicep, GitHub Actions OIDC.
 
----
+
 
 ## How To Read This Plan
 
