@@ -15,6 +15,9 @@ changeProject(DslContext.projectId) {
             param("env.CONTAINER_APP_JOB_NAME", "neolore-queue-pipeline-job")
         }
         add {
+            param("env.ACR_NAME", "neolorequeueacrgnqgt5titvw3a")
+        }
+        add {
             param("env.AZURE_RESOURCE_GROUP", "rg-neolore-queue-analytics")
         }
     }
