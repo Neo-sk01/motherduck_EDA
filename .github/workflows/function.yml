@@ -1,11 +1,7 @@
 name: Deploy Function
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'functions/**'
-      - '.github/workflows/function.yml'
+  # TeamCity now owns push-based CI/CD. Keep this workflow as a manual fallback.
   workflow_dispatch:
 
 permissions:

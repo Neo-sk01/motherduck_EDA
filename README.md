@@ -125,8 +125,8 @@ Reports are served from a public blob container for the dashboard. Treat generat
      --parameters infra/parameters.json \
      --parameters @infra/parameters.local.json
    ```
-3. Collect outputs (`acrLoginServer`, `containerAppJobName`, `reportsBaseUrl`, `swaHostname`, `functionAppHostname`) and set them as GitHub repo secrets per Task 18. Required GitHub secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `ACR_NAME`, `CONTAINER_APP_JOB_NAME`, `VITE_REPORTS_BASE_URL`, `SWA_DEPLOYMENT_TOKEN`.
-4. Push to `main`. The three GitHub Actions workflows fire:
+3. Collect outputs (`acrLoginServer`, `containerAppJobName`, `reportsBaseUrl`, `swaHostname`, `functionAppHostname`) and set them as TeamCity project parameters. Required TeamCity parameters are documented below.
+4. Push to `main`. TeamCity versioned settings in `.teamcity/` own CI/CD:
    - Dashboard builds and uploads to SWA.
    - Pipeline image builds, pushes to ACR, and updates the Job.
    - Function code deploys.
@@ -138,6 +138,29 @@ Reports are served from a public blob container for the dashboard. Treat generat
      -d '{"period":"month","start":"2026-04-01","end":"2026-04-30","api_cache_mode":"auto"}'
    ```
    Response is `202` with `{"execution_name": "..."}`. Watch the execution in the Azure portal under the Container Apps Job; wait for status = Succeeded. Verify the dashboard loads the April 2026 report.
+
+### TeamCity CI/CD
+
+TeamCity settings are versioned in `.teamcity/settings.kts`. Enable versioned settings for the TeamCity project from this repository and let TeamCity import the Kotlin DSL.
+
+Set these TeamCity project parameters before enabling push-based deployments:
+
+| Parameter | Notes |
+| --- | --- |
+| `env.AZURE_CLIENT_ID` | Azure service principal client ID. |
+| `env.AZURE_CLIENT_SECRET` | Secure TeamCity parameter. |
+| `env.AZURE_TENANT_ID` | Azure tenant ID. |
+| `env.AZURE_SUBSCRIPTION_ID` | Azure subscription ID. |
+| `env.AZURE_RESOURCE_GROUP` | Resource group that contains the deployed resources. |
+| `env.ACR_NAME` | ACR resource name, without `.azurecr.io`. |
+| `env.CONTAINER_APP_JOB_NAME` | Container Apps Job name for the pipeline. |
+| `env.FUNCTION_APP_NAME` | Function App name, for example `neolore-queue-fn`. |
+| `env.FUNCTION_STORAGE_ACCOUNT` | Storage account that contains the Function release container. |
+| `env.FUNCTION_RELEASE_CONTAINER` | Optional; defaults to `scm-releases`. |
+| `env.VITE_REPORTS_BASE_URL` | Dashboard report bundle base URL. |
+| `env.SWA_DEPLOYMENT_TOKEN` | Secure Static Web Apps deployment token. |
+
+TeamCity replaces GitHub Actions for automatic push-based CI/CD. The GitHub workflows remain in `.github/workflows/` as manual fallback jobs only.
 
 ### Operator runbook
 

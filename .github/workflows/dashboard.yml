@@ -1,11 +1,7 @@
 name: Deploy Dashboard
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'dashboard/**'
-      - '.github/workflows/dashboard.yml'
+  # TeamCity now owns push-based CI/CD. Keep this workflow as a manual fallback.
   workflow_dispatch:
 
 permissions:

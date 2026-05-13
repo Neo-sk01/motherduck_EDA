@@ -1,14 +1,7 @@
 name: Build Pipeline Image
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'pipeline/**'
-      - 'pyproject.toml'
-      - 'Dockerfile'
-      - '.dockerignore'
-      - '.github/workflows/pipeline-image.yml'
+  # TeamCity now owns push-based CI/CD. Keep this workflow as a manual fallback.
   workflow_dispatch:
 
 permissions:
