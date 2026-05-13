@@ -18,7 +18,13 @@ changeProject(DslContext.projectId) {
             param("env.ACR_NAME", "neolorequeueacrgnqgt5titvw3a")
         }
         add {
+            param("env.AZURE_TENANT_ID", "82fcdccc-2d47-47c7-8cfd-c9f0af78aee3")
+        }
+        add {
             param("env.AZURE_RESOURCE_GROUP", "rg-neolore-queue-analytics")
+        }
+        add {
+            param("env.AZURE_SUBSCRIPTION_ID", "18881902-3917-4da0-b708-bf35a34ecf53")
         }
     }
 }
