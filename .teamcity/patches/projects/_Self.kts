@@ -24,6 +24,12 @@ changeProject(DslContext.projectId) {
             param("env.VITE_REPORTS_BASE_URL", "https://neolorequeuestgnqgt5titv.blob.core.windows.net/reports")
         }
         add {
+            param("env.FUNCTION_APP_NAME", "neolore-queue-fn")
+        }
+        add {
+            param("env.FUNCTION_RELEASE_CONTAINER", "scm-releases")
+        }
+        add {
             param("env.CONTAINER_APP_JOB_NAME", "neolore-queue-pipeline-job")
         }
         add {
