@@ -12,9 +12,6 @@ accordingly, and delete the patch script.
 changeProject(DslContext.projectId) {
     params {
         add {
-            param("env.CONTAINER_APP_JOB_NAME", "neolore-queue-pipeline-job")
-        }
-        add {
             param("env.ACR_NAME", "neolorequeueacrgnqgt5titvw3a")
         }
         add {
@@ -24,10 +21,16 @@ changeProject(DslContext.projectId) {
             param("env.AZURE_RESOURCE_GROUP", "rg-neolore-queue-analytics")
         }
         add {
-            param("env.AZURE_SUBSCRIPTION_ID", "18881902-3917-4da0-b708-bf35a34ecf53")
+            param("env.VITE_REPORTS_BASE_URL", "https://neolorequeuestgnqgt5titv.blob.core.windows.net/reports")
         }
         add {
-            param("env.VITE_REPORTS_BASE_URL", "https://neolorequeuestgnqgt5titv.blob.core.windows.net/reports")
+            param("env.CONTAINER_APP_JOB_NAME", "neolore-queue-pipeline-job")
+        }
+        add {
+            param("env.FUNCTION_STORAGE_ACCOUNT", "neolorequeuefngnqgt5titv")
+        }
+        add {
+            param("env.AZURE_SUBSCRIPTION_ID", "18881902-3917-4da0-b708-bf35a34ecf53")
         }
     }
 }
