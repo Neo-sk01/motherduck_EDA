@@ -11,6 +11,7 @@ def read(path: str) -> str:
 def test_teamcity_dsl_migrates_all_ci_cd_targets() -> None:
     settings = read(".teamcity/settings.kts")
 
+    assert "import jetbrains.buildServer.configs.kotlin.*" in settings
     assert 'version = "2025.11"' in settings
     assert "object CI : BuildType" in settings
     assert "object DeployPipelineImage : BuildType" in settings
