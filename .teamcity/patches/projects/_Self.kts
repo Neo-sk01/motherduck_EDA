@@ -38,5 +38,8 @@ changeProject(DslContext.projectId) {
         add {
             param("env.AZURE_SUBSCRIPTION_ID", "18881902-3917-4da0-b708-bf35a34ecf53")
         }
+        add {
+            param("env.DASHBOARD_APP_SERVICE_NAME", "neolore-queue-dash-gnqgt5titvw3a")
+        }
     }
 }
