@@ -26,5 +26,8 @@ changeProject(DslContext.projectId) {
         add {
             param("env.AZURE_SUBSCRIPTION_ID", "18881902-3917-4da0-b708-bf35a34ecf53")
         }
+        add {
+            param("env.VITE_REPORTS_BASE_URL", "https://neolorequeuestgnqgt5titv.blob.core.windows.net/reports")
+        }
     }
 }
