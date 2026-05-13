@@ -12,6 +12,9 @@ accordingly, and delete the patch script.
 changeProject(DslContext.projectId) {
     params {
         add {
+            param("env.CONTAINER_APP_JOB_NAME", "neolore-queue-pipeline-job")
+        }
+        add {
             param("env.AZURE_RESOURCE_GROUP", "rg-neolore-queue-analytics")
         }
     }
