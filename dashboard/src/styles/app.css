@@ -945,3 +945,47 @@ th button {
     font-size: 11px;
   }
 }
+
+.tooltip-host {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.tooltip-trigger {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+}
+
+.tooltip-trigger:hover,
+.tooltip-trigger:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+.tooltip-popover {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #1c211e;
+  color: #f3f6f1;
+  font-family: var(--sans-font);
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 0 8px 22px rgba(20, 25, 22, 0.25);
+  pointer-events: none;
+}
