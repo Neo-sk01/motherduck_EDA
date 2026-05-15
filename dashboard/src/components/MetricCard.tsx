@@ -18,10 +18,10 @@ const STATUS_LABELS: Record<MetricStatus, string> = {
 
 export function MetricCard({ label, value, support, status, metricId }: MetricCardProps) {
   const glossaryEntry = getGlossaryEntry(metricId);
-  const toneClass = status ? `metric-card--${status}` : "metric-card--neutral";
+  const statusClass = status ? ` metric-card--${status}` : "";
 
   return (
-    <article className={`metric-card ${toneClass}`}>
+    <article className={`metric-card${statusClass}`}>
       <div className="metric-card__head">
         <p className="eyebrow">
           {label}
