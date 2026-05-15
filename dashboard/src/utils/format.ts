@@ -42,3 +42,27 @@ export function titleCase(value: string): string {
     .join(" ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+export function formatPhone(value: string): string {
+  if (!value) return value;
+  const digits = value.replace(/[^\d]/g, "");
+  if (digits.length === 11 && digits.startsWith("1")) {
+    return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+  if (digits.length === 10) {
+    return `+1 (${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  return value;
+}
+
+const ANOMALY_KIND_LABELS: Record<string, string> = {
+  volume_spike: "Volume spike",
+  volume_drop: "Volume drop",
+  cross_queue_caller: "Caller hit multiple queues",
+  no_agent_outlier: "Unusual missed-call rate",
+  routing_mismatch: "Wrong-language routing",
+};
+
+export function humanizeAnomalyKind(kind: string): string {
+  return ANOMALY_KIND_LABELS[kind] ?? titleCase(kind);
+}
