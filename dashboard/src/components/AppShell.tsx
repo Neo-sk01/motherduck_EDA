@@ -1,4 +1,4 @@
-import { Download, RefreshCw } from "lucide-react";
+import { CircleHelp, Download, RefreshCw } from "lucide-react";
 import type { ReactNode } from "react";
 import type { ReportOption } from "../data/reportManifest";
 import type { DashboardReport, ReportLoadResult, ViewKey } from "../data/reportTypes";
@@ -20,6 +20,7 @@ interface AppShellProps {
   onReportKeyChange: (key: string) => void;
   onReload: () => void;
   onExportReportCsv: () => void;
+  onOpenTutorial: () => void;
   children: ReactNode;
 }
 
@@ -33,6 +34,7 @@ export function AppShell({
   onReportKeyChange,
   onReload,
   onExportReportCsv,
+  onOpenTutorial,
   children,
 }: AppShellProps) {
   const validation = report?.validation.status ?? "pending";
@@ -81,6 +83,10 @@ export function AppShell({
           <button className="text-button" type="button" onClick={onReload}>
             <RefreshCw aria-hidden="true" size={15} />
             Reload
+          </button>
+          <button className="text-button" type="button" onClick={onOpenTutorial}>
+            <CircleHelp aria-hidden="true" size={15} />
+            Open tutorial
           </button>
           <button
             className="text-button"

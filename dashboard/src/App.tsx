@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AppShell } from "./components/AppShell";
 import { EmptyState } from "./components/EmptyState";
+import { TutorialModal, TUTORIAL_STEPS } from "./components/TutorialModal";
 import { DEFAULT_REPORT_PATH, loadReport } from "./data/reportLoader";
 import {
   DEFAULT_REPORT_OPTION,
@@ -14,6 +15,8 @@ import { FunnelDetailView } from "./views/FunnelDetailView";
 import { OverviewView } from "./views/OverviewView";
 import { PerQueueView } from "./views/PerQueueView";
 
+const TUTORIAL_STORAGE_KEY = "csh-platform-tutorial-complete";
+
 export default function App() {
   const [activeView, setActiveView] = useState<ViewKey>("overview");
   const [selectedQueueId, setSelectedQueueId] = useState<QueueId>("8020");
@@ -22,6 +25,14 @@ export default function App() {
   const [selectedReportKey, setSelectedReportKey] = useState(DEFAULT_REPORT_OPTION.key);
   const [reloadToken, setReloadToken] = useState(0);
   const [loadResult, setLoadResult] = useState<ReportLoadResult | null>(null);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const [tutorialStepIndex, setTutorialStepIndex] = useState(0);
+
+  useEffect(() => {
+    if (hasCompletedTutorial()) return;
+    setIsTutorialOpen(true);
+    setActiveView(TUTORIAL_STEPS[0].view);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,32 +66,67 @@ export default function App() {
     setSelectedReportKey(option.key);
     setReportPath(option.path);
   };
+  const handleOpenTutorial = () => {
+    setTutorialStepIndex(0);
+    setActiveView(TUTORIAL_STEPS[0].view);
+    setIsTutorialOpen(true);
+  };
+  const handleCloseTutorial = () => {
+    markTutorialComplete();
+    setIsTutorialOpen(false);
+  };
 
   return (
-    <AppShell
-      activeView={activeView}
-      onViewChange={setActiveView}
-      report={report}
-      loadResult={loadResult}
-      reportOptions={reportOptions}
-      selectedReportKey={selectedReportKey}
-      onReportKeyChange={handleReportKeyChange}
-      onReload={() => setReloadToken((current) => current + 1)}
-      onExportReportCsv={() => {
-        if (report) downloadFullReportCsv(report);
-      }}
-    >
-      {renderContent({
-        activeView,
-        report,
-        loadResult,
-        selectedQueueId,
-        setSelectedQueueId,
-        setActiveView,
-        reportPath,
-      })}
-    </AppShell>
+    <>
+      <AppShell
+        activeView={activeView}
+        onViewChange={setActiveView}
+        report={report}
+        loadResult={loadResult}
+        reportOptions={reportOptions}
+        selectedReportKey={selectedReportKey}
+        onReportKeyChange={handleReportKeyChange}
+        onReload={() => setReloadToken((current) => current + 1)}
+        onOpenTutorial={handleOpenTutorial}
+        onExportReportCsv={() => {
+          if (report) downloadFullReportCsv(report);
+        }}
+      >
+        {renderContent({
+          activeView,
+          report,
+          loadResult,
+          selectedQueueId,
+          setSelectedQueueId,
+          setActiveView,
+          reportPath,
+        })}
+      </AppShell>
+      <TutorialModal
+        isOpen={isTutorialOpen}
+        stepIndex={tutorialStepIndex}
+        onClose={handleCloseTutorial}
+        onStepChange={setTutorialStepIndex}
+        onViewChange={setActiveView}
+      />
+    </>
   );
+}
+
+function hasCompletedTutorial() {
+  try {
+    return window.localStorage.getItem(TUTORIAL_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markTutorialComplete() {
+  try {
+    window.localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
+  } catch {
+    // Storage can be unavailable in private or embedded browser contexts.
+  }
 }
 
 function renderContent({

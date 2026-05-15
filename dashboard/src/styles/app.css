@@ -130,7 +130,7 @@ main > *,
 
 .report-controls {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: 8px;
   align-items: end;
 }
@@ -654,6 +654,138 @@ th button {
   gap: 14px;
 }
 
+.tutorial-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: auto;
+  background: rgba(24, 29, 27, 0.44);
+  backdrop-filter: blur(4px);
+}
+
+.tutorial-modal {
+  width: min(560px, calc(100vw - 36px));
+  max-height: calc(100vh - 36px);
+  display: grid;
+  gap: 18px;
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 22px 70px rgba(24, 29, 27, 0.24);
+}
+
+.tutorial-modal__header,
+.tutorial-modal__body,
+.tutorial-modal__footer {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.tutorial-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-top: 18px;
+}
+
+.tutorial-modal__header h2,
+.tutorial-modal__body h3 {
+  margin: 0;
+  font-family: var(--display-font);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.tutorial-modal__header h2 {
+  font-size: 25px;
+  line-height: 1.05;
+}
+
+.tutorial-modal__body {
+  display: grid;
+  gap: 12px;
+}
+
+.tutorial-modal__body h3 {
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.tutorial-modal__body p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.tutorial-modal__body ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tutorial-modal__body li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.tutorial-modal__body li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.tutorial-progress {
+  display: flex;
+  gap: 7px;
+  padding: 0 18px;
+}
+
+.tutorial-progress button {
+  height: 8px;
+  flex: 1 1 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+}
+
+.tutorial-progress button.is-active {
+  background: var(--teal);
+}
+
+.tutorial-modal__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+}
+
+.tutorial-modal__footer > div {
+  display: flex;
+  gap: 8px;
+}
+
+.tutorial-primary {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+
 .empty-state,
 .loading-state {
   padding: 24px;
@@ -695,7 +827,7 @@ th button {
   }
 
   .report-controls {
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto auto auto;
   }
 
   .metric-grid,
@@ -763,6 +895,12 @@ th button {
 
   .report-controls {
     grid-template-columns: 1fr;
+  }
+
+  .tutorial-modal__footer,
+  .tutorial-modal__footer > div {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .funnel-row {

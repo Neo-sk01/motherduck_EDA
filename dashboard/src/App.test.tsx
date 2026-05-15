@@ -4,10 +4,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import fixture from "./fixtures/april-2026-metrics.json";
 
+const TUTORIAL_STORAGE_KEY = "csh-platform-tutorial-complete";
+
 describe("App", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    installLocalStorageMock();
+    window.localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
     vi.stubGlobal("fetch", vi.fn(async () => ({
       ok: true,
       json: async () => fixture,
@@ -42,6 +46,51 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { name: "CSR French" })).toBeInTheDocument();
     expect(screen.getByText(/8021 · French · primary/)).toBeInTheDocument();
+  });
+
+  it("walks first-time users through the dashboard views", async () => {
+    const user = userEvent.setup();
+    window.localStorage.removeItem(TUTORIAL_STORAGE_KEY);
+    render(<App />);
+
+    expect(
+      await screen.findByRole("dialog", { name: "CSH platform guide" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Period Health" })).toBeInTheDocument();
+    expect(screen.getByText(/Start with the health snapshot/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(screen.getByRole("heading", { name: "CSR English" })).toBeInTheDocument();
+    expect(screen.getByText(/Pick an individual queue/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(screen.getByRole("heading", { name: "Cross Queue Analytics" })).toBeInTheDocument();
+    expect(screen.getByText(/Compare agents and callers/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(screen.getByRole("heading", { name: "Funnel Detail" })).toBeInTheDocument();
+    expect(screen.getByText(/Use funnel detail/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Finish" }));
+
+    expect(screen.queryByRole("dialog", { name: "CSH platform guide" })).not.toBeInTheDocument();
+    expect(window.localStorage.getItem(TUTORIAL_STORAGE_KEY)).toBe("true");
+  });
+
+  it("keeps completed tutorials closed but lets users reopen them", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    expect(await screen.findByText("NeoLore Queue Analytics")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "CSH platform guide" })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Open tutorial" }));
+
+    expect(screen.getByRole("dialog", { name: "CSH platform guide" })).toBeInTheDocument();
+    expect(screen.getByText(/Start with the health snapshot/i)).toBeInTheDocument();
   });
 
   it("shows cross-queue reference rows", async () => {
@@ -229,5 +278,24 @@ function readBlobText(blob: Blob): Promise<string> {
     reader.onerror = () => reject(reader.error);
     reader.onload = () => resolve(String(reader.result));
     reader.readAsText(blob);
+  });
+}
+
+function installLocalStorageMock() {
+  const store = new Map<string, string>();
+  const storage: Storage = {
+    get length() {
+      return store.size;
+    },
+    clear: () => store.clear(),
+    getItem: (key) => store.get(key) ?? null,
+    key: (index) => Array.from(store.keys())[index] ?? null,
+    removeItem: (key) => store.delete(key),
+    setItem: (key, value) => store.set(key, String(value)),
+  };
+
+  Object.defineProperty(window, "localStorage", {
+    configurable: true,
+    value: storage,
   });
 }
