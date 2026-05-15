@@ -1032,3 +1032,56 @@ th button {
 .metric-card--good {
   border-color: rgba(47, 122, 63, 0.42);
 }
+
+.period-summary {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) repeat(3, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.period-summary__headline strong {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--display-font);
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.period-summary__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.period-summary__cell strong {
+  font-family: var(--sans-font);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.period-summary__cell--warning strong {
+  color: var(--loss);
+}
+
+.period-summary__anomalies {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .period-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
