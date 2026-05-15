@@ -294,13 +294,6 @@ main {
   line-height: 1;
 }
 
-.metric-card--good {
-  border-color: rgba(47, 122, 63, 0.42);
-}
-
-.metric-card--risk {
-  border-color: rgba(163, 45, 45, 0.35);
-}
 
 .eyebrow {
   margin: 0;
@@ -988,4 +981,54 @@ th button {
   line-height: 1.4;
   box-shadow: 0 8px 22px rgba(20, 25, 22, 0.25);
   pointer-events: none;
+}
+
+.metric-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 8px;
+}
+
+.metric-card .eyebrow {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metric-status-pill {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--sans-font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.metric-status-pill--good {
+  background: var(--badge-good-bg);
+  color: var(--badge-good-fg);
+}
+
+.metric-status-pill--watch {
+  background: var(--badge-watch-bg);
+  color: var(--badge-watch-fg);
+}
+
+.metric-status-pill--at-risk {
+  background: var(--badge-risk-bg);
+  color: var(--badge-risk-fg);
+}
+
+.metric-card--at-risk {
+  border-color: rgba(163, 45, 45, 0.35);
+}
+
+.metric-card--watch {
+  border-color: rgba(180, 145, 30, 0.35);
+}
+
+.metric-card--good {
+  border-color: rgba(47, 122, 63, 0.42);
 }

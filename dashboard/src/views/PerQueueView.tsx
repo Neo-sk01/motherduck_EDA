@@ -7,6 +7,7 @@ import { HourlyNoAnswerChart } from "../charts/HourlyNoAnswerChart";
 import { ReleaseReasonsChart } from "../charts/ReleaseReasonsChart";
 import type { DashboardReport, QueueAgent, QueueCaller, QueueId } from "../data/reportTypes";
 import { QUEUE_META, QUEUE_ORDER } from "../data/reportTypes";
+import { statusFor } from "../data/thresholds";
 import {
   formatDecimal,
   formatDuration,
@@ -73,21 +74,26 @@ export function PerQueueView({ report, selectedQueueId, onSelectQueue }: PerQueu
       </section>
 
       <section className="metric-grid metric-grid--six">
-        <MetricCard label="Total Calls" value={formatInteger(metrics.total_calls)} />
-        <MetricCard label="Avg Active Day" value={formatDecimal(metrics.avg_calls_per_active_day)} />
+        <MetricCard label="Total calls" value={formatInteger(metrics.total_calls)} />
+        <MetricCard label="Avg per active day" value={formatDecimal(metrics.avg_calls_per_active_day)} />
         <MetricCard
-          label="Busiest Day"
+          label="Busiest day"
           value={metrics.busiest_day ? formatInteger(metrics.busiest_day.calls) : "0"}
           support={metrics.busiest_day?.date}
         />
-        <MetricCard label="No-Agent Rate" value={formatPercent(metrics.no_agent_rate)} tone="risk" />
         <MetricCard
-          label="Busiest Hour"
+          label="Missed-call rate"
+          value={formatPercent(metrics.no_agent_rate)}
+          metricId="missed_call_rate"
+          status={statusFor("missed_call_rate", metrics.no_agent_rate)}
+        />
+        <MetricCard
+          label="Peak hour"
           value={formatHour(busiestHour)}
           support={topAgent ? `Top agent ${topAgent.agent_name}` : "No handled calls"}
         />
         <MetricCard
-          label="Top Caller"
+          label="Top caller"
           value={topCaller?.caller_number_norm ?? "n/a"}
           support={topCaller ? `${formatInteger(topCaller.calls)} calls` : undefined}
         />

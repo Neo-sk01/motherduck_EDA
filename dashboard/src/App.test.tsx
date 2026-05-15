@@ -115,8 +115,8 @@ describe("App", () => {
 
     expect(screen.getAllByText(/98.3%/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/88.2%/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Primary Failed").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Unaccounted").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Missed on primary").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Untracked").length).toBeGreaterThan(0);
   });
 
   it("toggles funnel card scrolling from the overview", async () => {
