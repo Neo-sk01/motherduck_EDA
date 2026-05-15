@@ -5,6 +5,7 @@ import {
   getAgentRows,
   getCallerRows,
   getLanguageFunnels,
+  getPeriodSummary,
   getQueueSummaries,
   getTopAgent,
   getTopCaller,
@@ -49,5 +50,18 @@ describe("dashboard selectors", () => {
   it("sorts agent rows by total calls", () => {
     const rows = getAgentRows(report);
     expect(rows[0].total_calls).toBeGreaterThanOrEqual(rows[1].total_calls);
+  });
+});
+
+describe("getPeriodSummary", () => {
+  it("computes the headline summary from the April fixture", () => {
+    const summary = getPeriodSummary(report);
+    expect(summary).toEqual({
+      periodLabel: "April 2026",
+      totalCalls: 1620,
+      reachedRate: expect.closeTo(0.84, 2),
+      anomalyCount: report.anomalies.length,
+      sourceGapCount: 0,
+    });
   });
 });

@@ -100,3 +100,51 @@ function sortByTotalThenName<T extends { total_calls: number }>(
 ): (a: T, b: T) => number {
   return (a, b) => b.total_calls - a.total_calls || String(a[nameKey]).localeCompare(String(b[nameKey]));
 }
+
+export interface PeriodSummary {
+  periodLabel: string;
+  totalCalls: number;
+  reachedRate: number;
+  anomalyCount: number;
+  sourceGapCount: number;
+}
+
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+/**
+ * Headline summary for the Overview view.
+ *
+ * Note: `totalCalls` sums every queue's `total_calls` (including overflow queues),
+ * while `reachedRate` is computed from funnel `primary_calls`. These intentionally
+ * use different denominators — `totalCalls` answers "how much traffic moved through
+ * the system", and `reachedRate` answers "of calls into the primary queues, how
+ * many reached an agent."
+ */
+export function getPeriodSummary(report: DashboardReport): PeriodSummary {
+  const [year, month] = report.date_range.start.split("-").map(Number);
+  const periodLabel = `${MONTH_NAMES[month - 1]} ${year}`;
+
+  const totalCalls = Object.values(report.queues).reduce(
+    (sum, queue) => sum + (queue.total_calls ?? 0),
+    0,
+  );
+
+  const funnels = Object.values(report.crossqueue.funnels);
+  const primary = funnels.reduce((sum, f) => sum + (f.primary_calls ?? 0), 0);
+  const answered = funnels.reduce(
+    (sum, f) => sum + (f.primary_answered ?? 0) + (f.overflow_answered ?? 0),
+    0,
+  );
+  const reachedRate = primary > 0 ? answered / primary : 0;
+
+  return {
+    periodLabel,
+    totalCalls,
+    reachedRate,
+    anomalyCount: report.anomalies.length,
+    sourceGapCount: report.source_gaps.length,
+  };
+}
