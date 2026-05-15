@@ -20,4 +20,10 @@
   --display-font: Georgia, "Times New Roman", serif;
   --mono-font: "SFMono-Regular", "IBM Plex Mono", "JetBrains Mono", Consolas, monospace;
   --sans-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --badge-good-bg: #e2f1e1;
+  --badge-good-fg: #1f5e2e;
+  --badge-watch-bg: #f6efd5;
+  --badge-watch-fg: #6b5a18;
+  --badge-risk-bg: #f7dcdc;
+  --badge-risk-fg: #8f2f2f;
 }
