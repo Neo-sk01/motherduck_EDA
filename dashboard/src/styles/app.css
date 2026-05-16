@@ -113,8 +113,9 @@ main > *,
   background: transparent;
   color: var(--muted);
   padding: 8px 11px;
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 12px;
+  font-weight: 500;
 }
 
 .tabs button.is-active,
@@ -139,7 +140,7 @@ main > *,
   min-width: 0;
   display: grid;
   gap: 4px;
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 11px;
   color: var(--muted);
 }
@@ -171,7 +172,7 @@ main > *,
   justify-content: center;
   gap: 6px;
   padding: 8px 11px;
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -338,17 +339,19 @@ main {
 
 .metric-card strong {
   font-family: var(--mono-font);
-  font-size: 28px;
-  line-height: 1;
+  font-size: 32px;
+  line-height: 1.0;
 }
 
 
 .eyebrow {
   margin: 0;
   color: var(--muted);
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 11px;
-  text-transform: uppercase;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .queue-card {
@@ -433,8 +436,9 @@ main {
 
 .queue-card dt {
   color: var(--muted);
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 10px;
+  font-weight: 500;
 }
 
 .queue-card dd {
