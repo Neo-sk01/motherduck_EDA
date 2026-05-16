@@ -27,11 +27,14 @@ export function Tooltip({ id, label, content }: TooltipProps) {
       >
         <HelpCircle aria-hidden="true" size={12} />
       </button>
-      {open ? (
-        <span role="tooltip" id={id} className="tooltip-popover">
-          {content}
-        </span>
-      ) : null}
+      <span
+        role="tooltip"
+        id={id}
+        className={`tooltip-popover ${open ? "is-open" : ""}`}
+        hidden={!open}
+      >
+        {content}
+      </span>
     </span>
   );
 }

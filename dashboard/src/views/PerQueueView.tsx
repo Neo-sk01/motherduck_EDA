@@ -14,6 +14,7 @@ import {
   formatHour,
   formatInteger,
   formatPercent,
+  formatPhone,
 } from "../utils/format";
 
 interface PerQueueViewProps {
@@ -94,7 +95,7 @@ export function PerQueueView({ report, selectedQueueId, onSelectQueue }: PerQueu
         />
         <MetricCard
           label="Top caller"
-          value={topCaller?.caller_number_norm ?? "n/a"}
+          value={topCaller ? formatPhone(topCaller.caller_number_norm) : "n/a"}
           support={topCaller ? `${formatInteger(topCaller.calls)} calls` : undefined}
         />
       </section>

@@ -13,22 +13,26 @@ describe("Tooltip", () => {
   it("reveals the popover on hover and hides on mouse leave", async () => {
     const user = userEvent.setup();
     render(<Tooltip id="t2" label="Why" content="Because." />);
-    expect(screen.queryByText("Because.")).not.toBeInTheDocument();
+    const popover = screen.getByRole("tooltip", { hidden: true });
+    expect(popover).toHaveAttribute("hidden");
 
     await user.hover(screen.getByRole("button", { name: "Why" }));
-    expect(screen.getByText("Because.")).toBeInTheDocument();
+    expect(popover).not.toHaveAttribute("hidden");
 
     await user.unhover(screen.getByRole("button", { name: "Why" }));
-    expect(screen.queryByText("Because.")).not.toBeInTheDocument();
+    expect(popover).toHaveAttribute("hidden");
   });
 
   it("reveals the popover on focus and hides on blur", async () => {
     const user = userEvent.setup();
     render(<Tooltip id="t3" label="Why" content="Because." />);
-    await user.tab();
-    expect(screen.getByText("Because.")).toBeInTheDocument();
+    const popover = screen.getByRole("tooltip", { hidden: true });
+    expect(popover).toHaveAttribute("hidden");
 
     await user.tab();
-    expect(screen.queryByText("Because.")).not.toBeInTheDocument();
+    expect(popover).not.toHaveAttribute("hidden");
+
+    await user.tab();
+    expect(popover).toHaveAttribute("hidden");
   });
 });
