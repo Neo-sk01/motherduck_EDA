@@ -13,11 +13,14 @@ export function QueueCard({ summary, onOpen }: QueueCardProps) {
   return (
     <button className="queue-card" type="button" onClick={onOpen}>
       <span className="queue-chip" style={{ "--queue-color": summary.meta.color } as React.CSSProperties}>
-        {summary.meta.id}
+        {summary.meta.language === "English" ? "EN" : "FR"}
+        <em>{summary.meta.role === "primary" ? "Pri" : "Ovr"}</em>
       </span>
       <div>
         <h3>{summary.meta.name}</h3>
-        <p>{summary.meta.language} {summary.meta.role}</p>
+        <p>
+          {summary.meta.id} · {summary.meta.language} · {summary.meta.role}
+        </p>
       </div>
       <strong>{formatInteger(summary.metrics.total_calls)}</strong>
       <dl>
