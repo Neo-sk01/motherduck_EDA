@@ -12,48 +12,20 @@ interface FunnelChartProps {
 export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: FunnelChartProps) {
   const max = Math.max(funnel.primary_calls, 1);
   const steps = [
-    {
-      label: "Primary calls",
-      value: funnel.primary_calls,
-      color: QUEUE_META[primaryQueue].color,
-    },
-    {
-      label: "Primary answered",
-      value: funnel.primary_answered,
-      color: "#2B7A4B",
-    },
-    {
-      label: "Primary failed",
-      value: funnel.primary_failed,
-      color: "#A32D2D",
-    },
-    {
-      label: "Overflow received",
-      value: funnel.overflow_received,
-      color: QUEUE_META[overflowQueue].color,
-    },
-    {
-      label: "Overflow answered",
-      value: funnel.overflow_answered,
-      color: "#2B7A4B",
-    },
-    {
-      label: "Lost",
-      value: funnel.lost,
-      color: "#A32D2D",
-    },
-    {
-      label: "Unaccounted",
-      value: funnel.unaccounted,
-      color: "#7B6B3A",
-    },
+    { label: "Calls in", value: funnel.primary_calls, color: QUEUE_META[primaryQueue].color },
+    { label: "Answered on primary", value: funnel.primary_answered, color: "#2B7A4B" },
+    { label: "Missed on primary", value: funnel.primary_failed, color: "#A32D2D" },
+    { label: "Sent to overflow", value: funnel.overflow_received, color: QUEUE_META[overflowQueue].color },
+    { label: "Answered on overflow", value: funnel.overflow_answered, color: "#2B7A4B" },
+    { label: "Never connected", value: funnel.lost, color: "#A32D2D" },
+    { label: "Untracked", value: funnel.unaccounted, color: "#7B6B3A" },
   ];
 
   return (
     <div className="funnel-chart" aria-label={`${language} routing funnel`}>
       <div className="funnel-rates">
-        <span>Routing {formatPercent(funnel.routing_match)}</span>
-        <span>Effective {formatPercent(funnel.effective_answer_rate)}</span>
+        <span>Right-language routing {formatPercent(funnel.routing_match)}</span>
+        <span>Reached an agent {formatPercent(funnel.effective_answer_rate)}</span>
       </div>
       {steps.map((step) => (
         <div className="funnel-row" key={step.label}>

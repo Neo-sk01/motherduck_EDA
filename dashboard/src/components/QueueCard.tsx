@@ -22,11 +22,11 @@ export function QueueCard({ summary, onOpen }: QueueCardProps) {
       <strong>{formatInteger(summary.metrics.total_calls)}</strong>
       <dl>
         <div>
-          <dt>No-agent</dt>
+          <dt>Missed-call rate</dt>
           <dd>{formatPercent(summary.metrics.no_agent_rate)}</dd>
         </div>
         <div>
-          <dt>Busiest hour</dt>
+          <dt>Peak hour</dt>
           <dd>{formatHour(summary.busiestHour)}</dd>
         </div>
         <div>
