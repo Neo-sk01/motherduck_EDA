@@ -1017,18 +1017,18 @@ th button {
 
 }
 
-.tooltip-host {
+.info-host {
   position: relative;
   display: inline-flex;
   align-items: center;
   margin-left: 4px;
 }
 
-.tooltip-trigger {
+.info-trigger {
   display: inline-grid;
   place-items: center;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border: 0;
   border-radius: 50%;
   background: transparent;
@@ -1036,34 +1036,97 @@ th button {
   padding: 0;
 }
 
-.tooltip-trigger:hover,
-.tooltip-trigger:focus-visible {
+.info-trigger:hover,
+.info-trigger:focus-visible,
+.info-trigger[aria-expanded="true"] {
+  color: var(--text);
+  background: var(--surface-subtle);
+  outline: none;
+}
+
+.info-popover {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  padding: 14px 16px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--sans-font);
+  font-size: 12px;
+  line-height: 1.45;
+  box-shadow: 0 12px 32px rgba(20, 25, 22, 0.16);
+  text-align: left;
+  white-space: normal;
+}
+
+.info-popover.is-open {
+  display: block;
+}
+
+.info-popover__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.info-popover__section-label,
+.info-popover__body {
+  display: block;
+}
+
+.info-popover__head strong {
+  font-family: var(--display-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.info-popover__close {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+  margin: -4px -6px 0 0;
+}
+
+.info-popover__close:hover,
+.info-popover__close:focus-visible {
+  background: var(--surface-subtle);
   color: var(--text);
   outline: none;
 }
 
-.tooltip-popover {
-  display: none;
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: max-content;
-  max-width: 240px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: #1c211e;
-  color: #f3f6f1;
-  font-family: var(--sans-font);
-  font-size: 12px;
-  line-height: 1.4;
-  box-shadow: 0 8px 22px rgba(20, 25, 22, 0.25);
-  pointer-events: none;
+.info-popover__section-label {
+  margin: 10px 0 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-.tooltip-popover.is-open {
-  display: block;
+.info-popover__section-label:first-of-type {
+  margin-top: 0;
+}
+
+.info-popover__body {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .metric-card__head {

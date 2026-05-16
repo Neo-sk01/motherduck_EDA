@@ -1,6 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
-import { Tooltip } from "../components/Tooltip";
-import { getGlossaryEntry } from "../data/glossary";
+import { InfoPopover } from "../components/InfoPopover";
 import type { FunnelMetrics, QueueId } from "../data/reportTypes";
 import { QUEUE_META } from "../data/reportTypes";
 import { formatInteger, formatPercent } from "../utils/format";
@@ -18,8 +17,6 @@ const UNTRACKED_COLOR = "#8b7a28";
 export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: FunnelChartProps) {
   const primaryColor = QUEUE_META[primaryQueue].color;
   const overflowColor = QUEUE_META[overflowQueue].color;
-  const routingTooltip = getGlossaryEntry("right_language_routing");
-  const reachedTooltip = getGlossaryEntry("reached_an_agent");
 
   const slices = [
     {
@@ -58,23 +55,11 @@ export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: F
       <div className="funnel-rates">
         <span>
           Right-language routing {formatPercent(funnel.routing_match)}
-          {routingTooltip ? (
-            <Tooltip
-              id={`${language}-routing-tip`}
-              label="Right-language routing"
-              content={routingTooltip}
-            />
-          ) : null}
+          <InfoPopover infoId="right_language_routing" />
         </span>
         <span>
           Reached an agent {formatPercent(funnel.effective_answer_rate)}
-          {reachedTooltip ? (
-            <Tooltip
-              id={`${language}-reached-tip`}
-              label="Reached an agent"
-              content={reachedTooltip}
-            />
-          ) : null}
+          <InfoPopover infoId="reached_an_agent" />
         </span>
       </div>
 

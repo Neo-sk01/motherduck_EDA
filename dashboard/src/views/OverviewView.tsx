@@ -98,7 +98,7 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
             label={`${item.language}: reached an agent`}
             value={formatPercent(item.funnel.effective_answer_rate)}
             support={`${formatInteger(item.funnel.primary_calls - item.funnel.lost)} reached before final loss; ${formatInteger(item.funnel.lost)} lost`}
-            metricId="reached_an_agent"
+            infoId="reached_an_agent"
             status={statusFor("reached_an_agent", item.funnel.effective_answer_rate)}
           />
         ))}

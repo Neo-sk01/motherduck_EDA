@@ -31,23 +31,51 @@ export function FunnelDetailView({ report }: FunnelDetailViewProps) {
             <FunnelChart {...item} />
           </ChartFrame>
           <div className="metric-grid metric-grid--six">
-            <MetricCard label="Calls in" value={formatInteger(item.funnel.primary_calls)} />
-            <MetricCard label="Answered on primary" value={formatInteger(item.funnel.primary_answered)} status="good" />
-            <MetricCard label="Missed on primary" value={formatInteger(item.funnel.primary_failed)} status="at-risk" />
-            <MetricCard label="Sent to overflow" value={formatInteger(item.funnel.overflow_received)} />
-            <MetricCard label="Answered on overflow" value={formatInteger(item.funnel.overflow_answered)} status="good" />
-            <MetricCard label="Never connected" value={formatInteger(item.funnel.lost)} status="at-risk" />
-            <MetricCard label="Untracked" value={formatInteger(item.funnel.unaccounted)} metricId="untracked" />
+            <MetricCard label="Calls in" value={formatInteger(item.funnel.primary_calls)} infoId="calls_in" />
+            <MetricCard
+              label="Answered on primary"
+              value={formatInteger(item.funnel.primary_answered)}
+              status="good"
+              infoId="answered_on_primary"
+            />
+            <MetricCard
+              label="Missed on primary"
+              value={formatInteger(item.funnel.primary_failed)}
+              status="at-risk"
+              infoId="missed_on_primary"
+            />
+            <MetricCard
+              label="Sent to overflow"
+              value={formatInteger(item.funnel.overflow_received)}
+              infoId="sent_to_overflow"
+            />
+            <MetricCard
+              label="Answered on overflow"
+              value={formatInteger(item.funnel.overflow_answered)}
+              status="good"
+              infoId="answered_on_overflow"
+            />
+            <MetricCard
+              label="Never connected"
+              value={formatInteger(item.funnel.lost)}
+              status="at-risk"
+              infoId="never_connected"
+            />
+            <MetricCard
+              label="Untracked"
+              value={formatInteger(item.funnel.unaccounted)}
+              infoId="untracked"
+            />
             <MetricCard
               label="Right-language routing"
               value={formatPercent(item.funnel.routing_match)}
-              metricId="right_language_routing"
+              infoId="right_language_routing"
               status={statusFor("right_language_routing", item.funnel.routing_match)}
             />
             <MetricCard
               label="Reached an agent"
               value={formatPercent(item.funnel.effective_answer_rate)}
-              metricId="reached_an_agent"
+              infoId="reached_an_agent"
               status={statusFor("reached_an_agent", item.funnel.effective_answer_rate)}
             />
           </div>

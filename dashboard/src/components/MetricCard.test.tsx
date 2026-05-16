@@ -25,13 +25,13 @@ describe("MetricCard", () => {
     expect(screen.getByText("At risk")).toBeInTheDocument();
   });
 
-  it("renders a tooltip trigger when metricId resolves in the glossary", () => {
-    render(<MetricCard label="Reached an agent" value="92%" metricId="reached_an_agent" />);
-    expect(screen.getByRole("button", { name: /reached an agent/i })).toBeInTheDocument();
+  it("renders an info trigger when infoId resolves in the metric info map", () => {
+    render(<MetricCard label="Reached an agent" value="92%" infoId="reached_an_agent" />);
+    expect(screen.getByRole("button", { name: /About Reached an agent/i })).toBeInTheDocument();
   });
 
-  it("does not render a tooltip trigger for unknown metric ids", () => {
-    render(<MetricCard label="Foo" value="1" metricId="unknown_metric" />);
+  it("does not render an info trigger for unknown info ids", () => {
+    render(<MetricCard label="Foo" value="1" infoId="unknown_metric" />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

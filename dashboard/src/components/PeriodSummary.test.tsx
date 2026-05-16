@@ -43,7 +43,9 @@ describe("PeriodSummary", () => {
       />,
     );
     expect(screen.getByText("No anomalies flagged.")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /anomal/i })).not.toBeInTheDocument();
+    // The info trigger button (aria-label "About Anomalies") is still present;
+    // the assertion targets only the count-pivoting clickable, which is gone.
+    expect(screen.queryByRole("button", { name: /anomalies flagged/i })).not.toBeInTheDocument();
   });
 
   it("calls onAnomaliesClick when the anomaly cell is clicked", async () => {

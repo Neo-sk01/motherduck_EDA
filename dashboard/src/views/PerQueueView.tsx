@@ -75,28 +75,35 @@ export function PerQueueView({ report, selectedQueueId, onSelectQueue }: PerQueu
       </section>
 
       <section className="metric-grid metric-grid--six">
-        <MetricCard label="Total calls" value={formatInteger(metrics.total_calls)} />
-        <MetricCard label="Avg per active day" value={formatDecimal(metrics.avg_calls_per_active_day)} />
+        <MetricCard label="Total calls" value={formatInteger(metrics.total_calls)} infoId="total_calls" />
+        <MetricCard
+          label="Avg per active day"
+          value={formatDecimal(metrics.avg_calls_per_active_day)}
+          infoId="avg_per_active_day"
+        />
         <MetricCard
           label="Busiest day"
           value={metrics.busiest_day ? formatInteger(metrics.busiest_day.calls) : "0"}
           support={metrics.busiest_day?.date}
+          infoId="busiest_day"
         />
         <MetricCard
           label="Missed-call rate"
           value={formatPercent(metrics.no_agent_rate)}
-          metricId="missed_call_rate"
+          infoId="missed_call_rate"
           status={statusFor("missed_call_rate", metrics.no_agent_rate)}
         />
         <MetricCard
           label="Peak hour"
           value={formatHour(busiestHour)}
           support={topAgent ? `Top agent ${topAgent.agent_name}` : "No handled calls"}
+          infoId="peak_hour"
         />
         <MetricCard
           label="Top caller"
           value={topCaller ? formatPhone(topCaller.caller_number_norm) : "n/a"}
           support={topCaller ? `${formatInteger(topCaller.calls)} calls` : undefined}
+          infoId="top_caller"
         />
       </section>
 

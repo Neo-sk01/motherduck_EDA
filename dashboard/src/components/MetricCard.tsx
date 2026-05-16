@@ -1,5 +1,5 @@
-import { Tooltip } from "./Tooltip";
-import { getGlossaryEntry } from "../data/glossary";
+import { InfoPopover } from "./InfoPopover";
+import { getMetricInfo } from "../data/metricInfo";
 import type { MetricStatus } from "../data/thresholds";
 
 interface MetricCardProps {
@@ -7,7 +7,7 @@ interface MetricCardProps {
   value: string;
   support?: string;
   status?: MetricStatus;
-  metricId?: string;
+  infoId?: string;
 }
 
 const STATUS_LABELS: Record<MetricStatus, string> = {
@@ -16,8 +16,8 @@ const STATUS_LABELS: Record<MetricStatus, string> = {
   "at-risk": "At risk",
 };
 
-export function MetricCard({ label, value, support, status, metricId }: MetricCardProps) {
-  const glossaryEntry = getGlossaryEntry(metricId);
+export function MetricCard({ label, value, support, status, infoId }: MetricCardProps) {
+  const hasInfo = Boolean(getMetricInfo(infoId));
   const statusClass = status ? ` metric-card--${status}` : "";
 
   return (
@@ -25,9 +25,7 @@ export function MetricCard({ label, value, support, status, metricId }: MetricCa
       <div className="metric-card__head">
         <p className="eyebrow">
           {label}
-          {glossaryEntry && metricId ? (
-            <Tooltip id={`${metricId}-tip`} label={label} content={glossaryEntry} />
-          ) : null}
+          {hasInfo && infoId ? <InfoPopover infoId={infoId} /> : null}
         </p>
         {status ? (
           <span className={`metric-status-pill metric-status-pill--${status}`}>
