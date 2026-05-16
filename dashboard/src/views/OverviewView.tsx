@@ -8,7 +8,7 @@ import { FunnelChart } from "../charts/FunnelChart";
 import type { DashboardReport, QueueId, ViewKey } from "../data/reportTypes";
 import { getLanguageFunnels, getPeriodSummary, getQueueSummaries, getTopAgent, getTopCaller } from "../data/selectors";
 import { statusFor } from "../data/thresholds";
-import { formatInteger, formatPercent, titleCase } from "../utils/format";
+import { formatInteger, formatPercent, humanizeAnomalyKind } from "../utils/format";
 
 interface OverviewViewProps {
   report: DashboardReport;
@@ -126,7 +126,7 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
             }}
           >
             <span>{anomaly.severity}</span>
-            <strong>{titleCase(anomaly.kind)}</strong>
+            <strong>{humanizeAnomalyKind(anomaly.kind)}</strong>
             <p>{anomaly.description}</p>
           </button>
         ))}
