@@ -17,7 +17,7 @@ export function FunnelDetailView({ report }: FunnelDetailViewProps) {
     <div className="view-stack">
       <section className="view-heading">
         <div>
-          <h2>Funnel Detail</h2>
+          <h2>Routing Funnel</h2>
           <p>Primary-to-overflow routing, final loss, and unaccounted transfer gaps.</p>
         </div>
       </section>

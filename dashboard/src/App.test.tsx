@@ -23,9 +23,9 @@ describe("App", () => {
 
     expect(await screen.findByText("NeoLore Queue Analytics")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Overview" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Per Queue" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cross Queue" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Funnel Detail" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "By Queue" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Across Queues" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Routing Funnel" })).toBeInTheDocument();
     expect(await screen.findByText(/2026-04-01 through 2026-04-30/)).toBeInTheDocument();
     expect(screen.getAllByText("1,181").length).toBeGreaterThan(0);
     expect(screen.getAllByText("66").length).toBeGreaterThan(0);
@@ -71,7 +71,7 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: "Next" }));
 
-    expect(screen.getByRole("heading", { name: "Funnel Detail" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Routing Funnel" })).toBeInTheDocument();
     expect(screen.getByText(/Use funnel detail/i)).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Finish" }));
@@ -97,7 +97,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click((await screen.findAllByRole("button", { name: "Cross Queue" }))[0]);
+    await user.click((await screen.findAllByRole("button", { name: "Across Queues" }))[0]);
 
     expect(screen.getByText("Alicia Yameen 241")).toBeInTheDocument();
     expect(screen.getByText("9052833500 63")).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click((await screen.findAllByRole("button", { name: "Funnel Detail" }))[0]);
+    await user.click((await screen.findAllByRole("button", { name: "Routing Funnel" }))[0]);
 
     expect(screen.getAllByText(/98.3%/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/88.2%/).length).toBeGreaterThan(0);
@@ -137,7 +137,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click((await screen.findAllByRole("button", { name: "Cross Queue" }))[0]);
+    await user.click((await screen.findAllByRole("button", { name: "Across Queues" }))[0]);
     const table = screen.getAllByRole("table")[0];
     const firstBody = within(table).getAllByRole("row")[1].textContent;
     await user.click(within(table).getByRole("button", { name: /Agent/i }));

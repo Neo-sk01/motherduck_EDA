@@ -5,9 +5,9 @@ import type { DashboardReport, ReportLoadResult, ViewKey } from "../data/reportT
 
 export const VIEWS: Array<{ key: ViewKey; label: string }> = [
   { key: "overview", label: "Overview" },
-  { key: "per-queue", label: "Per Queue" },
-  { key: "cross-queue", label: "Cross Queue" },
-  { key: "funnel-detail", label: "Funnel Detail" },
+  { key: "per-queue", label: "By Queue" },
+  { key: "cross-queue", label: "Across Queues" },
+  { key: "funnel-detail", label: "Routing Funnel" },
 ];
 
 interface AppShellProps {
