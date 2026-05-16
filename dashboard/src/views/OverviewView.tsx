@@ -8,7 +8,7 @@ import { FunnelChart } from "../charts/FunnelChart";
 import type { DashboardReport, QueueId, ViewKey } from "../data/reportTypes";
 import { getLanguageFunnels, getPeriodSummary, getQueueSummaries, getTopAgent, getTopCaller } from "../data/selectors";
 import { statusFor } from "../data/thresholds";
-import { formatInteger, formatPercent, humanizeAnomalyKind } from "../utils/format";
+import { formatInteger, formatPercent, formatPhone, humanizeAnomalyKind } from "../utils/format";
 
 interface OverviewViewProps {
   report: DashboardReport;
@@ -32,13 +32,21 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
           <h2>Period Health</h2>
           <p>Primary queues, overflow routing, and operational risks for the selected report.</p>
         </div>
-        <div className="reference-row" aria-label="April reference values">
-          <span>Queue 8020 {formatInteger(report.queues["8020"].total_calls)}</span>
-          <span>{topAgent ? `${topAgent.agent_name} ${formatInteger(topAgent.total_calls)}` : "Top agent n/a"}</span>
-          <span>
-            {topCaller
-              ? `Caller ${topCaller.caller_number_norm} ${formatInteger(topCaller.total_calls)}`
-              : "Top caller n/a"}
+        <div className="reference-row" aria-label="Period references">
+          <span className="reference-chip">
+            <em className="eyebrow">English primary queue</em>
+            <strong>{formatInteger(report.queues["8020"].total_calls)}</strong>
+            <small>CSR English · 8020</small>
+          </span>
+          <span className="reference-chip">
+            <em className="eyebrow">Top agent</em>
+            <strong>{topAgent?.agent_name ?? "n/a"}</strong>
+            {topAgent ? <small>{formatInteger(topAgent.total_calls)} calls</small> : null}
+          </span>
+          <span className="reference-chip">
+            <em className="eyebrow">Top caller</em>
+            <strong>{topCaller ? formatPhone(topCaller.caller_number_norm) : "n/a"}</strong>
+            {topCaller ? <small>{formatInteger(topCaller.total_calls)} calls</small> : null}
           </span>
         </div>
       </section>

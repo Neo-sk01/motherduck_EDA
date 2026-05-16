@@ -99,10 +99,12 @@ describe("App", () => {
 
     await user.click((await screen.findAllByRole("button", { name: "Across Queues" }))[0]);
 
-    expect(screen.getByText("Alicia Yameen 241")).toBeInTheDocument();
-    expect(screen.getByText("9052833500 63")).toBeInTheDocument();
+    // Reference chips now render the formatted phone number; the joined "name + count"
+    // string is gone (chips split label/value/support into separate elements).
     expect(screen.getAllByText("Alicia Yameen").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("+1 (905) 283-3500").length).toBeGreaterThan(0);
     expect(screen.getAllByText("241").length).toBeGreaterThan(0);
+    // Caller table still renders raw normalized number and the count:
     expect(screen.getAllByText("9052833500").length).toBeGreaterThan(0);
     expect(screen.getAllByText("63").length).toBeGreaterThan(0);
   });

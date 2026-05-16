@@ -5,7 +5,7 @@ import { SameDayVolumeOverlay, SameHourNoAnswerOverlay } from "../charts/Overlay
 import type { ConsolidatedAgent, ConsolidatedCaller, DashboardReport } from "../data/reportTypes";
 import { QUEUE_ORDER } from "../data/reportTypes";
 import { getAgentRows, getCallerRows, getTopCaller, queueColumnValue } from "../data/selectors";
-import { formatInteger } from "../utils/format";
+import { formatInteger, formatPhone } from "../utils/format";
 
 interface CrossQueueViewProps {
   report: DashboardReport;
@@ -60,12 +60,16 @@ export function CrossQueueView({ report }: CrossQueueViewProps) {
           <h2>Cross Queue Analytics</h2>
           <p>Consolidated agents, callers, no-answer timing, and same-day volume.</p>
         </div>
-        <div className="reference-row">
-          <span>{topAgent ? `${topAgent.agent_name} ${formatInteger(topAgent.total_calls)}` : "Top agent n/a"}</span>
-          <span>
-            {topCaller
-              ? `${topCaller.caller_number_norm} ${formatInteger(topCaller.total_calls)}`
-              : "Top caller n/a"}
+        <div className="reference-row" aria-label="Period references">
+          <span className="reference-chip">
+            <em className="eyebrow">Top agent</em>
+            <strong>{topAgent?.agent_name ?? "n/a"}</strong>
+            {topAgent ? <small>{formatInteger(topAgent.total_calls)} calls</small> : null}
+          </span>
+          <span className="reference-chip">
+            <em className="eyebrow">Top caller</em>
+            <strong>{topCaller ? formatPhone(topCaller.caller_number_norm) : "n/a"}</strong>
+            {topCaller ? <small>{formatInteger(topCaller.total_calls)} calls</small> : null}
           </span>
         </div>
       </section>
