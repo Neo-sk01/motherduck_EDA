@@ -531,7 +531,7 @@ main {
   font-size: 12px;
 }
 
-.funnel-rates span {
+.funnel-rates > span {
   display: inline-flex;
   align-items: center;
   background: var(--surface-subtle);
@@ -1043,6 +1043,7 @@ th button {
 }
 
 .tooltip-popover {
+  display: none;
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
@@ -1059,6 +1060,10 @@ th button {
   line-height: 1.4;
   box-shadow: 0 8px 22px rgba(20, 25, 22, 0.25);
   pointer-events: none;
+}
+
+.tooltip-popover.is-open {
+  display: block;
 }
 
 .metric-card__head {
