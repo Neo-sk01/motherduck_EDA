@@ -14,13 +14,15 @@ interface FunnelChartProps {
 export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: FunnelChartProps) {
   const primaryColor = QUEUE_META[primaryQueue].color;
   const overflowColor = QUEUE_META[overflowQueue].color;
-  const overflowMissed = Math.max(0, funnel.overflow_received - funnel.overflow_answered);
+  const overflowMissed = funnel.overflow_failed;
   const reachedTotal = funnel.primary_answered + funnel.overflow_answered;
   const reachedShare = funnel.primary_calls > 0 ? reachedTotal / funnel.primary_calls : 0;
   const primaryShare = funnel.primary_calls > 0 ? funnel.primary_answered / funnel.primary_calls : 0;
   const overflowShare = funnel.primary_calls > 0 ? funnel.overflow_received / funnel.primary_calls : 0;
   const ovfAnsShare = funnel.overflow_received > 0 ? funnel.overflow_answered / funnel.overflow_received : 0;
   const ovfMissShare = funnel.overflow_received > 0 ? overflowMissed / funnel.overflow_received : 0;
+  const routingTooltip = getGlossaryEntry("right_language_routing");
+  const reachedTooltip = getGlossaryEntry("reached_an_agent");
 
   return (
     <div className="funnel-chart" aria-label={`${language} routing funnel`}>
@@ -32,19 +34,23 @@ export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: F
       <div className="funnel-rates">
         <span>
           Right-language routing {formatPercent(funnel.routing_match)}
-          <Tooltip
-            id={`${language}-routing-tip`}
-            label="Right-language routing"
-            content={getGlossaryEntry("right_language_routing") ?? ""}
-          />
+          {routingTooltip ? (
+            <Tooltip
+              id={`${language}-routing-tip`}
+              label="Right-language routing"
+              content={routingTooltip}
+            />
+          ) : null}
         </span>
         <span>
           Reached an agent {formatPercent(funnel.effective_answer_rate)}
-          <Tooltip
-            id={`${language}-reached-tip`}
-            label="Reached an agent"
-            content={getGlossaryEntry("reached_an_agent") ?? ""}
-          />
+          {reachedTooltip ? (
+            <Tooltip
+              id={`${language}-reached-tip`}
+              label="Reached an agent"
+              content={reachedTooltip}
+            />
+          ) : null}
         </span>
       </div>
 
