@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AlertTriangle, ScrollText } from "lucide-react";
 import { ChartFrame } from "../components/ChartFrame";
+import { PeriodSummary } from "../components/PeriodSummary";
 import { MetricCard } from "../components/MetricCard";
 import { QueueCard } from "../components/QueueCard";
 import { FunnelChart } from "../charts/FunnelChart";
 import type { DashboardReport, QueueId, ViewKey } from "../data/reportTypes";
-import { getLanguageFunnels, getQueueSummaries, getTopAgent, getTopCaller } from "../data/selectors";
+import { getLanguageFunnels, getPeriodSummary, getQueueSummaries, getTopAgent, getTopCaller } from "../data/selectors";
 import { statusFor } from "../data/thresholds";
 import { formatInteger, formatPercent, titleCase } from "../utils/format";
 
@@ -18,6 +19,8 @@ interface OverviewViewProps {
 export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewViewProps) {
   const funnels = getLanguageFunnels(report);
   const summaries = getQueueSummaries(report);
+  const periodSummary = getPeriodSummary(report);
+  const anomalyStripRef = useRef<HTMLElement>(null);
   const topAgent = getTopAgent(report);
   const topCaller = getTopCaller(report);
   const [scrollableFunnels, setScrollableFunnels] = useState<Record<string, boolean>>({});
@@ -39,6 +42,13 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
           </span>
         </div>
       </section>
+
+      <PeriodSummary
+        summary={periodSummary}
+        onAnomaliesClick={() =>
+          anomalyStripRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+      />
 
       <section className="funnel-grid">
         {funnels.map((item) => (
@@ -99,7 +109,7 @@ export function OverviewView({ report, onSelectQueue, onNavigate }: OverviewView
         ))}
       </section>
 
-      <section className="anomaly-strip" aria-label="Anomalies">
+      <section className="anomaly-strip" aria-label="Anomalies" ref={anomalyStripRef}>
         <div className="section-kicker">
           <AlertTriangle aria-hidden="true" size={16} />
           <h3>Anomaly Strip</h3>
