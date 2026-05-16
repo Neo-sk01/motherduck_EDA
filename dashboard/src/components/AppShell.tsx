@@ -1,5 +1,5 @@
-import { CircleHelp, Download, RefreshCw } from "lucide-react";
-import type { ReactNode } from "react";
+import { ChevronDown, ChevronRight, CircleHelp, Download, RefreshCw } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import type { ReportOption } from "../data/reportManifest";
 import type { DashboardReport, ReportLoadResult, ViewKey } from "../data/reportTypes";
 
@@ -39,6 +39,18 @@ export function AppShell({
 }: AppShellProps) {
   const validation = report?.validation.status ?? "pending";
   const source = loadResult?.status === "loaded" ? loadResult.source : "remote";
+
+  const sourceGaps = report?.source_gaps.length ?? 0;
+  const warning = loadResult?.status === "loaded" ? loadResult.warning : undefined;
+  const isDegraded =
+    sourceGaps > 0 ||
+    Boolean(warning) ||
+    validation === "failed";
+  const [expanded, setExpanded] = useState(isDegraded);
+  const showExpanded = expanded || isDegraded;
+  const compactLabel = report
+    ? `Loaded · ${report.date_range.start.slice(0, 7)} · Source: ${source}`
+    : "Loading…";
 
   return (
     <div className="app-shell">
@@ -99,12 +111,23 @@ export function AppShell({
           </button>
         </div>
       </header>
-      <div className="status-strip">
-        <span>Source: {source}</span>
-        <span>Validation: {validation}</span>
-        <span>Source gaps: {report?.source_gaps.length ?? 0}</span>
-        {loadResult?.status === "loaded" && loadResult.warning ? (
-          <span className="warning">Fallback: {loadResult.warning}</span>
+      <div className={`status-strip ${showExpanded ? "is-expanded" : ""}`}>
+        <button
+          type="button"
+          className="status-strip__toggle"
+          aria-expanded={showExpanded}
+          onClick={() => setExpanded((current) => !current)}
+        >
+          {showExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+          <span>{showExpanded ? "Hide status" : compactLabel}</span>
+        </button>
+        {showExpanded ? (
+          <>
+            <span>Source: {source}</span>
+            <span className={validation === "failed" ? "warning" : ""}>Validation: {validation}</span>
+            <span className={sourceGaps > 0 ? "warning" : ""}>Source gaps: {sourceGaps}</span>
+            {warning ? <span className="warning">Fallback: {warning}</span> : null}
+          </>
         ) : null}
       </div>
       <main>{children}</main>
