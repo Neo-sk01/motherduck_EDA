@@ -1,3 +1,5 @@
+import { Tooltip } from "../components/Tooltip";
+import { getGlossaryEntry } from "../data/glossary";
 import type { FunnelMetrics, QueueId } from "../data/reportTypes";
 import { QUEUE_META } from "../data/reportTypes";
 import { formatInteger, formatPercent } from "../utils/format";
@@ -10,37 +12,95 @@ interface FunnelChartProps {
 }
 
 export function FunnelChart({ language, funnel, primaryQueue, overflowQueue }: FunnelChartProps) {
-  const max = Math.max(funnel.primary_calls, 1);
-  const steps = [
-    { label: "Calls in", value: funnel.primary_calls, color: QUEUE_META[primaryQueue].color },
-    { label: "Answered on primary", value: funnel.primary_answered, color: "#2B7A4B" },
-    { label: "Missed on primary", value: funnel.primary_failed, color: "#A32D2D" },
-    { label: "Sent to overflow", value: funnel.overflow_received, color: QUEUE_META[overflowQueue].color },
-    { label: "Answered on overflow", value: funnel.overflow_answered, color: "#2B7A4B" },
-    { label: "Never connected", value: funnel.lost, color: "#A32D2D" },
-    { label: "Untracked", value: funnel.unaccounted, color: "#7B6B3A" },
-  ];
+  const primaryColor = QUEUE_META[primaryQueue].color;
+  const overflowColor = QUEUE_META[overflowQueue].color;
+  const overflowMissed = Math.max(0, funnel.overflow_received - funnel.overflow_answered);
+  const reachedTotal = funnel.primary_answered + funnel.overflow_answered;
+  const reachedShare = funnel.primary_calls > 0 ? reachedTotal / funnel.primary_calls : 0;
+  const primaryShare = funnel.primary_calls > 0 ? funnel.primary_answered / funnel.primary_calls : 0;
+  const overflowShare = funnel.primary_calls > 0 ? funnel.overflow_received / funnel.primary_calls : 0;
+  const ovfAnsShare = funnel.overflow_received > 0 ? funnel.overflow_answered / funnel.overflow_received : 0;
+  const ovfMissShare = funnel.overflow_received > 0 ? overflowMissed / funnel.overflow_received : 0;
 
   return (
     <div className="funnel-chart" aria-label={`${language} routing funnel`}>
-      <div className="funnel-rates">
-        <span>Right-language routing {formatPercent(funnel.routing_match)}</span>
-        <span>Reached an agent {formatPercent(funnel.effective_answer_rate)}</span>
+      <div className="funnel-hero">
+        <p className="eyebrow">Calls in</p>
+        <strong>{formatInteger(funnel.primary_calls)}</strong>
       </div>
-      {steps.map((step) => (
-        <div className="funnel-row" key={step.label}>
-          <span>{step.label}</span>
-          <div className="funnel-track">
-            <i
-              style={{
-                width: `${Math.max(5, Math.abs(step.value / max) * 100)}%`,
-                backgroundColor: step.color,
-              }}
+
+      <div className="funnel-rates">
+        <span>
+          Right-language routing {formatPercent(funnel.routing_match)}
+          <Tooltip
+            id={`${language}-routing-tip`}
+            label="Right-language routing"
+            content={getGlossaryEntry("right_language_routing") ?? ""}
+          />
+        </span>
+        <span>
+          Reached an agent {formatPercent(funnel.effective_answer_rate)}
+          <Tooltip
+            id={`${language}-reached-tip`}
+            label="Reached an agent"
+            content={getGlossaryEntry("reached_an_agent") ?? ""}
+          />
+        </span>
+      </div>
+
+      <div className="funnel-leg" aria-label="Primary leg">
+        <div className="funnel-bar">
+          <span
+            className="funnel-segment"
+            style={{ width: `${primaryShare * 100}%`, backgroundColor: primaryColor }}
+            title={`Answered on primary: ${formatInteger(funnel.primary_answered)}`}
+          />
+          <span
+            className="funnel-segment"
+            style={{ width: `${overflowShare * 100}%`, backgroundColor: overflowColor }}
+            title={`Sent to overflow: ${formatInteger(funnel.overflow_received)}`}
+          />
+        </div>
+        <p className="funnel-leg__caption">
+          {formatInteger(funnel.primary_answered)} answered on primary ·{" "}
+          {formatInteger(funnel.overflow_received)} sent to overflow
+        </p>
+      </div>
+
+      {funnel.overflow_received > 0 ? (
+        <div className="funnel-leg funnel-leg--child" aria-label="Overflow detail">
+          <div className="funnel-bar">
+            <span
+              className="funnel-segment"
+              style={{ width: `${ovfAnsShare * 100}%`, backgroundColor: overflowColor }}
+              title={`Answered on overflow: ${formatInteger(funnel.overflow_answered)}`}
+            />
+            <span
+              className="funnel-segment funnel-segment--loss"
+              style={{ width: `${ovfMissShare * 100}%` }}
+              title={`Missed on overflow: ${formatInteger(overflowMissed)}`}
             />
           </div>
-          <strong>{formatInteger(step.value)}</strong>
+          <p className="funnel-leg__caption">
+            {formatInteger(funnel.overflow_answered)} answered on overflow ·{" "}
+            {formatInteger(overflowMissed)} missed on overflow
+          </p>
         </div>
-      ))}
+      ) : null}
+
+      <div className="funnel-outcomes">
+        <span className="funnel-outcome">
+          Reached someone: {formatInteger(reachedTotal)} ({formatPercent(reachedShare)})
+        </span>
+        <span className="funnel-outcome funnel-outcome--loss">
+          Never connected: {formatInteger(funnel.lost)}
+        </span>
+        {funnel.unaccounted > 0 ? (
+          <span className="funnel-outcome funnel-outcome--warn">
+            Untracked: {formatInteger(funnel.unaccounted)}
+          </span>
+        ) : null}
+      </div>
     </div>
   );
 }

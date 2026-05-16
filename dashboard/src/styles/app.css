@@ -445,50 +445,95 @@ main {
 .funnel-chart {
   min-width: 0;
   display: grid;
-  gap: 11px;
+  gap: 14px;
+}
+
+.funnel-hero {
+  display: grid;
+  gap: 2px;
+}
+
+.funnel-hero strong {
+  font-family: var(--display-font);
+  font-size: 28px;
+  line-height: 1;
 }
 
 .funnel-rates {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  font-family: var(--mono-font);
+  font-family: var(--sans-font);
   font-size: 12px;
 }
 
 .funnel-rates span {
+  display: inline-flex;
+  align-items: center;
   background: var(--surface-subtle);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 9px;
 }
 
-.funnel-row {
-  min-width: 0;
+.funnel-leg {
   display: grid;
-  grid-template-columns: 140px minmax(80px, 1fr) 74px;
-  gap: 10px;
-  align-items: center;
-  font-size: 13px;
+  gap: 6px;
 }
 
-.funnel-track {
-  min-width: 0;
-  height: 20px;
+.funnel-leg--child {
+  margin-left: 16px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+
+.funnel-bar {
+  display: flex;
+  height: 22px;
   border-radius: 5px;
-  background: #e4ece1;
   overflow: hidden;
+  background: #e4ece1;
 }
 
-.funnel-track i {
-  display: block;
+.funnel-segment {
   height: 100%;
-  border-radius: inherit;
+  display: block;
 }
 
-.funnel-row strong {
-  text-align: right;
-  font-family: var(--mono-font);
+.funnel-segment--loss {
+  background: var(--loss);
+}
+
+.funnel-leg__caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.funnel-outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.funnel-outcome {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.funnel-outcome--loss {
+  background: #f7dcdc;
+  border-color: rgba(143, 47, 47, 0.4);
+  color: var(--loss);
+}
+
+.funnel-outcome--warn {
+  background: #f6efd5;
+  border-color: rgba(180, 145, 30, 0.4);
+  color: var(--gold);
 }
 
 .anomaly-strip {
@@ -896,20 +941,6 @@ th button {
     flex-direction: column;
   }
 
-  .funnel-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 5px 10px;
-    font-size: 12px;
-  }
-
-  .funnel-track {
-    grid-column: 1 / -1;
-  }
-
-  .funnel-row strong {
-    font-size: 11px;
-  }
-
   .frame-heading,
   .frame-actions {
     align-items: flex-start;
@@ -932,11 +963,6 @@ th button {
     padding: 12px;
   }
 
-  .funnel-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 6px;
-    font-size: 11px;
-  }
 }
 
 .tooltip-host {
