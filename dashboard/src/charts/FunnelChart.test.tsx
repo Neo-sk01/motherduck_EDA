@@ -1,17 +1,17 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { FunnelChart } from "./FunnelChart";
 import type { FunnelMetrics } from "../data/reportTypes";
 
 const englishFunnel: FunnelMetrics = {
   primary_calls: 1181,
-  primary_answered: 800,
-  primary_failed: 200,
-  overflow_received: 181,
-  overflow_answered: 150,
-  overflow_failed: 31,
-  lost: 25,
-  lost_rate: 25 / 1181,
+  primary_answered: 832,
+  primary_failed: 349,
+  overflow_received: 343,
+  overflow_answered: 162,
+  overflow_failed: 181,
+  lost: 181,
+  lost_rate: 181 / 1181,
   unaccounted: 6,
   routing_match: 0.983,
   effective_answer_rate: 0.847,
@@ -44,21 +44,7 @@ describe("FunnelChart", () => {
     expect(screen.getByText(/Reached an agent 84.7%/)).toBeInTheDocument();
   });
 
-  it("renders the outcome strip with reached, never-connected, and hides untracked when zero", () => {
-    render(
-      <FunnelChart
-        language="English"
-        funnel={{ ...englishFunnel, unaccounted: 0 }}
-        primaryQueue="8020"
-        overflowQueue="8030"
-      />,
-    );
-    expect(screen.getByText(/Reached someone:/)).toBeInTheDocument();
-    expect(screen.getByText(/Never connected:/)).toBeInTheDocument();
-    expect(screen.queryByText(/Untracked:/)).not.toBeInTheDocument();
-  });
-
-  it("shows the untracked chip when unaccounted > 0", () => {
+  it("renders a legend row for each outcome slice with its count", () => {
     render(
       <FunnelChart
         language="English"
@@ -67,18 +53,26 @@ describe("FunnelChart", () => {
         overflowQueue="8030"
       />,
     );
-    expect(screen.getByText(/Untracked: 6/)).toBeInTheDocument();
+    const legend = screen.getByRole("list");
+    expect(within(legend).getByText("Answered on primary")).toBeInTheDocument();
+    expect(within(legend).getByText("832")).toBeInTheDocument();
+    expect(within(legend).getByText("Answered on overflow")).toBeInTheDocument();
+    expect(within(legend).getByText("162")).toBeInTheDocument();
+    expect(within(legend).getByText("Never connected")).toBeInTheDocument();
+    expect(within(legend).getByText("Untracked")).toBeInTheDocument();
+    expect(within(legend).getByText("6")).toBeInTheDocument();
   });
 
-  it("hides the overflow detail bar when overflow_received is zero", () => {
+  it("hides slices whose value is zero", () => {
     render(
       <FunnelChart
-        language="French"
-        funnel={{ ...englishFunnel, overflow_received: 0, overflow_answered: 0 }}
-        primaryQueue="8021"
-        overflowQueue="8031"
+        language="English"
+        funnel={{ ...englishFunnel, unaccounted: 0 }}
+        primaryQueue="8020"
+        overflowQueue="8030"
       />,
     );
-    expect(screen.queryByText(/Answered on overflow/)).not.toBeInTheDocument();
+    const legend = screen.getByRole("list");
+    expect(within(legend).queryByText("Untracked")).not.toBeInTheDocument();
   });
 });
